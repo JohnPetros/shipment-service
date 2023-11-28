@@ -18,7 +18,11 @@
   },
   "homepage": "https://github.com/codesandbox-app/static-template#readme",
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "fastify": "^4.24.3"
+  }
 }
