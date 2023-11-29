@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/app.ts",
     "lint": "eslint src --ext .ts --fix"
   },
   "keywords": [],
@@ -16,12 +16,14 @@
   "homepage": "https://github.com/codesandbox-app/static-template#readme",
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.1.0",
+    "@types/node": "^20.10.0",
     "eslint": "^8.54.0",
     "nodemon": "^3.0.1",
     "tsx": "^4.6.0",
     "typescript": "^5.3.2"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
     "fastify": "^4.24.3"
   }
 }
