@@ -1,17 +1,13 @@
 {
-  "name": "nodejs-sandbox",
+  "name": "sertton-industrial-shippment",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "src/server.ts",
   "scripts": {
-    "start": "nodemon index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/codesandbox-app/static-template.git"
+    "dev": "tsx watch src/server.ts"
   },
   "keywords": [],
-  "author": "Ives van Hoorne",
+  "author": "John Petros",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/codesandbox-app/static-template/issues"
