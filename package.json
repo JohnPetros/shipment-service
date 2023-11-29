@@ -5,6 +5,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/app.ts",
+    "start": "tsx watch src/app.ts",
     "lint": "eslint src --ext .ts --fix"
   },
   "keywords": [],
