@@ -12,6 +12,8 @@ export class ValidationProvider implements IValidationProvider {
   validateEnvConfig({
     PORT,
     NODE_ENV,
+    DOMAIN,
+    ZIPCODE,
     MELHOR_ENVIO_DEV_URL,
     MELHOR_ENVIO_PROD_URL,
     MELHOR_ENVIO_CLIENT_ID,
@@ -21,6 +23,8 @@ export class ValidationProvider implements IValidationProvider {
     this.validationProvider.validateEnvConfig({
       PORT,
       NODE_ENV,
+      DOMAIN,
+      ZIPCODE,
       MELHOR_ENVIO_DEV_URL,
       MELHOR_ENVIO_PROD_URL,
       MELHOR_ENVIO_CLIENT_ID,

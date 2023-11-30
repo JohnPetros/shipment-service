@@ -7,6 +7,8 @@ export class ZodValidationProvider implements IValidationProvider {
   validateEnvConfig({
     PORT,
     NODE_ENV,
+    DOMAIN,
+    ZIPCODE,
     MELHOR_ENVIO_DEV_URL,
     MELHOR_ENVIO_PROD_URL,
     MELHOR_ENVIO_CLIENT_ID,
@@ -17,6 +19,8 @@ export class ZodValidationProvider implements IValidationProvider {
       NODE_ENV: z
         .enum(['development', 'test', 'production'])
         .default('development'),
+      DOMAIN: z.string(),
+      ZIPCODE: z.number(),
       PORT: z.number().default(3333),
       MELHOR_ENVIO_DEV_URL: z.string(),
       MELHOR_ENVIO_PROD_URL: z.string(),
@@ -25,6 +29,8 @@ export class ZodValidationProvider implements IValidationProvider {
     const validation = envConfigSchema.safeParse({
       PORT,
       NODE_ENV,
+      DOMAIN,
+      ZIPCODE,
       MELHOR_ENVIO_DEV_URL,
       MELHOR_ENVIO_PROD_URL,
       MELHOR_ENVIO_CLIENT_ID,
