@@ -1,5 +1,6 @@
 export interface IHttpClientProvider {
   get<Response>(url: string): Promise<Response>
-  post(url: string, body: unknown): Promise<unknown>
+  post<Response>(url: string, body: unknown): Promise<Response>
   setBaseUrl(url: string): void
+  setBearerToken(token: string): void
 }

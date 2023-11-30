@@ -12,6 +12,10 @@ export class HttpClientProvider implements IHttpClientProvider {
     this.api.setBaseUrl(url)
   }
 
+  setBearerToken(token: string) {
+    this.api.setBearerToken(token)
+  }
+
   async get<Response>(url: string): Promise<Response> {
     return await this.api.get<Response>(url)
   }

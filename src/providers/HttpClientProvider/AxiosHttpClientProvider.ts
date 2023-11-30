@@ -17,6 +17,12 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
     this.axios.defaults.baseURL = baseUrl
   }
 
+  setBearerToken(token: string) {
+    this.axios.defaults.headers.common = {
+      Authorization: 'Bearer ' + token
+    }
+  }
+
   async get<Response>(url: string): Promise<Response> {
     const response = await this.axios.get(url)
     return response.data
