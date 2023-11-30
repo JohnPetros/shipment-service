@@ -4,6 +4,7 @@ import { FastifyRouter } from './FastifyRouter'
 import { envConfig } from '../../configs/envConfig'
 import { AppError } from '../../utils/AppError'
 import cookie from '@fastify/cookie'
+import { shipmentRoutes } from '../../routes/shipmentRoutes'
 
 export class Fastify {
   async init() {
@@ -13,7 +14,10 @@ export class Fastify {
 
     fastify.register(cookie)
 
-    await fastify.register(() => authRoutes(fastifyRouter), { prefix: 'auth' })
+    await Promise.all([
+      fastify.register(() => authRoutes(fastifyRouter), { prefix: 'auth' }),
+      fastify.register(() => shipmentRoutes(fastifyRouter), { prefix: 'shipment' })
+    ])
 
     fastify.setErrorHandler(function (error, request, reply) {
       if (error instanceof AppError) {
