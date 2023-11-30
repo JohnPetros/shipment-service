@@ -17,4 +17,12 @@ export class FastifyRouter implements IRouter {
       return controller.handle(fastifyHttp)
     })
   }
+
+  post(route: string, controller: ICrontroller): void {
+    this.fastify.post(route, (request, reply) => {
+      const fastifyHttp = new FastifyHttp(request, reply)
+
+      return controller.handle(fastifyHttp)
+    })
+  }
 }

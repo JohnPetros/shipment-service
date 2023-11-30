@@ -11,10 +11,19 @@ export class FastifyHttp implements IHttp {
     this.reply = reply
   }
 
+  getQuery<Query>(): Query {
+    return this.request.query as Query
+  }
+
+  getParams<Params>(): Params {
+    return this.request.params as Params
+  }
+
   getRequest(): IRequest {
     return {
       body: this.request.body,
       params: this.request.params,
+      query: this.request.query,
     }
   }
 
