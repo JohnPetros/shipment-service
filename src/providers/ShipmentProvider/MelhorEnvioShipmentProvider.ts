@@ -1,5 +1,7 @@
 import { Jwt } from '../../Entities/Jwt'
+import { Quote } from '../../Entities/Quote'
 import { envConfig } from '../../configs/envConfig'
+import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
 import { IHttpClientProvider } from '../HttpClientProvider/IHttpClientProvider'
 import { IShipmentProvider } from './IShipmentProvider'
 import queryStrig from 'node:querystring'
@@ -11,6 +13,7 @@ const {
   MELHOR_ENVIO_CLIENT_ID,
   MELHOR_ENVIO_SECRET,
   MELHOR_ENVIO_REDIRECT_URI,
+  ZIPCODE,
 } = envConfig
 
 const BASE_URL =
@@ -24,6 +27,18 @@ type Token = {
   expires_in: number
 }
 
+type MelhorEnvioQuote = {
+  id: number,
+  name: string,
+  price: string,
+  custom_price: string,
+  discount: string,
+  currency: string,
+  delivery_time: number,
+  custom_delivery_time: number,
+  error?: string
+}
+
 export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   private responseType = 'code'
   private api: IHttpClientProvider
@@ -34,8 +49,35 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     api.setBaseUrl(String(BASE_URL))
   }
 
-  calculate(): Promise<void> {
-    throw new Error('Method not implemented.')
+  async calculate(
+    { zipcode, skus }: CalculateQuotePayload,
+    token: string,
+  ): Promise<Quote[]> {
+    this.api.setBearerToken(token)
+
+  const quotes = await this.api.post<MelhorEnvioQuote[]>('/api/v2/me/shipment/calculate', {
+      from: {
+        postal_code: String(zipcode),
+      },
+      to: {
+        postal_code: String(ZIPCODE)
+      },
+      products: skus.map(sku => ({
+        width: sku.width,
+        height: sku.height,
+        length: sku.length,
+        weight: sku.weight,
+        insurance_value: sku.price,
+        quantity: sku.quantity,
+      }))
+    })
+
+    return quotes.filter(quote => !Boolean(quote.error)).map(quote => ({
+      name: quote.name,
+      service: quote.name,
+      price: Number(quote.custom_price),
+      days: quote.custom_delivery_time,
+    }))
   }
 
   async authorize() {
@@ -48,7 +90,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       })}`,
     )
 
-    console.log(response)
+    console.log({response})
   }
 
   async getToken(code: string): Promise<Jwt> {
@@ -66,7 +108,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     return {
       accessToken: access_token,
       refreshToken: refresh_token,
-      expiresIn: expires_in,
+      expiresIn: new Date(expires_in),
     }
   }
 }

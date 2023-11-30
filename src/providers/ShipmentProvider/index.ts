@@ -1,4 +1,6 @@
 import { Jwt } from '../../Entities/Jwt'
+import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
+import { Quote } from '../../Entities/Quote'
 import { IHttpClientProvider } from '../HttpClientProvider/IHttpClientProvider'
 import { IShipmentProvider } from './IShipmentProvider'
 import { MelhorEnvioShipmentProvider } from './MelhorEnvioShipmentProvider'
@@ -18,7 +20,10 @@ export class ShipmentProvider implements IShipmentProvider {
     await this.shippment.authorize()
   }
 
-  async calculate() {
-    await this.shippment.calculate()
+  async calculate(
+    payload: CalculateQuotePayload,
+    token: string,
+  ): Promise<Quote[]> {
+    return await this.shippment.calculate(payload, token)
   }
 }
