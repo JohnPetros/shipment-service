@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { IHttp } from '../interfaces/IHttp'
-import { IRequest } from '../interfaces/IRequest'
 
 export class FastifyHttp implements IHttp {
   private request: FastifyRequest
@@ -11,6 +10,10 @@ export class FastifyHttp implements IHttp {
     this.reply = reply
   }
 
+  getBody<Body>(): Body {
+    return this.request.body as Body
+  }
+
   getQuery<Query>(): Query {
     return this.request.query as Query
   }
@@ -19,12 +22,12 @@ export class FastifyHttp implements IHttp {
     return this.request.params as Params
   }
 
-  getRequest(): IRequest {
-    return {
-      body: this.request.body,
-      params: this.request.params,
-      query: this.request.query,
-    }
+  setCookie(name: string, data: string, expiresIn: number): void {
+    const maxAge = expiresIn ?? 1000 * 60 * 60 * 24 // 1 day
+    this.reply.cookie(name, data, {
+      path: '/',
+      maxAge,
+    })
   }
 
   send(statusCode: number, response: unknown) {

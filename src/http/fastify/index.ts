@@ -3,12 +3,15 @@ import Bootstrap from 'fastify'
 import { FastifyRouter } from './FastifyRouter'
 import { envConfig } from '../../configs/envConfig'
 import { AppError } from '../../utils/AppError'
+import cookie from '@fastify/cookie'
 
 export class Fastify {
   async init() {
     const fastify = Bootstrap()
 
     const fastifyRouter = new FastifyRouter(fastify)
+
+    fastify.register(cookie)
 
     await fastify.register(() => authRoutes(fastifyRouter), { prefix: 'auth' })
 

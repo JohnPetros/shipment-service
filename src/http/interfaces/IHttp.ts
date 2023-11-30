@@ -1,6 +1,7 @@
-import { IRequest } from './IRequest'
-
 export interface IHttp {
-  getRequest(): IRequest
+  getBody<Body>(): Body
+  getParams<Params>(): Params
+  getQuery<Query>(): Query
+  setCookie(name: string, data: unknown, expiresIn: number): void
   send(statusCode: number, response: unknown): JSON
 }
