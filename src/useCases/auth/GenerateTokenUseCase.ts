@@ -12,9 +12,7 @@ export class GenerateTokenUseCase {
     if (!code) throw new AppError('Invalid code', 401)
 
     try {
-      const token = await this.shippmentProvider.getToken(code)
-
-      console.log(token)
+      return await this.shippmentProvider.getToken(code)
     } catch (error) {
       console.error(error)
       throw new AppError('Failed to generate token', 500)
