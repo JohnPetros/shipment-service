@@ -9,7 +9,23 @@ export class ValidationProvider implements IValidationProvider {
     this.validationProvider = new ZodValidationProvider()
   }
 
-  validateEnvConfig({ PORT, NODE_ENV }: IEnvConfig) {
-    this.validationProvider.validateEnvConfig({ PORT, NODE_ENV })
+  validateEnvConfig({
+    PORT,
+    NODE_ENV,
+    MELHOR_ENVIO_DEV_URL,
+    MELHOR_ENVIO_PROD_URL,
+    MELHOR_ENVIO_CLIENT_ID,
+    MELHOR_ENVIO_REDIRECT_URI,
+    MELHOR_ENVIO_SECRET,
+  }: IEnvConfig) {
+    this.validationProvider.validateEnvConfig({
+      PORT,
+      NODE_ENV,
+      MELHOR_ENVIO_DEV_URL,
+      MELHOR_ENVIO_PROD_URL,
+      MELHOR_ENVIO_CLIENT_ID,
+      MELHOR_ENVIO_REDIRECT_URI,
+      MELHOR_ENVIO_SECRET,
+    })
   }
 }

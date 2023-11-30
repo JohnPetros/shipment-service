@@ -4,15 +4,33 @@ import { IEnvConfig } from '../../configs/interfaces/IEnvConfig'
 import { AppError } from '../../utils/AppError'
 
 export class ZodValidationProvider implements IValidationProvider {
-  validateEnvConfig({ NODE_ENV, PORT }: IEnvConfig) {
+  validateEnvConfig({
+    PORT,
+    NODE_ENV,
+    MELHOR_ENVIO_DEV_URL,
+    MELHOR_ENVIO_PROD_URL,
+    MELHOR_ENVIO_CLIENT_ID,
+    MELHOR_ENVIO_REDIRECT_URI,
+    MELHOR_ENVIO_SECRET,
+  }: IEnvConfig) {
     const envConfigSchema = z.object({
       NODE_ENV: z
         .enum(['development', 'test', 'production'])
         .default('development'),
       PORT: z.number().default(3333),
+      MELHOR_ENVIO_DEV_URL: z.string(),
+      MELHOR_ENVIO_PROD_URL: z.string(),
     })
 
-    const validation = envConfigSchema.safeParse({ NODE_ENV, PORT })
+    const validation = envConfigSchema.safeParse({
+      PORT,
+      NODE_ENV,
+      MELHOR_ENVIO_DEV_URL,
+      MELHOR_ENVIO_PROD_URL,
+      MELHOR_ENVIO_CLIENT_ID,
+      MELHOR_ENVIO_REDIRECT_URI,
+      MELHOR_ENVIO_SECRET,
+    })
 
     if (!validation.success) {
       console.error(validation.error.format())
