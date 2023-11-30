@@ -1,3 +1,4 @@
+import { Jwt } from '../../Entities/Jwt'
 import { envConfig } from '../../configs/envConfig'
 import { IHttpClientProvider } from '../HttpClientProvider/IHttpClientProvider'
 import { IShipmentProvider } from './IShipmentProvider'
@@ -16,6 +17,12 @@ const BASE_URL =
   NODE_ENV === 'development' || NODE_ENV === 'test'
     ? MELHOR_ENVIO_DEV_URL
     : MELHOR_ENVIO_PROD_URL
+
+type Token = {
+  access_token: string
+  refresh_token: string
+  expires_in: number
+}
 
 export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   private responseType = 'code'
@@ -44,7 +51,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     console.log(response)
   }
 
-  async getToken(code: string): Promise<string> {
+  async getToken(code: string): Promise<Jwt> {
     const body = {
       grant_type: 'authorization_code',
       client_id: MELHOR_ENVIO_CLIENT_ID,
@@ -53,6 +60,13 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       code,
     }
 
-    return await this.api.post<string>('/oauth/token', body)
+    const { access_token, refresh_token, expires_in } =
+      await this.api.post<Token>('/oauth/token', body)
+
+    return {
+      accessToken: access_token,
+      refreshToken: refresh_token,
+      expiresIn: expires_in,
+    }
   }
 }

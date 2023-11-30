@@ -23,6 +23,8 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
   }
 
   async post<Response>(url: string, body: unknown): Promise<Response> {
-    return await this.axios.post(url, body)
+    const response = await this.axios.post(url, body)
+
+    return response.data
   }
 }

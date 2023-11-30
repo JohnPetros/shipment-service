@@ -12,8 +12,12 @@ export class CallbackController implements ICrontroller {
     const shippmentProvider = new ShipmentProvider(httpClientProvider)
     const generateTokenUseCase = new GenerateTokenUseCase(shippmentProvider)
 
-    await generateTokenUseCase.execute(code)
+    const { accessToken, refreshToken, expiresIn } =
+      await generateTokenUseCase.execute(code)
 
-    return http.send(200, code)
+    http.setCookie('access_token', accessToken, expiresIn)
+    http.setCookie('refresh_token', refreshToken, expiresIn)
+
+    return http.send(200, { accessToken, refreshToken, expiresIn })
   }
 }
