@@ -1,8 +1,8 @@
-import { IHttp } from '../../http/interfaces/IHttp'
+import { IHttp } from '@http/interfaces/IHttp'
 import { ICrontroller } from '../IController'
-import { HttpClientProvider } from '../../providers/HttpClientProvider'
-import { ShipmentProvider } from '../../providers/ShipmentProvider'
-import { GenerateTokenUseCase } from '../../useCases/auth/GenerateTokenUseCase'
+import { RefreshTokenUseCase } from '@useCases/auth/RefreshTokenUseCase'
+import { HttpClientProvider } from '@providers/HttpClientProvider'
+import { ShipmentProvider } from '@providers/ShipmentProvider'
 
 export class CallbackController implements ICrontroller {
   async handle(http: IHttp): Promise<JSON> {
@@ -10,10 +10,10 @@ export class CallbackController implements ICrontroller {
 
     const httpClientProvider = new HttpClientProvider()
     const shippmentProvider = new ShipmentProvider(httpClientProvider)
-    const generateTokenUseCase = new GenerateTokenUseCase(shippmentProvider)
+    const refreshTokenUseCase = new RefreshTokenUseCase(shippmentProvider)
 
     const { accessToken, refreshToken, expiresIn } =
-      await generateTokenUseCase.execute(code)
+      await refreshTokenUseCase.execute(code)
 
     http.setCookie('access_token', accessToken, expiresIn)
     http.setCookie('refresh_token', refreshToken, expiresIn)

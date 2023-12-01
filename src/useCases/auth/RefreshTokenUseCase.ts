@@ -1,19 +1,21 @@
 import { IShipmentProvider } from '../../providers/ShipmentProvider/IShipmentProvider'
 import { AppError } from '../../utils/AppError'
 
-export class AuthorizeUseCase {
+export class RefreshTokenUseCase {
   private shippmentProvider: IShipmentProvider
 
   constructor(shippmentProvider: IShipmentProvider) {
     this.shippmentProvider = shippmentProvider
   }
 
-  async execute() {
+  async execute(refreshToken: string) {
+    if (!refreshToken) throw new AppError('Invalid refresh token', 401)
+
     try {
-      return await this.shippmentProvider.authorize()
+      return await this.shippmentProvider.refreshToken(refreshToken)
     } catch (error) {
-      console.error(error)
-      throw new AppError('Failed to authorize user', 401)
+      this.shippmentProvider.handleApiError(error)
+      throw new AppError('Failed to refresh token', 500)
     }
   }
 }

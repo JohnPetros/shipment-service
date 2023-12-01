@@ -8,4 +8,5 @@ const callbackController = new CallbackController()
 export async function authRoutes(router: IRouter) {
   router.get('/auth/authorize', authorizeController)
   router.get('/auth/callback', callbackController)
+  router.get('/auth/refresh_token', callbackController)
 }

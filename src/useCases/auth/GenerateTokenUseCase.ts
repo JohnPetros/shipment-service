@@ -14,7 +14,6 @@ export class GenerateTokenUseCase {
     try {
       return await this.shippmentProvider.getToken(code)
     } catch (error) {
-      console.error(error)
       throw new AppError('Failed to generate token', 500)
     }
   }
