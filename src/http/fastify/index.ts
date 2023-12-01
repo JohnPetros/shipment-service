@@ -1,25 +1,31 @@
-import { authRoutes } from '../../routes/authRoutes'
-import Bootstrap from 'fastify'
+import getFastifyInstance, { FastifyInstance } from 'fastify'
 import { FastifyRouter } from './FastifyRouter'
-import { envConfig } from '../../configs/envConfig'
-import { AppError } from '../../utils/AppError'
 import cookie from '@fastify/cookie'
-import { shipmentRoutes } from '../../routes/shipmentRoutes'
 
-export class Fastify {
-  async init() {
-    const fastify = Bootstrap()
+import { Server } from 'node:http'
+
+import { IApp } from '../interfaces/IApp'
+import { authRoutes } from '@routes/authRoutes'
+import { shipmentRoutes } from '@routes/shipmentRoutes'
+import { envConfig } from '@configs/envConfig'
+import { AppError } from '@utils/AppError'
+
+export class Fastify implements IApp {
+  private fastify: FastifyInstance
+
+  constructor() {
+    const fastify = getFastifyInstance()
 
     const fastifyRouter = new FastifyRouter(fastify)
 
     fastify.register(cookie)
 
-    await Promise.all([
-      fastify.register(() => authRoutes(fastifyRouter), { prefix: 'auth' }),
-      fastify.register(() => shipmentRoutes(fastifyRouter), { prefix: 'shipment' })
-    ])
+    fastify.register(() => authRoutes(fastifyRouter), { prefix: 'auth' })
+    fastify.register(() => shipmentRoutes(fastifyRouter), {
+      prefix: 'shipment',
+    })
 
-    fastify.setErrorHandler(function (error, request, reply) {
+    fastify.setErrorHandler((error, request, reply) => {
       if (error instanceof AppError) {
         return reply.status(error.statusCode).send({ message: error.message })
       }
@@ -29,14 +35,28 @@ export class Fastify {
       })
     })
 
-    fastify
+    this.fastify = fastify
+  }
+
+  async initServer() {
+    this.fastify
       .listen({
         port: envConfig.PORT,
       })
       .then(() => {
         console.log('HTTP Server Running on Port: ' + envConfig.PORT)
       })
+  }
 
-    return fastify
+  async waitServerAvailability() {
+    await this.fastify.ready()
+  }
+
+  async closeServer() {
+    this.fastify.close()
+  }
+
+  getServer() {
+    return this.fastify.server as Server
   }
 }

@@ -34,12 +34,12 @@ export class FastifyHttp implements IHttp {
     return {
       accessToken,
       refreshToken,
-      expiresIn: new Date(expiresIn),
+      expiresIn: Number(expiresIn),
     }
   }
 
-  setCookie(name: string, data: string, expiresIn: Date): void {
-    const maxAge = Number(expiresIn) ?? 1000 * 60 * 60 * 24 // 1 day
+  setCookie(name: string, data: string, expiresIn: number): void {
+    const maxAge = expiresIn ?? 1000 * 60 * 60 * 24 // 1 day
     this.reply.setCookie(name, data, {
       domain: envConfig.DOMAIN,
       path: '/',
