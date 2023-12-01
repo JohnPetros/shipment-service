@@ -16,8 +16,12 @@ export class ShipmentProvider implements IShipmentProvider {
     return await this.shippment.getToken(code)
   }
 
+  async refreshToken(refreshToken: string): Promise<Jwt> {
+    return await this.shippment.getToken(refreshToken)
+  }
+
   async authorize() {
-    await this.shippment.authorize()
+    return await this.shippment.authorize()
   }
 
   async calculate(

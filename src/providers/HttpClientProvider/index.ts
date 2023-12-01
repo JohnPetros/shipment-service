@@ -23,4 +23,8 @@ export class HttpClientProvider implements IHttpClientProvider {
   async post<Response>(url: string, body: unknown): Promise<Response> {
     return await this.api.post<Response>(url, body)
   }
+
+  getResponseError<ResponseError>(error: unknown): ResponseError {
+    return this.api.getResponseError(error)
+  }
 }
