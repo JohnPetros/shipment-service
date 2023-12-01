@@ -1,10 +1,10 @@
-import { Jwt } from '../../Entities/Jwt'
-import { Quote } from '../../Entities/Quote'
+import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
 import { envConfig } from '../../configs/envConfig'
 import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
-import { IHttpClientProvider } from '../HttpClientProvider/IHttpClientProvider'
 import { IShipmentProvider } from './IShipmentProvider'
 import queryStrig from 'node:querystring'
+import { Quote } from '@entities/Quote'
+import { Jwt } from '@entities/Jwt'
 
 const {
   NODE_ENV,
@@ -21,13 +21,13 @@ const BASE_URL =
     ? MELHOR_ENVIO_DEV_URL
     : MELHOR_ENVIO_PROD_URL
 
-type Token = {
+export type MelhorEnvioToken = {
   access_token: string
   refresh_token: string
   expires_in: number
 }
 
-type MelhorEnvioQuote = {
+export type MelhorEnvioQuote = {
   id: number,
   name: string,
   price: string,
@@ -40,7 +40,6 @@ type MelhorEnvioQuote = {
 }
 
 export class MelhorEnvioShipmentProvider implements IShipmentProvider {
-  private responseType = 'code'
   private api: IHttpClientProvider
 
   constructor(api: IHttpClientProvider) {
@@ -85,12 +84,12 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       `/oauth/authorize?${queryStrig.stringify({
         client_id: MELHOR_ENVIO_CLIENT_ID,
         redirect_uri: MELHOR_ENVIO_REDIRECT_URI,
-        response_type: this.responseType,
+        response_type: 'code',
         scope: 'shipping-calculate',
       })}`,
     )
 
-    console.log({response})
+    console.log({ response })
   }
 
   async getToken(code: string): Promise<Jwt> {
@@ -103,7 +102,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     }
 
     const { access_token, refresh_token, expires_in } =
-      await this.api.post<Token>('/oauth/token', body)
+      await this.api.post<MelhorEnvioToken>('/oauth/token', body)
 
     return {
       accessToken: access_token,

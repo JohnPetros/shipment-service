@@ -1,6 +1,6 @@
-import { Jwt } from '../../Entities/Jwt'
+import { Jwt } from '../../entities/Jwt'
 import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
-import { Quote } from '../../Entities/Quote'
+import { Quote } from '../../entities/Quote'
 import { IHttpClientProvider } from '../HttpClientProvider/IHttpClientProvider'
 import { IShipmentProvider } from './IShipmentProvider'
 import { MelhorEnvioShipmentProvider } from './MelhorEnvioShipmentProvider'

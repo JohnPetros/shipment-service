@@ -1,5 +1,5 @@
-import { Jwt } from '../../Entities/Jwt'
-import { Quote } from '../../Entities/Quote'
+import { Jwt } from '../../entities/Jwt'
+import { Quote } from '../../entities/Quote'
 import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
 
 export interface IShipmentProvider {
