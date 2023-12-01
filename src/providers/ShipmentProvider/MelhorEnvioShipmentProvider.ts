@@ -2,9 +2,10 @@ import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientPr
 import { envConfig } from '../../configs/envConfig'
 import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
 import { IShipmentProvider } from './IShipmentProvider'
-import queryStrig from 'node:querystring'
 import { Quote } from '@entities/Quote'
 import { Jwt } from '@entities/Jwt'
+import { AppError } from '@utils/AppError'
+import queryStrig from 'node:querystring'
 
 const {
   NODE_ENV,
@@ -28,14 +29,14 @@ export type MelhorEnvioToken = {
 }
 
 export type MelhorEnvioQuote = {
-  id: number,
-  name: string,
-  price: string,
-  custom_price: string,
-  discount: string,
-  currency: string,
-  delivery_time: number,
-  custom_delivery_time: number,
+  id: number
+  name: string
+  price: string
+  custom_price: string
+  discount: string
+  currency: string
+  delivery_time: number
+  custom_delivery_time: number
   error?: string
 }
 
@@ -52,44 +53,49 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     { zipcode, skus }: CalculateQuotePayload,
     token: string,
   ): Promise<Quote[]> {
-    this.api.setBearerToken(token)
+    this.api.setBearerToken('')
 
-  const quotes = await this.api.post<MelhorEnvioQuote[]>('/api/v2/me/shipment/calculate', {
-      from: {
-        postal_code: String(zipcode),
+    const quotes = await this.api.post<MelhorEnvioQuote[]>(
+      '/api/v2/me/shipment/calculate',
+      {
+        from: {
+          postal_code: String(zipcode),
+        },
+        to: {
+          postal_code: String(ZIPCODE),
+        },
+        products: skus.map((sku) => ({
+          width: sku.width,
+          height: sku.height,
+          length: sku.length,
+          weight: sku.weight,
+          insurance_value: sku.price,
+          quantity: sku.quantity,
+        })),
       },
-      to: {
-        postal_code: String(ZIPCODE)
-      },
-      products: skus.map(sku => ({
-        width: sku.width,
-        height: sku.height,
-        length: sku.length,
-        weight: sku.weight,
-        insurance_value: sku.price,
-        quantity: sku.quantity,
+    )
+
+    return quotes
+      .filter((quote) => !quote.error)
+      .map((quote) => ({
+        name: quote.name,
+        service: quote.name,
+        price: Number(quote.custom_price),
+        days: quote.custom_delivery_time,
       }))
-    })
-
-    return quotes.filter(quote => !Boolean(quote.error)).map(quote => ({
-      name: quote.name,
-      service: quote.name,
-      price: Number(quote.custom_price),
-      days: quote.custom_delivery_time,
-    }))
   }
 
   async authorize() {
-    const response = await this.api.get(
-      `/oauth/authorize?${queryStrig.stringify({
-        client_id: MELHOR_ENVIO_CLIENT_ID,
-        redirect_uri: MELHOR_ENVIO_REDIRECT_URI,
-        response_type: 'code',
-        scope: 'shipping-calculate',
-      })}`,
-    )
+    const uri = `/oauth/authorize?${queryStrig.stringify({
+      client_id: MELHOR_ENVIO_CLIENT_ID,
+      redirect_uri: MELHOR_ENVIO_REDIRECT_URI,
+      response_type: 'code',
+      scope: 'shipping-calculate',
+    })}`
 
-    console.log({ response })
+    const response = await this.api.get(uri)
+
+    return `${BASE_URL}/${uri}`
   }
 
   async getToken(code: string): Promise<Jwt> {
@@ -107,7 +113,31 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     return {
       accessToken: access_token,
       refreshToken: refresh_token,
-      expiresIn: new Date(expires_in),
+      expiresIn: expires_in,
     }
+  }
+
+  async refreshToken(refreshToken: string) {
+    const body = {
+      grant_type: 'refresh_token',
+      client_id: MELHOR_ENVIO_CLIENT_ID,
+      client_secret: MELHOR_ENVIO_SECRET,
+      refresh_token: refreshToken,
+    }
+
+    const { access_token, refresh_token, expires_in } =
+      await this.api.post<MelhorEnvioToken>('/oauth/token', body)
+
+    return {
+      accessToken: access_token,
+      refreshToken: refresh_token,
+      expiresIn: expires_in,
+    }
+  }
+
+  handleApiError(error: unknown): void {
+    const { message } = this.api.getResponseError<{ message: string }>(error)
+    if (message === 'Unauthenticated.')
+      throw new AppError(APP_ERRORS.invalidToken, 401)
   }
 }

@@ -27,6 +27,7 @@ export class Fastify implements IApp {
 
     fastify.setErrorHandler((error, request, reply) => {
       if (error instanceof AppError) {
+        if (error.message === 'Invalid Token') return reply.redirect('auth/refresh_token')
         return reply.status(error.statusCode).send({ message: error.message })
       }
 

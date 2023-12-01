@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosError, AxiosInstance, isAxiosError } from 'axios'
 import { IHttpClientProvider } from './IHttpClientProvider'
 
 export class AxiosHttpClientProvider implements IHttpClientProvider {
@@ -19,7 +19,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 
   setBearerToken(token: string) {
     this.axios.defaults.headers.common = {
-      Authorization: 'Bearer ' + token
+      Authorization: 'Bearer ' + token,
     }
   }
 
@@ -30,7 +30,14 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 
   async post<Response>(url: string, body: unknown): Promise<Response> {
     const response = await this.axios.post(url, body)
-
     return response.data
+  }
+
+  getResponseError<ResponseError>(error: unknown): ResponseError {
+    if (isAxiosError(error)) {
+      return error.response?.data
+    }
+
+    return error as ResponseError
   }
 }

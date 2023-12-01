@@ -3,4 +3,5 @@ export interface IHttpClientProvider {
   post<Response>(url: string, body: unknown): Promise<Response>
   setBaseUrl(url: string): void
   setBearerToken(token: string): void
+  getResponseError<ResponseError>(error: unknown): ResponseError
 }
