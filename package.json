@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "tsx watch src/app.ts",
-    "start": "tsx watch src/app.ts",
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx watch src/server.ts",
     "lint": "eslint src --ext .ts --fix",
     "test": "vitest"
   },
