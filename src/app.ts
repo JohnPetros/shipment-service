@@ -1,4 +1,4 @@
+import { Fastify } from '@http/fastify'
 import 'dotenv/config'
-import { Fastify } from './http/fastify'
 
 export const app = new Fastify().init()

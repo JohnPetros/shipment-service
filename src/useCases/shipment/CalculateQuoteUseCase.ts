@@ -1,4 +1,4 @@
-import { Quote } from '../../Entities/Quote'
+import { Quote } from '../../entities/Quote'
 import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
 import { IShipmentProvider } from '../../providers/ShipmentProvider/IShipmentProvider'
 import { AppError } from '../../utils/AppError'
