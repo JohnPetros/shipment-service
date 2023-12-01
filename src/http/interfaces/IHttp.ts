@@ -1,4 +1,4 @@
-import { Jwt } from '../../Entities/Jwt'
+import { Jwt } from '../../entities/Jwt'
 
 export interface IHttp {
   getBody<Body>(): Body
