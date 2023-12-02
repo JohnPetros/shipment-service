@@ -27,13 +27,15 @@
     /* Modules */
     "module": "commonjs", 
     "paths": {
-      "@constrollers/*": ["constrollers/*"],
+      "@controllers/*": ["controllers/*"],
       "@http/*": ["http/*"],
       "@routes/*": ["routes/*"],
       "@useCases/*": ["useCases/*"],
       "@entities/*": ["entities/*"],
+      "@constants/*": ["constants/*"],
       "@configs/*": ["configs/*"],
       "@providers/*": ["providers/*"],
+      "@cache/*": ["cache/*"],
       "@utils/*": ["utils/*"]
     },                               /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
