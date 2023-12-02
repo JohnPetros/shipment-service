@@ -13,6 +13,7 @@ export class AuthorizeUseCase {
       return await this.shippmentProvider.authorize()
     } catch (error) {
       console.error(error)
+      this.shippmentProvider.handleApiError(error)
       throw new AppError('Failed to authorize user', 401)
     }
   }
