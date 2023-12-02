@@ -3,22 +3,23 @@ import { ICrontroller } from '../IController'
 import { HttpClientProvider } from '../../providers/HttpClientProvider'
 import { ShipmentProvider } from '../../providers/ShipmentProvider'
 import { GenerateTokenUseCase } from '../../useCases/auth/GenerateTokenUseCase'
+import { Cache } from '@cache/index'
 
 export class CallbackController implements ICrontroller {
   async handle(http: IHttp): Promise<JSON> {
     const { code } = http.getQuery<{ code: string }>()
 
+    const cache = new Cache()
     const httpClientProvider = new HttpClientProvider()
     const shippmentProvider = new ShipmentProvider(httpClientProvider)
-    const generateTokenUseCase = new GenerateTokenUseCase(shippmentProvider)
+    const generateTokenUseCase = new GenerateTokenUseCase(
+      shippmentProvider,
+      cache,
+    )
 
-    const { accessToken, refreshToken, expiresIn } =
+    const { accessToken, refreshToken } =
       await generateTokenUseCase.execute(code)
 
-    http.setCookie('access_token', accessToken, expiresIn)
-    http.setCookie('refresh_token', refreshToken, expiresIn)
-    http.setCookie('expires_in', expiresIn, expiresIn)
-
-    return http.send(200, { accessToken, refreshToken, expiresIn })
+    return http.send(200, { accessToken, refreshToken })
   }
 }

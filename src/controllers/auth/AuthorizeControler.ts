@@ -1,8 +1,8 @@
-import { IHttp } from '../../http/interfaces/IHttp'
-import { HttpClientProvider } from '../../providers/HttpClientProvider'
-import { ShipmentProvider } from '../../providers/ShipmentProvider'
-import { AuthorizeUseCase } from '../../useCases/auth/AuthorizeUseCase'
 import { ICrontroller } from '../IController'
+import { IHttp } from '@http/interfaces/IHttp'
+import { HttpClientProvider } from '@providers/HttpClientProvider'
+import { ShipmentProvider } from '@providers/ShipmentProvider'
+import { AuthorizeUseCase } from '@useCases/auth/AuthorizeUseCase'
 
 export class AuthorizeController implements ICrontroller {
   async handle(http: IHttp): Promise<JSON> {

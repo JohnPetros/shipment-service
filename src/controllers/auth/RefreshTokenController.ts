@@ -4,16 +4,16 @@ import { RefreshTokenUseCase } from '@useCases/auth/RefreshTokenUseCase'
 import { HttpClientProvider } from '@providers/HttpClientProvider'
 import { ShipmentProvider } from '@providers/ShipmentProvider'
 
-export class CallbackController implements ICrontroller {
+export class RefreshTokenController implements ICrontroller {
   async handle(http: IHttp): Promise<JSON> {
-    const { code } = http.getQuery<{ code: string }>()
+    const jwt = http.getJwt()
 
     const httpClientProvider = new HttpClientProvider()
     const shippmentProvider = new ShipmentProvider(httpClientProvider)
     const refreshTokenUseCase = new RefreshTokenUseCase(shippmentProvider)
 
     const { accessToken, refreshToken, expiresIn } =
-      await refreshTokenUseCase.execute(code)
+      await refreshTokenUseCase.execute(jwt?.refreshToken ?? '')
 
     http.setCookie('access_token', accessToken, expiresIn)
     http.setCookie('refresh_token', refreshToken, expiresIn)

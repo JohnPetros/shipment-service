@@ -21,6 +21,7 @@ export class CalculateQuoteUseCase {
       return await this.shippmentProvider.calculate({ skus, zipcode }, token)
     } catch (error) {
       console.error(error)
+      this.shippmentProvider.handleApiError(error)
       throw new AppError('Failed to calculate quotes', 500)
     }
   }

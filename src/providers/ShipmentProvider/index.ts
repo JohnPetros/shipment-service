@@ -12,12 +12,16 @@ export class ShipmentProvider implements IShipmentProvider {
     this.shippment = new MelhorEnvioShipmentProvider(api)
   }
 
+  handleApiError(error: unknown): void {
+    this.shippment.handleApiError(error)
+  }
+
   async getToken(code: string): Promise<Jwt> {
     return await this.shippment.getToken(code)
   }
 
   async refreshToken(refreshToken: string): Promise<Jwt> {
-    return await this.shippment.getToken(refreshToken)
+    return await this.shippment.refreshToken(refreshToken)
   }
 
   async authorize() {

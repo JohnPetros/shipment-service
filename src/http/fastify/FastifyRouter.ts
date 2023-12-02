@@ -28,7 +28,11 @@ export class FastifyRouter implements IRouter {
     })
   }
 
-  post(route: string, controller: ICrontroller, ...middlewares: IMiddleware[]): void {
+  post(
+    route: string,
+    controller: ICrontroller,
+    ...middlewares: IMiddleware[]
+  ): void {
     this.fastify.post(route, (request, reply) => {
       // reply.setCookie('teste', 'foo', {
       //   path: '/',

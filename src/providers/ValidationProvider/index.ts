@@ -19,6 +19,8 @@ export class ValidationProvider implements IValidationProvider {
     MELHOR_ENVIO_CLIENT_ID,
     MELHOR_ENVIO_REDIRECT_URI,
     MELHOR_ENVIO_SECRET,
+    REDIS_PASSWORD,
+    REDIS_PORT,
   }: IEnvConfig) {
     this.validationProvider.validateEnvConfig({
       PORT,
@@ -30,6 +32,8 @@ export class ValidationProvider implements IValidationProvider {
       MELHOR_ENVIO_CLIENT_ID,
       MELHOR_ENVIO_REDIRECT_URI,
       MELHOR_ENVIO_SECRET,
+      REDIS_PASSWORD,
+      REDIS_PORT,
     })
   }
 }

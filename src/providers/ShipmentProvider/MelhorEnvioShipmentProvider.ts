@@ -6,6 +6,7 @@ import { Quote } from '@entities/Quote'
 import { Jwt } from '@entities/Jwt'
 import { AppError } from '@utils/AppError'
 import queryStrig from 'node:querystring'
+import { APP_ERRORS } from '@constants/app-errors'
 
 const {
   NODE_ENV,
@@ -53,7 +54,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     { zipcode, skus }: CalculateQuotePayload,
     token: string,
   ): Promise<Quote[]> {
-    this.api.setBearerToken('')
+    this.api.setBearerToken(token)
 
     const quotes = await this.api.post<MelhorEnvioQuote[]>(
       '/api/v2/me/shipment/calculate',
@@ -90,7 +91,6 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       client_id: MELHOR_ENVIO_CLIENT_ID,
       redirect_uri: MELHOR_ENVIO_REDIRECT_URI,
       response_type: 'code',
-      scope: 'shipping-calculate',
     })}`
 
     const response = await this.api.get(uri)
@@ -107,13 +107,12 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       code,
     }
 
-    const { access_token, refresh_token, expires_in } =
+    const { access_token, refresh_token } =
       await this.api.post<MelhorEnvioToken>('/oauth/token', body)
 
     return {
       accessToken: access_token,
       refreshToken: refresh_token,
-      expiresIn: expires_in,
     }
   }
 
@@ -137,7 +136,8 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
 
   handleApiError(error: unknown): void {
     const { message } = this.api.getResponseError<{ message: string }>(error)
-    if (message === 'Unauthenticated.')
+    if (message === 'Unauthenticated.') {
       throw new AppError(APP_ERRORS.invalidToken, 401)
+    }
   }
 }
