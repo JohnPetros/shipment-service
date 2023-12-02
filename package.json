@@ -7,6 +7,7 @@
     "dev": "tsx watch src/server.ts",
     "start": "tsx watch src/server.ts",
     "lint": "eslint src --ext .ts --fix",
+    "build": "tsup src --out-dir build",
     "test": "vitest"
   },
   "keywords": [],
@@ -26,6 +27,7 @@
     "nodemon": "^3.0.1",
     "prettier": "^3.1.0",
     "supertest": "^6.3.3",
+    "tsup": "^8.0.1",
     "tsx": "^4.6.0",
     "typescript": "^5.3.2",
     "vitest": "^0.34.6"
