@@ -13,8 +13,11 @@ const _envConfig: IEnvConfig = {
   MELHOR_ENVIO_CLIENT_ID: Number(process.env.MELHOR_ENVIO_CLIENT_ID),
   MELHOR_ENVIO_SECRET: process.env.MELHOR_ENVIO_SECRET,
   MELHOR_ENVIO_REDIRECT_URI: process.env.MELHOR_ENVIO_REDIRECT_URI,
+  REDIS_PORT: Number(process.env.REDIS_PORT),
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 }
 
+console.log(_envConfig)
 validationProvider.validateEnvConfig(_envConfig)
 
 export const envConfig = _envConfig

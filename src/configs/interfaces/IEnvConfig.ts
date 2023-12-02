@@ -8,4 +8,6 @@ export interface IEnvConfig {
   MELHOR_ENVIO_SECRET: string | undefined
   MELHOR_ENVIO_CLIENT_ID: number
   MELHOR_ENVIO_REDIRECT_URI: string | undefined
+  REDIS_PORT: number | undefined
+  REDIS_PASSWORD: string | undefined
 }

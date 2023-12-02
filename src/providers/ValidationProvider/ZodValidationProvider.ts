@@ -14,6 +14,8 @@ export class ZodValidationProvider implements IValidationProvider {
     MELHOR_ENVIO_CLIENT_ID,
     MELHOR_ENVIO_REDIRECT_URI,
     MELHOR_ENVIO_SECRET,
+    REDIS_PASSWORD,
+    REDIS_PORT,
   }: IEnvConfig) {
     const envConfigSchema = z.object({
       NODE_ENV: z
@@ -24,6 +26,8 @@ export class ZodValidationProvider implements IValidationProvider {
       PORT: z.number().default(3333),
       MELHOR_ENVIO_DEV_URL: z.string(),
       MELHOR_ENVIO_PROD_URL: z.string(),
+      REDIS_PASSWORD: z.string(),
+      REDIS_PORT: z.number(),
     })
 
     const validation = envConfigSchema.safeParse({
@@ -36,6 +40,8 @@ export class ZodValidationProvider implements IValidationProvider {
       MELHOR_ENVIO_CLIENT_ID,
       MELHOR_ENVIO_REDIRECT_URI,
       MELHOR_ENVIO_SECRET,
+      REDIS_PASSWORD,
+      REDIS_PORT,
     })
 
     if (!validation.success) {
