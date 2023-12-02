@@ -9,6 +9,7 @@ import { authRoutes } from '@routes/authRoutes'
 import { shipmentRoutes } from '@routes/shipmentRoutes'
 import { envConfig } from '@configs/envConfig'
 import { AppError } from '@utils/AppError'
+import { FastifyHttp } from './FastifyHttp'
 
 export class Fastify implements IApp {
   private fastify: FastifyInstance
@@ -25,13 +26,10 @@ export class Fastify implements IApp {
       prefix: 'shipment',
     })
 
-    fastify.setErrorHandler((error, request, reply) => {
+    fastify.setErrorHandler(async (error, request, reply) => {
       if (error instanceof AppError) {
-        if (error.message === 'Invalid Token') {
-          return reply.redirect('/auth/refresh_token')
-        }
-
-        return reply.status(error.statusCode).send({ message: error.message })
+        const fastifyHttp = new FastifyHttp(request, reply)
+        await error.handleError(fastifyHttp)
       }
 
       return reply.status(500).send({

@@ -24,18 +24,8 @@ export class FastifyHttp implements IHttp {
     return this.request.params as Params
   }
 
-  getJwt(): Jwt | null {
-    const accessToken = this.request.cookies.access_token
-    const refreshToken = this.request.cookies.refresh_token
-    const expiresIn = this.request.cookies.expires_in
-
-    if (!accessToken || !refreshToken || !expiresIn) return null
-
-    return {
-      accessToken,
-      refreshToken,
-      expiresIn: Number(expiresIn),
-    }
+  getPreviusRoute(): string {
+    return this.request.originalUrl
   }
 
   setCookie(name: string, data: string, expiresIn: number): void {
@@ -45,6 +35,10 @@ export class FastifyHttp implements IHttp {
       path: '/',
       maxAge,
     })
+  }
+
+  redirect(route: string) {
+    this.reply.redirect(307, route)
   }
 
   send(statusCode: number, response: unknown) {
