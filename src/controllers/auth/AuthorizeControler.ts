@@ -5,13 +5,13 @@ import { ShipmentProvider } from '@providers/ShipmentProvider'
 import { AuthorizeUseCase } from '@useCases/auth/AuthorizeUseCase'
 
 export class AuthorizeController implements ICrontroller {
-  async handle(http: IHttp): Promise<JSON> {
+  async handle(http: IHttp) {
     const httpClientProvider = new HttpClientProvider()
     const shippmentProvider = new ShipmentProvider(httpClientProvider)
     const authorizeUseCase = new AuthorizeUseCase(shippmentProvider)
 
     await authorizeUseCase.execute()
 
-    return http.send(200, 'Olá, Mundo!')
+    http.send(200, 'Olá, Mundo!')
   }
 }

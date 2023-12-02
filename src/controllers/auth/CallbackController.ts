@@ -6,7 +6,7 @@ import { GenerateTokenUseCase } from '../../useCases/auth/GenerateTokenUseCase'
 import { Cache } from '@cache/index'
 
 export class CallbackController implements ICrontroller {
-  async handle(http: IHttp): Promise<JSON> {
+  async handle(http: IHttp) {
     const { code } = http.getQuery<{ code: string }>()
 
     const cache = new Cache()
@@ -20,6 +20,6 @@ export class CallbackController implements ICrontroller {
     const { accessToken, refreshToken } =
       await generateTokenUseCase.execute(code)
 
-    return http.send(200, { accessToken, refreshToken })
+    http.send(200, { accessToken, refreshToken })
   }
 }

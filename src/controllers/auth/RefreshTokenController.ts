@@ -6,7 +6,7 @@ import { ShipmentProvider } from '@providers/ShipmentProvider'
 import { Cache } from '@cache/index'
 
 export class RefreshTokenController implements ICrontroller {
-  async handle(http: IHttp): Promise<JSON> {
+  async handle(http: IHttp) {
     const httpClientProvider = new HttpClientProvider()
     const shippmentProvider = new ShipmentProvider(httpClientProvider)
     const refreshTokenUseCase = new RefreshTokenUseCase(
@@ -14,8 +14,10 @@ export class RefreshTokenController implements ICrontroller {
       new Cache(),
     )
 
-    const { accessToken, refreshToken } = await refreshTokenUseCase.execute()
+    const previousRoute = await refreshTokenUseCase.execute()
 
-    return http.send(200, { accessToken, refreshToken })
+    console.log(previousRoute)
+
+    http.redirect(previousRoute)
   }
 }

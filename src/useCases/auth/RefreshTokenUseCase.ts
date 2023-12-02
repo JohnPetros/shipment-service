@@ -20,12 +20,17 @@ export class RefreshTokenUseCase {
     try {
       const jwt = await this.shippmentProvider.refreshToken(refreshToken)
 
-      await Promise.all([
+      const [, , previousRoute] = await Promise.all([
         this.cache.set(CacheKeys.ACCESS_TOKEN, jwt.accessToken),
         this.cache.set(CacheKeys.REFRESH_TOKEN, jwt.refreshToken),
+        this.cache.get<string>(CacheKeys.PREVIOUS_ROUTE),
+        this.cache.delete(CacheKeys.PREVIOUS_ROUTE),
       ])
 
-      return jwt
+      if (!previousRoute)
+        throw new AppError('Failed to get previous route', 500)
+
+      return previousRoute
     } catch (error) {
       console.error(error)
       this.shippmentProvider.handleApiError(error)

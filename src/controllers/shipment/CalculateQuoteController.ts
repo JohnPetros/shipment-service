@@ -7,7 +7,7 @@ import { ICrontroller } from '../IController'
 import { CalculateQuotePayload } from './payloads/CalculateQuotePayload'
 
 export class CalculateQuoteController implements ICrontroller {
-  async handle(http: IHttp): Promise<JSON> {
+  async handle(http: IHttp) {
     const payload = http.getBody<CalculateQuotePayload>()
 
     const httpClientProvider = new HttpClientProvider()
@@ -19,6 +19,6 @@ export class CalculateQuoteController implements ICrontroller {
 
     const quotes = await calculateUseCase.execute(payload)
 
-    return http.send(200, quotes)
+    http.send(200, quotes)
   }
 }
