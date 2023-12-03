@@ -10,8 +10,12 @@ export class AuthorizeController implements ICrontroller {
     const shippmentProvider = new ShipmentProvider(httpClientProvider)
     const authorizeUseCase = new AuthorizeUseCase(shippmentProvider)
 
-    await authorizeUseCase.execute()
+    const url = await authorizeUseCase.execute()
 
-    http.send(200, 'Olá, Mundo!')
+    console.log(url)
+
+    http.redirect(
+      'https://sandbox.melhorenvio.com.br/oauth/authorize?client_id=3930&redirect_uri=https://sdl5yh-3333.csb.app/auth/callback&response_type=code&sate=111&scope=shipping-calculate',
+    )
   }
 }

@@ -1,11 +1,14 @@
 {
   "name": "shipment-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple app to calculate shipment quote",
+  "engines": {
+    "node": ">=20"
+  },
   "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "tsx watch src/server.ts",
+    "start": "node build",
     "lint": "eslint src --ext .ts --fix",
     "build": "tsup src --out-dir build",
     "test": "vitest"
@@ -13,10 +16,6 @@
   "keywords": [],
   "author": "John Petros",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/codesandbox-app/static-template/issues"
-  },
-  "homepage": "https://github.com/codesandbox-app/static-template#readme",
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.1.0",
     "@types/node": "^20.10.0",

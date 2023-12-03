@@ -93,7 +93,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       response_type: 'code',
     })}`
 
-    const response = await this.api.get(uri)
+    // const response = await this.api.get(uri)
 
     return `${BASE_URL}/${uri}`
   }
