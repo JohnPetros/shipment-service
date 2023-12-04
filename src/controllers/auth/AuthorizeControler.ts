@@ -18,6 +18,6 @@ export class AuthorizeController implements ICrontroller {
     //   'https://sandbox.melhorenvio.com.br/oauth/authorize?client_id=3930&redirect_uri=https://sdl5yh-3333.csb.app/auth/callback&response_type=code&sate=111&scope=shipping-calculate',
     // )
 
-    http.send(200, url)
+    http.send(200, { url })
   }
 }
