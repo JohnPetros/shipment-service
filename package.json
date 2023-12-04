@@ -8,7 +8,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "node build",
+    "start": "node build/server",
     "lint": "eslint src --ext .ts --fix",
     "build": "tsup src --out-dir build",
     "test": "vitest"

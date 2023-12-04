@@ -1,40 +1,16 @@
 version: '3.8'
 
 services:
-  app:
-    container_name: "shipment-service"
-    build: .
-    ports:
-      - 3000:3000
-    environment:
-      - NODE_ENV=development
-      - PORT=3333
-      - ZIPCODE=07176000
-      - DOMAIN=https://sdl5yh-3333.csb.app
-      - NODE_ENV=dev
-      - MELHOR_ENVIO_SECRET=ZEM3eW6aTgXxwAoLEJNxvqy4oUhRNmCD5pxdM4fX
-      - MELHOR_ENVIO_CLIENT_ID=3930
-      - MELHOR_ENVIO_REDIRECT_URI=https://sdl5yh-3333.csb.app/auth/callback
-      - MELHOR_ENVIO_DEV_URL=https://sandbox.melhorenvio.com.br
-      - MELHOR_ENVIO_PROD_URL=https://melhorenvio.com.br
-      - MELHOR_ENVIO_API_URL=/api/v2/me/
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=sertton
-    volumes:
-      - .:/usr/app
-    network_mode: host
   cache:
     image: redis:6.2-alpine
     container_name: redis
     restart: always
     ports:
-      - 6379:6379
+      - '6379:6379'
     environment:
       - REDIS_PASSWORD=sertton
-    volumes:
+    volumes: 
       - cache:/data
-    network_mode: host
-
 volumes:
   cache:
     driver: local
