@@ -1,8 +1,8 @@
-FROM node:20-bullseye
+FROM node
 
 WORKDIR /usr/app
 
-COPY package*.json ./
+COPY package*.json .
 
 RUN npm install --legacy-peer-deps
 
@@ -12,4 +12,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ['npm', 'start']
+CMD ["npm", "run", "build"]
