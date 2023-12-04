@@ -18,6 +18,8 @@ services:
       - MELHOR_ENVIO_DEV_URL=https://sandbox.melhorenvio.com.br
       - MELHOR_ENVIO_PROD_URL=https://melhorenvio.com.br
       - MELHOR_ENVIO_API_URL=/api/v2/me/
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=sertton
     volumes:
       - .:/usr/app
     network_mode: host
