@@ -1,22 +1,9 @@
 import { z } from 'zod'
 import { IValidationProvider } from './IValidationProvider'
-import { IEnvConfig } from '../../configs/interfaces/IEnvConfig'
-import { AppError } from '../../utils/AppError'
+import { IEnvConfig } from '@configs/interfaces/IEnvConfig'
 
 export class ZodValidationProvider implements IValidationProvider {
-  validateEnvConfig({
-    PORT,
-    NODE_ENV,
-    DOMAIN,
-    ZIPCODE,
-    MELHOR_ENVIO_DEV_URL,
-    MELHOR_ENVIO_PROD_URL,
-    MELHOR_ENVIO_CLIENT_ID,
-    MELHOR_ENVIO_REDIRECT_URI,
-    MELHOR_ENVIO_SECRET,
-    REDIS_PASSWORD,
-    REDIS_PORT,
-  }: IEnvConfig) {
+  validateEnvConfig(envVars: IEnvConfig) {
     const envConfigSchema = z.object({
       NODE_ENV: z
         .enum(['development', 'test', 'production'])
@@ -28,25 +15,19 @@ export class ZodValidationProvider implements IValidationProvider {
       MELHOR_ENVIO_PROD_URL: z.string(),
       REDIS_PASSWORD: z.string(),
       REDIS_PORT: z.number(),
+      REDIS_EXTERNAL_URL: z.string(),
+      REDIS_INTERNAL_URL: z.string(),
+      MERCADO_PAGO_ACCESS_TOKEN: z.string(),
+      MERCADO_PAGO_PUBLIC_KEY: z.string(),
     })
 
-    const validation = envConfigSchema.safeParse({
-      PORT,
-      NODE_ENV,
-      DOMAIN,
-      ZIPCODE,
-      MELHOR_ENVIO_DEV_URL,
-      MELHOR_ENVIO_PROD_URL,
-      MELHOR_ENVIO_CLIENT_ID,
-      MELHOR_ENVIO_REDIRECT_URI,
-      MELHOR_ENVIO_SECRET,
-      REDIS_PASSWORD,
-      REDIS_PORT,
-    })
+    const validation = envConfigSchema.safeParse(envVars)
+
+    console.log(validation.success)
 
     if (!validation.success) {
       console.error(validation.error.format())
-      throw new AppError('Invalid env variables', 500)
+      throw new Error('Invalid env variables')
     }
   }
 }
