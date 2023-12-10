@@ -1,6 +1,9 @@
 import { z } from 'zod'
 import { IValidationProvider } from './IValidationProvider'
 import { IEnvConfig } from '@configs/interfaces/IEnvConfig'
+import { Customer } from '@entities/Customer'
+import { regexConfig } from '@configs/regexConfig'
+import { AppError } from '@utils/AppError'
 
 export class ZodValidationProvider implements IValidationProvider {
   validateEnvConfig(envVars: IEnvConfig) {
@@ -23,11 +26,28 @@ export class ZodValidationProvider implements IValidationProvider {
 
     const validation = envConfigSchema.safeParse(envVars)
 
-    console.log(validation.success)
-
     if (!validation.success) {
       console.error(validation.error.format())
       throw new Error('Invalid env variables')
+    }
+  }
+
+  async validateCustomer(customer: Customer) {
+    const emailSchema = z
+      .string({
+        required_error: 'E-mail obrigatório',
+      })
+      .regex(regexConfig.EMAIL, 'E-mail inválido')
+
+    const customerSchema = z.object({
+      id: z.string(),
+      email: emailSchema,
+    })
+
+    try {
+      customerSchema.parse(customer)
+    } catch (error) {
+      throw new AppError(`Invalid customer data: ERROR: ${error}`)
     }
   }
 }
