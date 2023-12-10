@@ -1,6 +1,6 @@
 import { ICache } from '@cache/ICache'
-import { IShipmentProvider } from '../../providers/ShipmentProvider/IShipmentProvider'
-import { AppError } from '../../utils/AppError'
+import { IShipmentProvider } from '../../../providers/ShipmentProvider/IShipmentProvider'
+import { AppError } from '../../../utils/AppError'
 import { CacheKeys } from '@constants/CacheKeys'
 
 export class GenerateTokenUseCase {

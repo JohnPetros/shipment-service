@@ -1,6 +1,6 @@
 import { IHttp } from '@http/interfaces/IHttp'
-import { ICrontroller } from '../IController'
-import { RefreshTokenUseCase } from '@useCases/auth/RefreshTokenUseCase'
+import { ICrontroller } from '../../../http/interfaces/IController'
+import { RefreshTokenUseCase } from 'modules/auth/useCases/RefreshTokenUseCase'
 import { HttpClientProvider } from '@providers/HttpClientProvider'
 import { ShipmentProvider } from '@providers/ShipmentProvider'
 import { Cache } from '@cache/index'
