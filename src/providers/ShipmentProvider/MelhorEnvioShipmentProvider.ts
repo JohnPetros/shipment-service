@@ -6,9 +6,9 @@ import { Quote } from '@entities/Quote'
 import { Jwt } from '@entities/Jwt'
 import { AppError } from '@utils/AppError'
 import { AppErrors } from '@constants/AppErrors'
-import queryStrig from 'node:querystring'
 
 const {
+  DOMAIN,
   NODE_ENV,
   MELHOR_ENVIO_DEV_URL,
   MELHOR_ENVIO_PROD_URL,
@@ -87,11 +87,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   }
 
   async authorize() {
-    const uri = `/oauth/authorize?${queryStrig.stringify({
-      client_id: MELHOR_ENVIO_CLIENT_ID,
-      redirect_uri: MELHOR_ENVIO_REDIRECT_URI,
-      response_type: 'code',
-    })}`
+    const uri = `/oauth/authorize?client_id=${MELHOR_ENVIO_CLIENT_ID}&redirect_uri=${`${DOMAIN}/${MELHOR_ENVIO_REDIRECT_URI}`}&response_type=code`
 
     // const response = await this.api.get(uri)
 

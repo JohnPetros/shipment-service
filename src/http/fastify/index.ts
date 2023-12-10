@@ -5,11 +5,12 @@ import cookie from '@fastify/cookie'
 import { Server } from 'node:http'
 
 import { IApp } from '../interfaces/IApp'
+import { FastifyHttp } from './FastifyHttp'
 import { authRoutes } from '@routes/authRoutes'
 import { shipmentRoutes } from '@routes/shipmentRoutes'
 import { envConfig } from '@configs/envConfig'
 import { AppError } from '@utils/AppError'
-import { FastifyHttp } from './FastifyHttp'
+import { paymentRoutes } from '@routes/paymentRoutes'
 
 export class Fastify implements IApp {
   private fastify: FastifyInstance
@@ -24,6 +25,9 @@ export class Fastify implements IApp {
     fastify.register(() => authRoutes(fastifyRouter), { prefix: 'auth' })
     fastify.register(() => shipmentRoutes(fastifyRouter), {
       prefix: 'shipment',
+    })
+    fastify.register(() => paymentRoutes(fastifyRouter), {
+      prefix: 'payment',
     })
 
     fastify.setErrorHandler(async (error, request, reply) => {
