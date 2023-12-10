@@ -16,10 +16,10 @@ export class CheckoutController implements ICrontroller {
       validationProvider,
     )
 
-    const checkoutUrl = await getPaymentMethodsUseCase.execute(
+    const checkoutUrl = await getPaymentMethodsUseCase.execute({
       customer,
       products,
-    )
+    })
 
     http.send(201, { checkoutUrl })
   }

@@ -27,10 +27,9 @@
     /* Modules */
     "module": "commonjs", 
     "paths": {
-      "@controllers/*": ["controllers/*"],
       "@http/*": ["http/*"],
       "@routes/*": ["routes/*"],
-      "@useCases/*": ["useCases/*"],
+      "@modules/*": ["modules/*"],
       "@entities/*": ["entities/*"],
       "@constants/*": ["constants/*"],
       "@configs/*": ["configs/*"],

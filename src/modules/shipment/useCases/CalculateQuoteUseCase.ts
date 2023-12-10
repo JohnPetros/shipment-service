@@ -3,8 +3,8 @@ import { CalculateQuotePayload } from '../../../controllers/shipment/payloads/Ca
 import { IShipmentProvider } from '../../../providers/ShipmentProvider/IShipmentProvider'
 import { AppError } from '../../../utils/AppError'
 import { ICache } from '@cache/ICache'
-import { CacheKeys } from '@constants/CacheKeys'
-import { AppErrors } from '@constants/AppErrors'
+import { cachConfig } from '@configs/cacheConfig'
+import { appConfig } from '@configs/appConfig'
 
 export class CalculateQuoteUseCase {
   private shippmentProvider: IShipmentProvider
@@ -19,9 +19,11 @@ export class CalculateQuoteUseCase {
     if (!zipcode || !skus.length)
       throw new AppError('Zipcode or skus are incorrect', 402)
 
-    const accessToken = await this.cache.get<string>(CacheKeys.ACCESS_TOKEN)
+    const accessToken = await this.cache.get<string>(
+      cachConfig.KEYS.ACCESS_TOKEN,
+    )
 
-    if (!accessToken) throw new AppError(AppErrors.INVALID_TOKEN, 402)
+    if (!accessToken) throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 402)
 
     try {
       return await this.shippmentProvider.calculate(
