@@ -1,8 +1,8 @@
-import { PaymentMethod } from '@entities/PaymentMethod'
 import { IPaymentProvider } from './IPaymentProvider'
 import { MercadoPagoPaymentProvider } from './MercadoPagoPaymentProvider'
 import { Customer } from '@entities/Customer'
 import { Product } from '@entities/Product'
+import { Payment } from '@entities/Payment'
 
 export class PaymentProvider implements IPaymentProvider {
   private paymentProvider: IPaymentProvider
@@ -11,11 +11,11 @@ export class PaymentProvider implements IPaymentProvider {
     this.paymentProvider = new MercadoPagoPaymentProvider()
   }
 
-  async checkout(customer: Customer, products: Product[]): Promise<string> {
-    return await this.paymentProvider.checkout(customer, products)
+  async getPayment(paymentId: string): Promise<Payment> {
+    return await this.paymentProvider.getPayment(paymentId)
   }
 
-  async getPaymentMethods(): Promise<PaymentMethod[]> {
-    return await this.paymentProvider.getPaymentMethods()
+  async checkout(customer: Customer, products: Product[]): Promise<string> {
+    return await this.paymentProvider.checkout(customer, products)
   }
 }

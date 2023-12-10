@@ -1,10 +1,12 @@
-import { Customer } from '@entities/Customer'
-import { Product } from '@entities/Product'
+import { IUseCase } from '@http/interfaces/IUseCase'
+
 import { IPaymentProvider } from '@providers/PaymentProvider/IPaymentProvider'
 import { IValidationProvider } from '@providers/ValidationProvider/IValidationProvider'
-import { AppError } from '@utils/AppError'
 
-export class CheckoutUseCase {
+import { AppError } from '@utils/AppError'
+import { CheckoutDTO } from '../dtos/CheckoutDTO'
+
+export class CheckoutUseCase implements IUseCase<CheckoutDTO, string> {
   private paymentProvider: IPaymentProvider
   private validationProvider: IValidationProvider
 
@@ -16,7 +18,7 @@ export class CheckoutUseCase {
     this.validationProvider = validationProvider
   }
 
-  async execute(customer: Customer, products: Product[]): Promise<string> {
+  async execute({ customer, products }: CheckoutDTO): Promise<string> {
     if (!customer) throw new AppError('Customer data is not provided', 400)
     if (!products.length)
       throw new AppError('Products data is not provided', 400)
@@ -26,7 +28,6 @@ export class CheckoutUseCase {
     try {
       return await this.paymentProvider.checkout(customer, products)
     } catch (error) {
-      console.error(error)
       throw new AppError('Failed to checkout', 500)
     }
   }

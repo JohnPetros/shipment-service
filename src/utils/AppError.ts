@@ -1,6 +1,4 @@
-import { Cache } from '@cache/index'
 import { appConfig } from '@configs/appConfig'
-import { cachConfig } from '@configs/cacheConfig'
 import { IHttp } from '@http/interfaces/IHttp'
 
 export class AppError {
@@ -12,19 +10,19 @@ export class AppError {
     this.statusCode = statusCode
   }
 
-  private async handleIvalidTokenError(http: IHttp) {
-    const cache = new Cache()
-    await cache.set(cachConfig.KEYS.PREVIOUS_ROUTE, http.getPreviusRoute())
-    http.redirect('/auth/refresh_token')
-  }
+  // private async handleIvalidTokenError(http: IHttp) {
+  //   const cache = new Cache()
+  //   await cache.set(cachConfig.KEYS.PREVIOUS_ROUTE, http.getPreviusRoute())
+  //   http.redirect('/auth/refresh_token')
+  // }
 
   async handleError(http: IHttp) {
     switch (this.message) {
-      case appConfig.ERRORS.INVALID_TOKEN:
-        await this.handleIvalidTokenError(http)
-        break
+      // case appConfig.ERRORS.INVALID_TOKEN:
+      //   await this.handleIvalidTokenError(http)
+      //   break
       default:
-        http.send(this.statusCode, this.message)
+        http.send(this.statusCode, { message: this.message })
     }
   }
 }

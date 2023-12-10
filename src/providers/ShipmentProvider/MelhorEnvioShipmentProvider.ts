@@ -5,7 +5,7 @@ import { IShipmentProvider } from './IShipmentProvider'
 import { Quote } from '@entities/Quote'
 import { Jwt } from '@entities/Jwt'
 import { AppError } from '@utils/AppError'
-import { AppErrors } from '@constants/AppErrors'
+import { appConfig } from '@configs/appConfig'
 
 const {
   DOMAIN,
@@ -133,7 +133,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   handleApiError(error: unknown): void {
     const { message } = this.api.getResponseError<{ message: string }>(error)
     if (message === 'Unauthenticated.') {
-      throw new AppError(AppErrors.INVALID_TOKEN, 401)
+      throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 401)
     }
   }
 }
