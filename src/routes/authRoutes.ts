@@ -1,6 +1,6 @@
-import { AuthorizeController } from '@controllers/auth/AuthorizeControler'
-import { CallbackController } from '@controllers/auth/CallbackController'
-import { RefreshTokenController } from '@controllers/auth/RefreshTokenController'
+import { AuthorizeController } from '@modules/auth/controllers/AuthorizeControler'
+import { CallbackController } from '@modules/auth/controllers/CallbackController'
+import { RefreshTokenController } from '@modules/auth/controllers/RefreshTokenController'
 import { IRouter } from '@http/interfaces/IRouter'
 
 const authorizeController = new AuthorizeController()

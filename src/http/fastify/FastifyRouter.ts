@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 import { IRouter } from '../interfaces/IRouter'
 import { FastifyHttp } from './FastifyHttp'
-import { ICrontroller } from '../../controllers/IController'
+import { ICrontroller } from '../interfaces/IController'
 import { IMiddleware } from '../interfaces/IMiddleware'
 import { IHttp } from '../interfaces/IHttp'
 
@@ -34,12 +34,7 @@ export class FastifyRouter implements IRouter {
     ...middlewares: IMiddleware[]
   ): void {
     this.fastify.post(route, (request, reply) => {
-      // reply.setCookie('teste', 'foo', {
-      //   path: '/',
-      //   maxAge: 10000,
-      // })
       const fastifyHttp = new FastifyHttp(request, reply)
-      // fastifyHttp.setCookie('oof', 'teste', new Date())
       this.handleMiddlewares(middlewares, fastifyHttp)
 
       return controller.handle(fastifyHttp)

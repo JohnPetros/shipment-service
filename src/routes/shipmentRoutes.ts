@@ -1,4 +1,4 @@
-import { CalculateQuoteController } from '../controllers/shipment/CalculateQuoteController'
+import { CalculateQuoteController } from '@modules/shipment/controllers/CalculateQuoteController'
 import { IRouter } from '../http/interfaces/IRouter'
 
 const calculateQuoteController = new CalculateQuoteController()
