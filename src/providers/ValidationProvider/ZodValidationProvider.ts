@@ -6,6 +6,16 @@ import { regexConfig } from '@configs/regexConfig'
 import { AppError } from '@utils/AppError'
 
 export class ZodValidationProvider implements IValidationProvider {
+  private getErrorsMessage(errors: Record<string, string[]>) {
+    const errorMessages = []
+
+    for (const error in errors) {
+      errorMessages.push(errors[error].join(', '))
+    }
+
+    return errorMessages.join(', ')
+  }
+
   validateEnvConfig(envVars: IEnvConfig) {
     const envConfigSchema = z.object({
       NODE_ENV: z
@@ -28,26 +38,31 @@ export class ZodValidationProvider implements IValidationProvider {
 
     if (!validation.success) {
       console.error(validation.error.format())
-      throw new Error('Invalid env variables')
+      throw new AppError('Invalid env variables')
     }
   }
 
-  async validateCustomer(customer: Customer) {
+  validateCustomer(customer: Customer) {
     const emailSchema = z
       .string({
-        required_error: 'E-mail obrigatório',
+        required_error: 'Email is required',
       })
-      .regex(regexConfig.EMAIL, 'E-mail inválido')
+      .regex(regexConfig.EMAIL, 'Email is invalid')
 
     const customerSchema = z.object({
-      id: z.string(),
+      id: z.string({
+        required_error: 'Id is required',
+      }),
       email: emailSchema,
     })
 
-    try {
-      customerSchema.parse(customer)
-    } catch (error) {
-      throw new AppError(`Invalid customer data: ERROR: ${error}`)
+    const validation = customerSchema.safeParse(customer)
+
+    if (!validation.success) {
+      throw new AppError(
+        'customer data is invalid. Error: ' +
+          this.getErrorsMessage(validation.error.formErrors.fieldErrors),
+      )
     }
   }
 }
