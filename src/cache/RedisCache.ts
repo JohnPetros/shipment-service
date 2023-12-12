@@ -9,15 +9,16 @@ export class RedisCache implements ICache {
   constructor() {
     const URL =
       envConfig.NODE_ENV === 'development'
-        ? envConfig.REDIS_EXTERNAL_URL
-        : envConfig.REDIS_INTERNAL_URL
+        ? envConfig.REDIS_INTERNAL_URL
+        : envConfig.REDIS_EXTERNAL_URL
 
     if (!URL) throw new AppError('Redis connection url is not provided')
 
-    this.redis = new Redis(URL)
+    this.redis = new Redis({ port: 6379 })
   }
 
   async set(key: string, data: unknown): Promise<void> {
+    console.log({ key })
     await this.redis.set(key, JSON.stringify(data))
   }
 
