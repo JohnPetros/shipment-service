@@ -1,11 +1,12 @@
 import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
 import { envConfig } from '../../configs/envConfig'
-import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
+
 import { IShipmentProvider } from './IShipmentProvider'
 import { Quote } from '@entities/Quote'
 import { Jwt } from '@entities/Jwt'
 import { AppError } from '@utils/AppError'
 import { appConfig } from '@configs/appConfig'
+import { CalculateQuoteDTO } from '@modules/shipment/dtos/CalculateQuoteDTO'
 
 const {
   DOMAIN,
@@ -44,17 +45,17 @@ export type MelhorEnvioQuote = {
 export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   private api: IHttpClientProvider
 
-  constructor(api: IHttpClientProvider) {
+  constructor(api: IHttpClientProvider, token?: string) {
     this.api = api
 
     api.setBaseUrl(String(BASE_URL))
   }
 
   async calculate(
-    { zipcode, skus }: CalculateQuotePayload,
+    { zipcode, products }: CalculateQuoteDTO,
     token: string,
   ): Promise<Quote[]> {
-    this.api.setBearerToken(token)
+    this.api.setJwt(`Bearer ${token}`)
 
     const quotes = await this.api.post<MelhorEnvioQuote[]>(
       '/api/v2/me/shipment/calculate',
@@ -65,13 +66,13 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
         to: {
           postal_code: String(ZIPCODE),
         },
-        products: skus.map((sku) => ({
-          width: sku.width,
-          height: sku.height,
-          length: sku.length,
-          weight: sku.weight,
-          insurance_value: sku.price,
-          quantity: sku.quantity,
+        products: products.map((product) => ({
+          width: product.width,
+          height: product.height,
+          length: product.length,
+          weight: product.weight,
+          insurance_value: product.price,
+          quantity: product.quantity,
         })),
       },
     )
@@ -87,11 +88,9 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   }
 
   async authorize() {
-    const uri = `/oauth/authorize?client_id=${MELHOR_ENVIO_CLIENT_ID}&redirect_uri=${`${DOMAIN}/${MELHOR_ENVIO_REDIRECT_URI}`}&response_type=code`
+    const uri = `/oauth/authorize?client_id=${MELHOR_ENVIO_CLIENT_ID}&redirect_uri=${`${DOMAIN}${MELHOR_ENVIO_REDIRECT_URI}`}&response_type=code&scope=shipping-calculate`
 
-    // const response = await this.api.get(uri)
-
-    return `${BASE_URL}/${uri}`
+    return `${BASE_URL}${uri}`
   }
 
   async getToken(code: string): Promise<Jwt> {
@@ -99,7 +98,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       grant_type: 'authorization_code',
       client_id: MELHOR_ENVIO_CLIENT_ID,
       client_secret: MELHOR_ENVIO_SECRET,
-      redirect_uri: MELHOR_ENVIO_REDIRECT_URI,
+      redirect_uri: 'https://sdl5yh-3333.csb.app/auth/callback',
       code,
     }
 
@@ -132,6 +131,8 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
 
   handleApiError(error: unknown): void {
     const { message } = this.api.getResponseError<{ message: string }>(error)
+    console.error(error)
+
     if (message === 'Unauthenticated.') {
       throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 401)
     }

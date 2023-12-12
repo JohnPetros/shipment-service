@@ -1,7 +1,7 @@
 import { ICache } from '@cache/ICache'
 import { IShipmentProvider } from '../../../providers/ShipmentProvider/IShipmentProvider'
 import { AppError } from '../../../utils/AppError'
-import { cachConfig } from '@configs/cacheConfig'
+import { cacheConfig } from '@configs/cacheConfig'
 
 export class GenerateTokenUseCase {
   private shippmentProvider: IShipmentProvider
@@ -19,12 +19,13 @@ export class GenerateTokenUseCase {
       const jwt = await this.shippmentProvider.getToken(code)
 
       await Promise.all([
-        this.cache.set(cachConfig.KEYS.ACCESS_TOKEN, jwt.accessToken),
-        this.cache.set(cachConfig.KEYS.ACCESS_TOKEN, jwt.refreshToken),
+        this.cache.set(cacheConfig.KEYS.ACCESS_TOKEN, jwt.accessToken),
+        this.cache.set(cacheConfig.KEYS.REFRESH_TOKEN, jwt.refreshToken),
       ])
 
       return jwt
     } catch (error) {
+      console.error(error)
       throw new AppError('Failed to generate token', 500)
     }
   }

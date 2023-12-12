@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, isAxiosError } from 'axios'
+import axios, { AxiosInstance, isAxiosError } from 'axios'
 import { IHttpClientProvider } from './IHttpClientProvider'
 
 export class AxiosHttpClientProvider implements IHttpClientProvider {
@@ -17,9 +17,21 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
     this.axios.defaults.baseURL = baseUrl
   }
 
-  setBearerToken(token: string) {
-    this.axios.defaults.headers.common = {
-      Authorization: 'Bearer ' + token,
+  setJwt(token: string) {
+    console.log({ token })
+    this.axios.defaults.headers.common.Authorization = token
+  }
+
+  setAuth(username: string, password: string): void {
+    this.axios.defaults.auth = {
+      username,
+      password,
+    }
+  }
+
+  setParams(key: string, value: string) {
+    this.axios.defaults.params = {
+      [key]: value,
     }
   }
 

@@ -1,10 +1,11 @@
-import { Quote } from '../../../entities/Quote'
-import { CalculateQuotePayload } from '../../../controllers/shipment/payloads/CalculateQuotePayload'
-import { IShipmentProvider } from '../../../providers/ShipmentProvider/IShipmentProvider'
-import { AppError } from '../../../utils/AppError'
+import { Quote } from '@entities/Quote'
+
+import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider'
+import { AppError } from '@utils/AppError'
 import { ICache } from '@cache/ICache'
-import { cachConfig } from '@configs/cacheConfig'
+import { cacheConfig } from '@configs/cacheConfig'
 import { appConfig } from '@configs/appConfig'
+import { CalculateQuoteDTO } from '../dtos/CalculateQuoteDTO'
 
 export class CalculateQuoteUseCase {
   private shippmentProvider: IShipmentProvider
@@ -15,19 +16,19 @@ export class CalculateQuoteUseCase {
     this.cache = cache
   }
 
-  async execute({ skus, zipcode }: CalculateQuotePayload): Promise<Quote[]> {
-    if (!zipcode || !skus.length)
+  async execute({ products, zipcode }: CalculateQuoteDTO): Promise<Quote[]> {
+    if (!zipcode || !products.length)
       throw new AppError('Zipcode or skus are incorrect', 402)
 
     const accessToken = await this.cache.get<string>(
-      cachConfig.KEYS.ACCESS_TOKEN,
+      cacheConfig.KEYS.ACCESS_TOKEN,
     )
 
     if (!accessToken) throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 402)
 
     try {
       return await this.shippmentProvider.calculate(
-        { skus, zipcode },
+        { products, zipcode },
         accessToken,
       )
     } catch (error) {

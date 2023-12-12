@@ -1,11 +1,15 @@
-import { Jwt } from '../../entities/Jwt'
-import { Quote } from '../../entities/Quote'
-import { CalculateQuotePayload } from '../../controllers/shipment/payloads/CalculateQuotePayload'
+import { Jwt } from '@entities/Jwt'
+import { Quote } from '@entities/Quote'
+
+import { CalculateQuoteDTO } from '@modules/shipment/dtos/CalculateQuoteDTO'
 
 export interface IShipmentProvider {
   authorize(): Promise<string>
   getToken(code: string): Promise<Jwt>
   refreshToken(refreshToken: string): Promise<Jwt>
-  calculate(payload: CalculateQuotePayload, token: string): Promise<Quote[]>
+  calculate(
+    { products, zipcode }: CalculateQuoteDTO,
+    token: string,
+  ): Promise<Quote[]>
   handleApiError(error: unknown): void
 }

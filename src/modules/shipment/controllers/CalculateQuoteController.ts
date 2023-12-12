@@ -1,23 +1,27 @@
 import { Cache } from '@cache/index'
 import { IHttp } from '../../../http/interfaces/IHttp'
-import { HttpClientProvider } from '../../../providers/HttpClientProvider'
-import { ShipmentProvider } from '../../../providers/ShipmentProvider'
 import { CalculateQuoteUseCase } from '../useCases/CalculateQuoteUseCase'
 import { ICrontroller } from '../../../http/interfaces/IController'
-import { CalculateQuotePayload } from '../../../controllers/shipment/payloads/CalculateQuotePayload'
+import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
+import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttpClientProvider'
+import { CalculateQuoteDTO } from '../dtos/CalculateQuoteDTO'
 
 export class CalculateQuoteController implements ICrontroller {
   async handle(http: IHttp) {
-    const payload = http.getBody<CalculateQuotePayload>()
+    const { zipcode, products } = http.getBody<CalculateQuoteDTO>()
 
-    const httpClientProvider = new HttpClientProvider()
-    const shippmentProvider = new ShipmentProvider(httpClientProvider)
+    console.log(zipcode, products)
+
+    const axiosHttpClientProvider = new AxiosHttpClientProvider()
+    const shippmentProvider = new MelhorEnvioShipmentProvider(
+      axiosHttpClientProvider,
+    )
     const calculateUseCase = new CalculateQuoteUseCase(
       shippmentProvider,
       new Cache(),
     )
 
-    const quotes = await calculateUseCase.execute(payload)
+    const quotes = await calculateUseCase.execute({ zipcode, products })
 
     http.send(200, quotes)
   }

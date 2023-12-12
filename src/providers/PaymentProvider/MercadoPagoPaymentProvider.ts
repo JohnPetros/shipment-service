@@ -38,6 +38,10 @@ export class MercadoPagoPaymentProvider implements IPaymentProvider {
     this.preference = new MercadoPagoPreference(client)
   }
 
+  handleApiError(error: unknown): void {
+    if (error) throw new AppError('Api error')
+  }
+
   async createCreditCardTransaction(
     payload: CreateCreditCardTransactionDTO,
   ): Promise<Transaction> {
@@ -74,6 +78,9 @@ export class MercadoPagoPaymentProvider implements IPaymentProvider {
           zipCode: response.payer?.address?.zip_code ?? '',
           state: response.payer?.address?.street_name ?? '',
           city: response.payer?.address?.street_name ?? '',
+          neighborhood: response.payer?.address?.street_name ?? '',
+          number: Number(response.payer?.address?.street_number),
+          street: response.payer?.address?.street_name ?? '',
         },
       },
       paymentMethod: this.getPaymentMethod(response.payment_type_id ?? ''),

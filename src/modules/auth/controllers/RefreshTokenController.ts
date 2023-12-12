@@ -1,14 +1,16 @@
 import { IHttp } from '@http/interfaces/IHttp'
 import { ICrontroller } from '../../../http/interfaces/IController'
 import { RefreshTokenUseCase } from 'modules/auth/useCases/RefreshTokenUseCase'
-import { HttpClientProvider } from '@providers/HttpClientProvider'
-import { ShipmentProvider } from '@providers/ShipmentProvider'
 import { Cache } from '@cache/index'
+import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
+import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttpClientProvider'
 
 export class RefreshTokenController implements ICrontroller {
   async handle(http: IHttp) {
-    const httpClientProvider = new HttpClientProvider()
-    const shippmentProvider = new ShipmentProvider(httpClientProvider)
+    const axiosHttpClientProvider = new AxiosHttpClientProvider()
+    const shippmentProvider = new MelhorEnvioShipmentProvider(
+      axiosHttpClientProvider,
+    )
     const refreshTokenUseCase = new RefreshTokenUseCase(
       shippmentProvider,
       new Cache(),
