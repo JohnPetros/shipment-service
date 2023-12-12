@@ -9,12 +9,13 @@ import { IPaymentProvider } from './IPaymentProvider'
 
 import { envConfig } from '@configs/envConfig'
 import { AppError } from '@utils/AppError'
-import { Console } from '@utils/Console'
 import { Customer } from '@entities/Customer'
 import { Product } from '@entities/Product'
 import { Items } from 'mercadopago/dist/clients/commonTypes'
 import { Payer } from 'mercadopago/dist/clients/payment/commonTypes'
 import { Payment, PaymentMethod, PaymentStatus } from '@entities/Payment'
+import { CreateCreditCardTransactionDTO } from '@modules/payment/dtos/CreateTransactionDTO'
+import { Transaction } from '@entities/Transaction'
 
 const ACCESS_TOKEN = envConfig.MERCADO_PAGO_ACCESS_TOKEN
 
@@ -35,6 +36,12 @@ export class MercadoPagoPaymentProvider implements IPaymentProvider {
     this.payment = new MercadoPagoPayment(client)
     this.paymentMethod = new MercadoPagoPaymentMethod(client)
     this.preference = new MercadoPagoPreference(client)
+  }
+
+  async createCreditCardTransaction(
+    payload: CreateCreditCardTransactionDTO,
+  ): Promise<Transaction> {
+    throw new Error('Method not implemented.')
   }
 
   private getPaymentMethod(mercadoPagoPaymentType: string): PaymentMethod {
@@ -59,6 +66,15 @@ export class MercadoPagoPaymentProvider implements IPaymentProvider {
       customer: {
         id: response.payer?.id ?? '',
         email: response.payer?.email ?? '',
+        phone: String(response.payer?.phone) ?? '',
+        name: response.payer?.first_name ?? '',
+        type: 'natural',
+        document: String(response.payer?.identification) ?? '',
+        address: {
+          zipCode: response.payer?.address?.zip_code ?? '',
+          state: response.payer?.address?.street_name ?? '',
+          city: response.payer?.address?.street_name ?? '',
+        },
       },
       paymentMethod: this.getPaymentMethod(response.payment_type_id ?? ''),
     }
