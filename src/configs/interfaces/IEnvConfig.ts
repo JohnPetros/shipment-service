@@ -14,4 +14,7 @@ export interface IEnvConfig {
   REDIS_EXTERNAL_URL: string | undefined
   MERCADO_PAGO_PUBLIC_KEY: string | undefined
   MERCADO_PAGO_ACCESS_TOKEN: string | undefined
+  PAGAR_ME_API_URL: string | undefined
+  PAGAR_ME_PUBLIC_KEY: string | undefined
+  PAGAR_ME_SECRET_KEY: string | undefined
 }

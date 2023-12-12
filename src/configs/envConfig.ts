@@ -18,6 +18,9 @@ const _envConfig: IEnvConfig = {
   REDIS_EXTERNAL_URL: process.env.REDIS_EXTERNAL_URL,
   MERCADO_PAGO_PUBLIC_KEY: process.env.MERCADO_PAGO_PUBLIC_KEY,
   MERCADO_PAGO_ACCESS_TOKEN: process.env.MERCADO_PAGO_ACCESS_TOKEN,
+  PAGAR_ME_PUBLIC_KEY: process.env.PAGAR_ME_PUBLIC_KEY,
+  PAGAR_ME_SECRET_KEY: process.env.PAGAR_ME_PUBLIC_KEY,
+  PAGAR_ME_API_URL: process.env.PAGAR_ME_API_URL,
 }
 
 console.log({ _envConfig })
