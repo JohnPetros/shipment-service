@@ -1,6 +1,6 @@
-import { ValidationProvider } from '@providers/ValidationProvider'
 import { IEnvConfig } from './interfaces/IEnvConfig'
 import 'dotenv/config'
+import { ZodValidationProvider } from '@providers/ValidationProvider/ZodValidationProvider'
 
 const _envConfig: IEnvConfig = {
   NODE_ENV: process.env.NODE_ENV,
@@ -25,8 +25,8 @@ const _envConfig: IEnvConfig = {
 
 console.log({ _envConfig })
 
-const validationProvider = new ValidationProvider()
+const zodValidationProvider = new ZodValidationProvider()
 
-validationProvider.validateEnvConfig(_envConfig)
+zodValidationProvider.validateEnvConfig(_envConfig)
 
 export const envConfig = _envConfig

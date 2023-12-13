@@ -35,11 +35,15 @@ export class CreateTransactionUseCase
 
     this.validationProvider.validateCustomer(customer)
 
+    for (const product of products)
+      this.validationProvider.validateProduct(product)
+
     try {
       switch (paymentMethod) {
         case 'credit-card':
           if (!creditCard)
             throw new AppError('Customer data is not provided', 400)
+          this.validationProvider.validateCreditCard(creditCard)
 
           return await this.paymentProvider.createCreditCardTransaction({
             customer,
