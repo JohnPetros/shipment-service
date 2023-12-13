@@ -7,7 +7,7 @@ export interface PagarmeTransaction {
   acquirer_message: string
   amount: number
   status: string
-  success: true
+  success: boolean
   qr_code: string
   qr_code_url: string
   expires_at: Date

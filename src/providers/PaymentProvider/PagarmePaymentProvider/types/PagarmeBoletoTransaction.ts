@@ -7,4 +7,6 @@ export interface PagarmeBoletoTransaction extends PagarmeTransaction {
   instructions: string
   qr_code: string
   due_at: string
+  status: 'generated'
+  line: string
 }

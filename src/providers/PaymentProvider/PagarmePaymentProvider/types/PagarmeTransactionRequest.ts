@@ -50,7 +50,7 @@ export type PagarmeTransactionRequest = {
     document_type: string
   }
   payments: {
-    payment_method: string
+    payment_method: 'credit_card' | 'boleto' | 'pix'
     credit_card?: {
       installments: number
       statement_descriptor: string
@@ -102,11 +102,16 @@ export type PagarmeTransactionRequest = {
       recurrence?: boolean
     }
     boleto?: {
-      bank: number
+      bank: string
       due_at: Date
       document_number: string
       type: string
       instructions: string
+    }
+    pix?: {
+      expires_in?: string
+      expires_at?: Date
+      additional_information?: Record<string, string>[]
     }
   }[]
 }
