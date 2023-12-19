@@ -40,6 +40,7 @@
     "jsqr": "^1.4.0",
     "melhor-envio": "^1.6.3",
     "mercadopago": "^2.0.5",
+    "node-downloader-helper": "^2.1.9",
     "pagarme": "^4.33.1",
     "tsup": "^8.0.1",
     "vite-tsconfig-paths": "^4.2.1",
