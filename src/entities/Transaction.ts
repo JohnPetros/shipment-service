@@ -9,4 +9,5 @@ export type Transaction = {
   qrCode?: string
   code?: string
   expires_at?: Date
+  pdf?: string
 }
