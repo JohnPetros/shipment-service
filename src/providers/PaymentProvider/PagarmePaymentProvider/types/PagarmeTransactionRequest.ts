@@ -6,6 +6,21 @@ export type PagarmeTransactionRequest = {
     quantity: number
     category?: string
   }[]
+  shipping: {
+    amount: number
+    description: string
+    recipient_name: string
+    recipient_phone: string
+    address: {
+      country: 'BR'
+      state: string
+      city: string
+      street: string
+      zip_code: string
+      line_1: string
+      line_2?: string
+    }
+  }
   customer: {
     name: string
     email: string
@@ -53,21 +68,21 @@ export type PagarmeTransactionRequest = {
     payment_method: 'credit_card' | 'boleto' | 'pix'
     credit_card?: {
       installments: number
-      statement_descriptor: string
-      card: {
-        number: string
-        holder_name: string
-        exp_month: number
-        exp_year: number
-        cvv: string
+      statement_descriptor?: string
+      card?: {
+        number?: string
+        holder_name?: string
+        exp_month?: number
+        exp_year?: number
+        cvv?: string
         billing_address: {
-          street: string
-          number: string
-          zip_code: string
-          neighborhood: string
-          city: string
-          state: string
-          country: string
+          street?: string
+          number?: string
+          zip_code?: string
+          neighborhood?: string
+          city?: string
+          state?: string
+          country?: string
           complement?: string
           line_1: string
           line_2?: string

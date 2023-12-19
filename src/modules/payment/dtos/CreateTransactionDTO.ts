@@ -1,11 +1,12 @@
-import { CreditCard } from '@entities/CreditCard'
 import { Customer } from '@entities/Customer'
 import { PaymentMethod } from '@entities/PaymentMethod'
 import { Product } from '@entities/Product'
+import { ShipmentService } from '@entities/ShipmentService'
 
 export interface CreateTransactionDTO {
   customer: Customer
   products: Product[]
-  creditCard?: CreditCard
+  shipmentService: ShipmentService
+  cardToken?: string
   paymentMethod: PaymentMethod
 }

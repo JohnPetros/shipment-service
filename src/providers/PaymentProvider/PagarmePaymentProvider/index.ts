@@ -19,6 +19,9 @@ import { CreateTransactionDTO } from '@modules/payment/dtos/CreateTransactionDTO
 import crypto from 'node:crypto'
 import { PagarmePixTransaction } from './types/PagarmePixTransaction'
 import { QRCode } from '@utils/QRCode'
+import { File } from '@utils/File'
+import { fileConfig } from '@configs/fileConfig'
+import { ShipmentService } from '@entities/ShipmentService'
 
 const URL = envConfig.PAGAR_ME_API_URL
 const SECRET_KEY = envConfig.PAGAR_ME_SECRET_KEY
@@ -50,6 +53,7 @@ export class PagarMePaymentProvider implements IPaymentProvider {
   }
 
   private getTransactionItems(products: Product[]) {
+    console.log({ products })
     return products.map((product) => ({
       id: product.id,
       code: product.sku,
@@ -90,12 +94,28 @@ export class PagarMePaymentProvider implements IPaymentProvider {
   async createTicketTransaction({
     customer,
     products,
+    shipmentService,
   }: CreateTransactionDTO): Promise<Transaction> {
     const formatedCustomer = this.formatCustomer(customer)
     const items = this.getTransactionItems(products)
+    const documentNumber = crypto.randomUUID().slice(0, 16)
 
     const ticketTransaction: PagarmeTransactionRequest = {
       customer: formatedCustomer,
+      shipping: {
+        amount: Number(shipmentService.price),
+        description: shipmentService.name,
+        recipient_name: formatedCustomer.name,
+        recipient_phone: formatedCustomer.phones.mobile_phone.number,
+        address: {
+          country: 'BR',
+          state: formatedCustomer.address.state,
+          city: formatedCustomer.address.city,
+          zip_code: formatedCustomer.address.zip_code,
+          line_1: formatedCustomer.address.line_1,
+          street: formatedCustomer.address.street,
+        },
+      },
       payments: [
         {
           payment_method: 'boleto',
@@ -103,7 +123,7 @@ export class PagarMePaymentProvider implements IPaymentProvider {
             bank: '033',
             instructions: 'Pagar até o vencimento em 3 dias.',
             due_at: this.date.addDays(new Date(), 3),
-            document_number: crypto.randomUUID().slice(0, 16),
+            document_number: documentNumber,
             type: 'DM',
           },
         },
@@ -130,50 +150,63 @@ export class PagarMePaymentProvider implements IPaymentProvider {
       response.charges[0].last_transaction.qr_code,
     )
 
+    const file = new File(fileConfig.FOLDERS.TMP, `${documentNumber}.pdf`)
+
+    await file.downloadFromRemoteUrl(
+      'https://www.africau.edu/images/default/sample.pdf',
+    )
+
+    const pdf = await file.convertToBase64()
+
+    await file.delete()
+
     return {
       status: this.transationStatus[response.status],
       qrCode: response.charges[0].last_transaction.qr_code,
       code,
+      pdf,
     }
   }
 
   async createCreditCardTransaction({
     customer,
     products,
-    creditCard,
+    cardToken,
+    shipmentService,
   }: CreateTransactionDTO): Promise<Transaction> {
-    if (!creditCard) throw new AppError('Credit card must be provided')
-
-    const expirationDateMonth = creditCard.expirationDate.slice(0, 2)
-    const expirationDateYear = creditCard.expirationDate.slice(3)
-
     const formatedCustomer = this.formatCustomer(customer)
     const items = this.getTransactionItems(products)
 
     const creditCardTransaction: PagarmeTransactionRequest = {
       customer: formatedCustomer,
+      shipping: {
+        amount: Number(shipmentService.price),
+        description: shipmentService.name,
+        recipient_name: formatedCustomer.name,
+        recipient_phone: formatedCustomer.phones.mobile_phone.number,
+        address: {
+          country: 'BR',
+          state: formatedCustomer.address.state,
+          zip_code: formatedCustomer.address.zip_code,
+          line_1: formatedCustomer.address.line_1,
+          street: formatedCustomer.address.street,
+          city: formatedCustomer.address.city,
+        },
+      },
       payments: [
         {
           payment_method: 'credit_card',
           credit_card: {
-            statement_descriptor: '',
+            card_token: cardToken,
             installments: 1,
             card: {
-              cvv: creditCard.cvv,
-              number: creditCard.number,
-              holder_name: creditCard.holderName,
-              exp_year: Number(expirationDateYear),
-              exp_month: Number(expirationDateMonth),
               billing_address: {
-                line_1: `${customer.address.number}, ${customer.address.street},
-                ${customer.address.neighborhood}`,
-                number: customer.address.number.toString(),
-                street: customer.address.street,
-                neighborhood: customer.address.neighborhood,
-                zip_code: customer.address.zipCode,
-                city: customer.address.city,
-                state: customer.address.state,
                 country: 'BR',
+                state: formatedCustomer.address.state,
+                city: formatedCustomer.address.city,
+                zip_code: formatedCustomer.address.zip_code,
+                line_1: `${formatedCustomer.address.number}, ${formatedCustomer.address.street},
+                ${formatedCustomer.address.neighborhood}`,
               },
             },
           },
@@ -196,17 +229,34 @@ export class PagarMePaymentProvider implements IPaymentProvider {
   async createPixTransaction({
     customer,
     products,
+    shipmentService,
   }: Omit<CreateTransactionDTO, 'paymentMethod'>): Promise<Transaction> {
     const formatedCustomer = this.formatCustomer(customer)
     const items = this.getTransactionItems(products)
 
+    console.log(shipmentService.price)
+
     const pixTransaction: PagarmeTransactionRequest = {
       customer: formatedCustomer,
+      shipping: {
+        amount: shipmentService.price * 100,
+        description: shipmentService.name,
+        recipient_name: formatedCustomer.name,
+        recipient_phone: formatedCustomer.phones.mobile_phone.number,
+        address: {
+          country: 'BR',
+          state: formatedCustomer.address.state,
+          zip_code: formatedCustomer.address.zip_code,
+          city: formatedCustomer.address.city,
+          line_1: formatedCustomer.address.line_1,
+          street: formatedCustomer.address.street,
+        },
+      },
       payments: [
         {
           payment_method: 'pix',
           pix: {
-            expires_in: String(60 * 60 * 15), // 15 minutes
+            expires_in: String(60 * 60 * 30), // 15 minutes
           },
         },
       ],
@@ -217,18 +267,19 @@ export class PagarMePaymentProvider implements IPaymentProvider {
       PagarmeTransactionResponse<PagarmePixTransaction>
     >('/orders', pixTransaction)
 
-    new Console().log(response.charges[0].last_transaction.qr_code_url)
-
     const qrcode = new QRCode()
 
     const code = await qrcode.decode(
       response.charges[0].last_transaction.qr_code_url,
     )
 
+    // new Console().log(response.charges[0].last_transaction)
+
     return {
       status: this.transationStatus[response.status],
       qrCode: response.charges[0].last_transaction.qr_code_url,
       code,
+      expires_at: response.charges[0].last_transaction.expires_at,
     }
   }
 

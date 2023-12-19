@@ -13,7 +13,7 @@ import { PaymentMethod } from '@entities/PaymentMethod'
 
 export class CreateTransactionController implements ICrontroller {
   async handle(http: IHttp): Promise<void> {
-    const { customer, products, creditCard } =
+    const { customer, products, shipmentService, cardToken } =
       http.getBody<CreateTransactionDTO>()
 
     const { paymentMethod } = http.getParams<{ paymentMethod: PaymentMethod }>()
@@ -33,8 +33,9 @@ export class CreateTransactionController implements ICrontroller {
     const transaction = await createTransactionUseCase.execute({
       customer,
       products,
-      creditCard,
+      cardToken,
       paymentMethod,
+      shipmentService,
     })
 
     http.send(201, transaction)

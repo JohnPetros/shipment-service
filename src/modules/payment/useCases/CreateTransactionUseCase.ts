@@ -25,8 +25,9 @@ export class CreateTransactionUseCase
 
   async execute({
     customer,
-    creditCard,
+    cardToken,
     products,
+    shipmentService,
     paymentMethod,
   }: CreateTransactionDTO): Promise<Transaction | undefined> {
     if (!customer) throw new AppError('Customer data is not provided', 400)
@@ -34,6 +35,7 @@ export class CreateTransactionUseCase
       throw new AppError('Products data is not provided', 400)
 
     this.validationProvider.validateCustomer(customer)
+    this.validationProvider.validateShipmentService(shipmentService)
 
     for (const product of products)
       this.validationProvider.validateProduct(product)
@@ -41,24 +43,26 @@ export class CreateTransactionUseCase
     try {
       switch (paymentMethod) {
         case 'credit-card':
-          if (!creditCard)
-            throw new AppError('Customer data is not provided', 400)
-          this.validationProvider.validateCreditCard(creditCard)
+          if (!cardToken)
+            throw new AppError('credit card token is not provided', 400)
 
           return await this.paymentProvider.createCreditCardTransaction({
             customer,
             products,
-            creditCard,
+            cardToken,
+            shipmentService,
           })
         case 'ticket':
           return await this.paymentProvider.createTicketTransaction({
             customer,
             products,
+            shipmentService,
           })
         case 'pix':
           return await this.paymentProvider.createPixTransaction({
             customer,
             products,
+            shipmentService,
           })
         default:
           throw new AppError('Payment method is not provided', 400)
