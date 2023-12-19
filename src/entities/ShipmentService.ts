@@ -1,4 +1,4 @@
-export type Quote = {
+export type ShipmentService = {
   name: string
   service: string
   price: number
