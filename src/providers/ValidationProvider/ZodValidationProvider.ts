@@ -26,6 +26,7 @@ export class ZodValidationProvider implements IValidationProvider {
         .default('development'),
       DOMAIN: z.string(),
       ZIPCODE: z.number(),
+      ALIAS: z.string(),
       PORT: z.number().default(3333),
       MELHOR_ENVIO_DEV_URL: z.string(),
       MELHOR_ENVIO_PROD_URL: z.string(),
@@ -38,6 +39,9 @@ export class ZodValidationProvider implements IValidationProvider {
       PAGAR_ME_API_URL: z.string(),
       PAGAR_ME_PUBLIC_KEY: z.string(),
       PAGAR_ME_SECRET_KEY: z.string(),
+      YAMPI_BASE_URL: z.string(),
+      YAMPI_SECRET_KEY: z.string(),
+      YAMPI_TOKEN: z.string(),
     })
 
     const validation = envConfigSchema.safeParse(envVars)
