@@ -3,7 +3,7 @@ import { CreateTransactionDTO } from '@modules/payment/dtos/CreateTransactionDTO
 
 export interface IPaymentProvider {
   createCreditCardTransaction({
-    creditCard,
+    cardToken,
     customer,
     products,
   }: Omit<CreateTransactionDTO, 'paymentMethod'>): Promise<Transaction>

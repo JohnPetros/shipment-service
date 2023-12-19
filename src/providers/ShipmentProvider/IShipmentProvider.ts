@@ -1,5 +1,5 @@
 import { Jwt } from '@entities/Jwt'
-import { Quote } from '@entities/Quote'
+import { ShipmentService } from '@entities/ShipmentService'
 
 import { CalculateQuoteDTO } from '@modules/shipment/dtos/CalculateQuoteDTO'
 
@@ -10,6 +10,6 @@ export interface IShipmentProvider {
   calculate(
     { products, zipcode }: CalculateQuoteDTO,
     token: string,
-  ): Promise<Quote[]>
+  ): Promise<ShipmentService[]>
   handleApiError(error: unknown): void
 }
