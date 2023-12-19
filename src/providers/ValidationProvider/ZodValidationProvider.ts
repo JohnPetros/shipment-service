@@ -6,6 +6,7 @@ import { regexConfig } from '@configs/regexConfig'
 import { AppError } from '@utils/AppError'
 import { Product } from '@entities/Product'
 import { CreditCard } from '@entities/CreditCard'
+import { ShipmentService } from '@entities/ShipmentService'
 
 export class ZodValidationProvider implements IValidationProvider {
   private getErrorsMessage(errors: Record<string, string[]>) {
@@ -108,6 +109,33 @@ export class ZodValidationProvider implements IValidationProvider {
     if (!validation.success) {
       throw new AppError(
         'Product data is invalid. Error: ' +
+          this.getErrorsMessage(validation.error.formErrors.fieldErrors),
+        400,
+      )
+    }
+  }
+
+  validateShipmentService(shipmentService: ShipmentService) {
+    const shipmentServiceSchema = z.object({
+      name: z.string({
+        required_error: 'Name is required',
+      }),
+      service: z.string({
+        required_error: 'Service is required',
+      }),
+      price: z.number({
+        required_error: 'Price must be number',
+      }),
+      days: z.number({
+        required_error: 'Days must be number',
+      }),
+    })
+
+    const validation = shipmentServiceSchema.safeParse(shipmentService)
+
+    if (!validation.success) {
+      throw new AppError(
+        'Shipment service data is invalid. Error: ' +
           this.getErrorsMessage(validation.error.formErrors.fieldErrors),
         400,
       )
