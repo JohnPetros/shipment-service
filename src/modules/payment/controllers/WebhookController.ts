@@ -8,7 +8,7 @@ import { PagarmeWebhook } from '@providers/PaymentProvider/PagarmePaymentProvide
 
 export class WebhookController implements ICrontroller {
   async handle(http: IHttp): Promise<void> {
-    const { data } = http.getBody<PagarmeWebhook>()
+    const payload = http.getBody<PagarmeWebhook>()
 
     const httpClientProvider = new AxiosHttpClientProvider()
     const dateProvider = new DayjsDateProvider()
@@ -18,8 +18,8 @@ export class WebhookController implements ICrontroller {
     )
     const webhookUseCase = new WebhookUseCase(pagarMePaymentProvider)
 
-    await webhookUseCase.execute(data as unknown as PagarmeWebhook)
+    await webhookUseCase.execute(payload)
 
-    http.send(201, { data })
+    http.send(200, payload)
   }
 }
