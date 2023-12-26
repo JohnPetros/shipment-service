@@ -2,7 +2,7 @@ import { ICache } from '@cache/ICache'
 import { IShipmentProvider } from '../../../providers/ShipmentProvider/IShipmentProvider'
 import { AppError } from '../../../utils/AppError'
 import { appConfig } from '@configs/appConfig'
-import { cachConfig } from '@configs/cacheConfig'
+import { cacheConfig } from '@configs/cacheConfig'
 
 export class RefreshTokenUseCase {
   private shippmentProvider: IShipmentProvider
@@ -15,7 +15,7 @@ export class RefreshTokenUseCase {
 
   async execute() {
     const refreshToken = await this.cache.get<string>(
-      cachConfig.KEYS.REFRESH_TOKEN,
+      cacheConfig.KEYS.REFRESH_TOKEN,
     )
     if (!refreshToken) throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 402)
 
@@ -23,10 +23,10 @@ export class RefreshTokenUseCase {
       const jwt = await this.shippmentProvider.refreshToken(refreshToken)
 
       const [, , previousRoute] = await Promise.all([
-        this.cache.set(cachConfig.KEYS.ACCESS_TOKEN, jwt.accessToken),
-        this.cache.set(cachConfig.KEYS.REFRESH_TOKEN, jwt.refreshToken),
-        this.cache.get<string>(cachConfig.KEYS.PREVIOUS_ROUTE),
-        this.cache.delete(cachConfig.KEYS.PREVIOUS_ROUTE),
+        this.cache.set(cacheConfig.KEYS.ACCESS_TOKEN, jwt.accessToken),
+        this.cache.set(cacheConfig.KEYS.REFRESH_TOKEN, jwt.refreshToken),
+        this.cache.get<string>(cacheConfig.KEYS.PREVIOUS_ROUTE),
+        this.cache.delete(cacheConfig.KEYS.PREVIOUS_ROUTE),
       ])
 
       if (!previousRoute)

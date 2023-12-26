@@ -7,83 +7,63 @@ import {
   expect,
   it,
 } from 'vitest'
-import { ShipmentProvider } from '@providers/ShipmentProvider'
-import { HttpClientProvider } from '@providers/HttpClientProvider'
 import { AppError } from '@utils/AppError'
-import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
+import { httpClientProviderMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
 import { CalculateQuoteUseCase } from '../CalculateQuoteUseCase'
-import { jwtMock } from '@entities/mocks/jwtMock'
-import { quoteMock } from '@entities/mocks/shipmentServiceMock'
+import { shipmentServiceMock } from '@entities/mocks/shipmentServiceMock'
+import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider'
+import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
+import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttpClientProvider'
+import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
+import { productsMock } from '@entities/mocks/productsMock'
+import { ICache } from '@cache/ICache'
+import { CacheMock } from '@cache/CacheMock'
 
-let httpClientProvider: HttpClientProvider
-let shipmentProvider: ShipmentProvider
+let httpClientProvider: IHttpClientProvider
+let shipmentProvider: IShipmentProvider
+let cache: ICache
 let calculateQuoteUseCase: CalculateQuoteUseCase
 
 describe('Generate Token Use Case', () => {
-  beforeAll(() => apiServerMock.listen())
+  beforeAll(() => httpClientProviderMock.listen())
   beforeEach(async () => {
-    httpClientProvider = new HttpClientProvider()
-    shipmentProvider = new ShipmentProvider(httpClientProvider)
-    calculateQuoteUseCase = new CalculateQuoteUseCase(shipmentProvider)
+    httpClientProvider = new AxiosHttpClientProvider()
+    shipmentProvider = new MelhorEnvioShipmentProvider(httpClientProvider)
+    cache = new CacheMock()
+
+    calculateQuoteUseCase = new CalculateQuoteUseCase(shipmentProvider, cache)
   })
-  afterEach(() => apiServerMock.resetHandlers())
-  afterAll(() => apiServerMock.close())
+  afterEach(() => httpClientProviderMock.resetHandlers())
+  afterAll(() => httpClientProviderMock.close())
 
   it('should not be able to calculate quote when zipcode is not defined', async () => {
     expect(
       async () =>
-        await calculateQuoteUseCase.execute(
-          {
-            zipcode: 0,
-            skus: [
-              {
-                price: 12.0,
-                quantity: 2,
-                length: 1,
-                width: 1,
-                height: 1,
-                weight: 1,
-              },
-            ],
-          },
-          jwtMock.accessToken,
-        ),
+        await calculateQuoteUseCase.execute({
+          products: productsMock,
+          zipcode: 0,
+        }),
     ).rejects.toEqual(new AppError('Zipcode or skus are incorrect', 402))
   })
 
   it('should not be able to calculate quote when skus are not defined', async () => {
     expect(
       async () =>
-        await calculateQuoteUseCase.execute(
-          {
-            zipcode: 929292,
-            // eslint-disable-next-line
+        await calculateQuoteUseCase.execute({
+          zipcode: 929292,
+          // eslint-disable-next-line
             // @ts-ignore
-            skus: [],
-          },
-          '424242',
-        ),
+          products: [],
+        }),
     ).rejects.toEqual(new AppError('Zipcode or skus are incorrect', 402))
   })
 
   it('should be able to calculate quote', async () => {
-    const response = await calculateQuoteUseCase.execute(
-      {
-        zipcode: 929292,
-        skus: [
-          {
-            price: 12.0,
-            quantity: 2,
-            length: 1,
-            width: 1,
-            height: 1,
-            weight: 1,
-          },
-        ],
-      },
-      '424242',
-    )
+    const response = await calculateQuoteUseCase.execute({
+      zipcode: 929292,
+      products: productsMock,
+    })
 
-    expect(response).toEqual([expect.objectContaining(quoteMock)])
+    expect(response).toEqual([expect.objectContaining(shipmentServiceMock)])
   })
 })

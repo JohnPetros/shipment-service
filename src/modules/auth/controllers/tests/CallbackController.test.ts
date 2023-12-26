@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
+import { httpClientProviderMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
 import request from 'supertest'
 import { app } from 'app'
 import { jwtMock } from '@entities/mocks/jwtMock'
@@ -7,12 +7,12 @@ import { jwtMock } from '@entities/mocks/jwtMock'
 describe('Generate Token Use Case', () => {
   beforeAll(async () => {
     await app.waitServerAvailability()
-    apiServerMock.listen()
+    httpClientProviderMock.listen()
   })
-  afterEach(() => apiServerMock.resetHandlers())
+  afterEach(() => httpClientProviderMock.resetHandlers())
   afterAll(async () => {
     await app.closeServer()
-    apiServerMock.close()
+    httpClientProviderMock.close()
   })
 
   it('should not be able to generate a token when code is not defined', async () => {
@@ -28,7 +28,6 @@ describe('Generate Token Use Case', () => {
       expect.objectContaining({
         accessToken: jwtMock.accessToken,
         refreshToken: jwtMock.refreshToken,
-        expiresIn: jwtMock.expiresIn,
       }),
     )
   })

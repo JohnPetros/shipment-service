@@ -1,24 +1,31 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { ShipmentProvider } from '@providers/ShipmentProvider'
-import { HttpClientProvider } from '@providers/HttpClientProvider'
 import { AppError } from '@utils/AppError'
 import { GenerateTokenUseCase } from '../GenerateTokenUseCase'
-import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
+import { httpClientProviderMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
 import { afterEach } from 'node:test'
+import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider'
+import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
+import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttpClientProvider'
+import { ICache } from '@cache/ICache'
+import { CacheMock } from '@cache/CacheMock'
+import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
 
-let httpClientProvider: HttpClientProvider
-let shipmentProvider: ShipmentProvider
+let httpClientProvider: IHttpClientProvider
+let shipmentProvider: IShipmentProvider
 let generateTokenUseCase: GenerateTokenUseCase
+let cache: ICache
 
 describe('Generate Token Use Case', () => {
-  beforeAll(() => apiServerMock.listen())
+  beforeAll(() => httpClientProviderMock.listen())
   beforeEach(async () => {
-    httpClientProvider = new HttpClientProvider()
-    shipmentProvider = new ShipmentProvider(httpClientProvider)
-    generateTokenUseCase = new GenerateTokenUseCase(shipmentProvider)
+    httpClientProvider = new AxiosHttpClientProvider()
+    shipmentProvider = new MelhorEnvioShipmentProvider(httpClientProvider)
+
+    cache = new CacheMock()
+    generateTokenUseCase = new GenerateTokenUseCase(shipmentProvider, cache)
   })
-  afterEach(() => apiServerMock.resetHandlers())
-  afterAll(() => apiServerMock.close())
+  afterEach(() => httpClientProviderMock.resetHandlers())
+  afterAll(() => httpClientProviderMock.close())
 
   it('should not be able to generate a token when code is not defined', async () => {
     expect(async () => await generateTokenUseCase.execute('')).rejects.toEqual(

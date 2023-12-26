@@ -15,12 +15,7 @@ export class AuthorizeController implements ICrontroller {
     )
     const authorizeUseCase = new AuthorizeUseCase(shippmentProvider)
 
-    const cache = new Cache()
-    console.log(cache)
-
     const url = await authorizeUseCase.execute()
-
-    console.log(url)
 
     http.redirect(url)
 

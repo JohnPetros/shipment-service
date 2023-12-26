@@ -9,6 +9,8 @@ export class CallbackController implements ICrontroller {
   async handle(http: IHttp) {
     const { code } = http.getQuery<{ code: string }>()
 
+    console.log('callback')
+
     const cache = new Cache()
     const axiosHttpClientProvider = new AxiosHttpClientProvider()
     const shippmentProvider = new MelhorEnvioShipmentProvider(
