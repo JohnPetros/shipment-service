@@ -31,6 +31,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
-          timeout: 120
+          timeout: 120s
           source: "./, !node_modules"
           target: "~/shipment-service"
