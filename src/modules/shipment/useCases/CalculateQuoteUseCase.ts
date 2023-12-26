@@ -1,4 +1,4 @@
-import { Quote } from '@entities/Quote'
+import { ShipmentService } from '@entities/ShipmentService'
 
 import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider'
 import { AppError } from '@utils/AppError'
@@ -16,7 +16,10 @@ export class CalculateQuoteUseCase {
     this.cache = cache
   }
 
-  async execute({ products, zipcode }: CalculateQuoteDTO): Promise<Quote[]> {
+  async execute({
+    products,
+    zipcode,
+  }: CalculateQuoteDTO): Promise<ShipmentService[]> {
     if (!zipcode || !products.length)
       throw new AppError('Zipcode or skus are incorrect', 402)
 
@@ -34,7 +37,7 @@ export class CalculateQuoteUseCase {
     } catch (error) {
       console.error(error)
       this.shippmentProvider.handleApiError(error)
-      throw new AppError('Failed to calculate quotes', 500)
+      throw new AppError('Failed to calculate shipment quotes', 500)
     }
   }
 }

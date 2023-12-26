@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { IHttp } from '../interfaces/IHttp'
 import { envConfig } from '../../configs/envConfig'
-import { Jwt } from '@entities/Jwt'
 
 export class FastifyHttp implements IHttp {
   private request: FastifyRequest

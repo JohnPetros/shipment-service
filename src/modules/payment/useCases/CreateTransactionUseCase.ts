@@ -30,10 +30,6 @@ export class CreateTransactionUseCase
     shipmentService,
     paymentMethod,
   }: CreateTransactionDTO): Promise<Transaction | undefined> {
-    if (!customer) throw new AppError('Customer data is not provided', 400)
-    if (!products.length)
-      throw new AppError('Products data is not provided', 400)
-
     this.validationProvider.validateCustomer(customer)
     this.validationProvider.validateShipmentService(shipmentService)
 

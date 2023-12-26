@@ -1,4 +1,6 @@
-export const productsMock = [
+import { Product } from "@entities/Product";
+
+export const productsMock: Product[] = [
   {
     id: '1',
     name: 'Produto A',
@@ -8,6 +10,7 @@ export const productsMock = [
     width: 5.5,
     height: 2.0,
     weight: 0.5,
+    sku: 'sku-1'
   },
   {
     id: '2',
@@ -18,6 +21,8 @@ export const productsMock = [
     width: 9.0,
     height: 4.0,
     weight: 1.0,
+    sku: 'sku-2'
+
   },
   {
     id: '3',
@@ -28,5 +33,6 @@ export const productsMock = [
     width: 11.0,
     height: 6.0,
     weight: 1.5,
+    sku: 'sku-3'
   },
 ]

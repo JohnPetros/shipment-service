@@ -1,12 +1,12 @@
-import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
-import { envConfig } from '../../configs/envConfig'
-
-import { IShipmentProvider } from './IShipmentProvider'
-import { Quote } from '@entities/Quote'
-import { Jwt } from '@entities/Jwt'
-import { AppError } from '@utils/AppError'
 import { appConfig } from '@configs/appConfig'
+import { envConfig } from '@configs/envConfig'
+
+import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
+import { IShipmentProvider } from './IShipmentProvider'
+import { ShipmentService } from '@entities/ShipmentService'
+import { Jwt } from '@entities/Jwt'
 import { CalculateQuoteDTO } from '@modules/shipment/dtos/CalculateQuoteDTO'
+import { AppError } from '@utils/AppError'
 
 const {
   DOMAIN,
@@ -45,7 +45,7 @@ export type MelhorEnvioQuote = {
 export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   private api: IHttpClientProvider
 
-  constructor(api: IHttpClientProvider, token?: string) {
+  constructor(api: IHttpClientProvider) {
     this.api = api
 
     api.setBaseUrl(String(BASE_URL))
@@ -54,7 +54,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   async calculate(
     { zipcode, products }: CalculateQuoteDTO,
     token: string,
-  ): Promise<Quote[]> {
+  ): Promise<ShipmentService[]> {
     this.api.setJwt(`Bearer ${token}`)
 
     const quotes = await this.api.post<MelhorEnvioQuote[]>(

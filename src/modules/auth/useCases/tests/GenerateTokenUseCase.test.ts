@@ -3,7 +3,7 @@ import { ShipmentProvider } from '@providers/ShipmentProvider'
 import { HttpClientProvider } from '@providers/HttpClientProvider'
 import { AppError } from '@utils/AppError'
 import { GenerateTokenUseCase } from '../GenerateTokenUseCase'
-import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpServerMock'
+import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
 import { afterEach } from 'node:test'
 
 let httpClientProvider: HttpClientProvider

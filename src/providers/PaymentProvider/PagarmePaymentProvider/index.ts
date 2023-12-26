@@ -21,7 +21,6 @@ import { PagarmePixTransaction } from './types/PagarmePixTransaction'
 import { QRCode } from '@utils/QRCode'
 import { File } from '@utils/File'
 import { fileConfig } from '@configs/fileConfig'
-import { ShipmentService } from '@entities/ShipmentService'
 
 const URL = envConfig.PAGAR_ME_API_URL
 const SECRET_KEY = envConfig.PAGAR_ME_SECRET_KEY
@@ -44,9 +43,6 @@ export class PagarMePaymentProvider implements IPaymentProvider {
     if (!URL) throw new AppError('Pagar.Me API URL must be provided')
     if (!SECRET_KEY || !PUBLIC_KEY)
       throw new AppError('Pagar.Me API KEYS must be provided')
-
-    console.log({ PUBLIC_KEY })
-    console.log({ SECRET_KEY })
 
     api.setBaseUrl(URL)
     api.setAuth('sk_test_18b2a5468876488387eec0e390708a50', '')
@@ -103,7 +99,7 @@ export class PagarMePaymentProvider implements IPaymentProvider {
     const ticketTransaction: PagarmeTransactionRequest = {
       customer: formatedCustomer,
       shipping: {
-        amount: Number(shipmentService.price),
+        amount: Number(shipmentService.price) * 100,
         description: shipmentService.name,
         recipient_name: formatedCustomer.name,
         recipient_phone: formatedCustomer.phones.mobile_phone.number,
@@ -180,7 +176,7 @@ export class PagarMePaymentProvider implements IPaymentProvider {
     const creditCardTransaction: PagarmeTransactionRequest = {
       customer: formatedCustomer,
       shipping: {
-        amount: Number(shipmentService.price),
+        amount: Number(shipmentService.price) * 100,
         description: shipmentService.name,
         recipient_name: formatedCustomer.name,
         recipient_phone: formatedCustomer.phones.mobile_phone.number,
@@ -219,7 +215,7 @@ export class PagarMePaymentProvider implements IPaymentProvider {
       PagarmeTransactionResponse<PagarmeCreditCardTransaction>
     >('/orders', creditCardTransaction)
 
-    new Console().log(response)
+    // new Console().log(response)
 
     return {
       status: this.transationStatus[response.status],

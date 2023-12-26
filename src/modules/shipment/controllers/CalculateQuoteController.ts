@@ -10,8 +10,6 @@ export class CalculateQuoteController implements ICrontroller {
   async handle(http: IHttp) {
     const { zipcode, products } = http.getBody<CalculateQuoteDTO>()
 
-    console.log(zipcode, products)
-
     const axiosHttpClientProvider = new AxiosHttpClientProvider()
     const shippmentProvider = new MelhorEnvioShipmentProvider(
       axiosHttpClientProvider,
@@ -21,8 +19,11 @@ export class CalculateQuoteController implements ICrontroller {
       new Cache(),
     )
 
-    const quotes = await calculateUseCase.execute({ zipcode, products })
+    const shipmentServices = await calculateUseCase.execute({
+      zipcode,
+      products,
+    })
 
-    http.send(200, quotes)
+    http.send(200, shipmentServices)
   }
 }

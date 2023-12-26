@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpServerMock'
+import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
 import request from 'supertest'
 import { app } from 'app'
 import { jwtMock } from '@entities/mocks/jwtMock'

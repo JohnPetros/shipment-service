@@ -29,6 +29,10 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
     }
   }
 
+  setHeader(key: string, value: string) {
+    this.axios.defaults.headers[key] = value
+  }
+
   setParams(key: string, value: string) {
     this.axios.defaults.params = {
       [key]: value,

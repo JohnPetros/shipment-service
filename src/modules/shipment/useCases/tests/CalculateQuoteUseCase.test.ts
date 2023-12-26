@@ -10,10 +10,10 @@ import {
 import { ShipmentProvider } from '@providers/ShipmentProvider'
 import { HttpClientProvider } from '@providers/HttpClientProvider'
 import { AppError } from '@utils/AppError'
-import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpServerMock'
+import { apiServerMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
 import { CalculateQuoteUseCase } from '../CalculateQuoteUseCase'
 import { jwtMock } from '@entities/mocks/jwtMock'
-import { quoteMock } from '@entities/mocks/quoteMock'
+import { quoteMock } from '@entities/mocks/shipmentServiceMock'
 
 let httpClientProvider: HttpClientProvider
 let shipmentProvider: ShipmentProvider
