@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Nodejs
-        uses: actions/setup-nodejs@v2
+        uses: actions/setup-nodejs@v4
         with: 
           node-version: 20.10.0
       
