@@ -49,7 +49,6 @@ export class PagarMePaymentProvider implements IPaymentProvider {
   }
 
   private getTransactionItems(products: Product[]) {
-    console.log({ products })
     return products.map((product) => ({
       id: product.id,
       code: product.sku,
@@ -215,8 +214,6 @@ export class PagarMePaymentProvider implements IPaymentProvider {
       PagarmeTransactionResponse<PagarmeCreditCardTransaction>
     >('/orders', creditCardTransaction)
 
-    // new Console().log(response)
-
     return {
       status: this.transationStatus[response.status],
     }
@@ -229,8 +226,6 @@ export class PagarMePaymentProvider implements IPaymentProvider {
   }: Omit<CreateTransactionDTO, 'paymentMethod'>): Promise<Transaction> {
     const formatedCustomer = this.formatCustomer(customer)
     const items = this.getTransactionItems(products)
-
-    console.log(shipmentService.price)
 
     const pixTransaction: PagarmeTransactionRequest = {
       customer: formatedCustomer,
@@ -288,6 +283,10 @@ export class PagarMePaymentProvider implements IPaymentProvider {
 
     console.error({ error })
 
-    throw new AppError(error.message, error.statusCode)
+    if (error.message && error.statusCode) {
+      throw new AppError(error.message, error.statusCode)
+    } else {
+      throw new AppError(String(error), 500)
+    }
   }
 }

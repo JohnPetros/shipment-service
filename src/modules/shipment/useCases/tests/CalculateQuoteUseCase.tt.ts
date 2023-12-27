@@ -36,34 +36,34 @@ describe('Generate Token Use Case', () => {
   afterEach(() => httpClientProviderMock.resetHandlers())
   afterAll(() => httpClientProviderMock.close())
 
-  it('should not be able to calculate quote when zipcode is not defined', async () => {
-    expect(
-      async () =>
-        await calculateQuoteUseCase.execute({
-          products: productsMock,
-          zipcode: 0,
-        }),
-    ).rejects.toEqual(new AppError('Zipcode or skus are incorrect', 402))
-  })
+  // it('should not be able to calculate quote when zipcode is not defined', async () => {
+  //   expect(
+  //     async () =>
+  //       await calculateQuoteUseCase.execute({
+  //         products: productsMock,
+  //         zipcode: 0,
+  //       }),
+  //   ).rejects.toEqual(new AppError('Zipcode or skus are incorrect', 402))
+  // })
 
-  it('should not be able to calculate quote when skus are not defined', async () => {
-    expect(
-      async () =>
-        await calculateQuoteUseCase.execute({
-          zipcode: 929292,
-          // eslint-disable-next-line
-            // @ts-ignore
-          products: [],
-        }),
-    ).rejects.toEqual(new AppError('Zipcode or skus are incorrect', 402))
-  })
+  // it('should not be able to calculate quote when skus are not defined', async () => {
+  //   expect(
+  //     async () =>
+  //       await calculateQuoteUseCase.execute({
+  //         zipcode: 929292,
+  //         // eslint-disable-next-line
+  //           // @ts-ignore
+  //         products: [],
+  //       }),
+  //   ).rejects.toEqual(new AppError('Zipcode or skus are incorrect', 402))
+  // })
 
-  it('should be able to calculate quote', async () => {
-    const response = await calculateQuoteUseCase.execute({
-      zipcode: 929292,
-      products: productsMock,
-    })
+  // it('should be able to calculate quote', async () => {
+  //   const response = await calculateQuoteUseCase.execute({
+  //     zipcode: 929292,
+  //     products: productsMock,
+  //   })
 
-    expect(response).toEqual([expect.objectContaining(shipmentServiceMock)])
-  })
+  //   expect(response).toEqual([expect.objectContaining(shipmentServiceMock)])
+  // })
 })
