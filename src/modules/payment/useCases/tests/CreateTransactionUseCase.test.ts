@@ -21,6 +21,10 @@ import { shipmentServiceMock } from '@entities/mocks/shipmentServiceMock'
 import { HttpResponse, http } from 'msw'
 import { envConfig } from '@configs/envConfig'
 import { ZodValidationProvider } from '@providers/ValidationProvider/ZodValidationProvider'
+import { DayjsDateProvider } from '@providers/DateProvider/DayjsDateProvider'
+import { transactionConfig } from '@configs/transactionConfig'
+import { AppError } from '@utils/AppError'
+import { Customer } from '@entities/Customer'
 
 let httpClientProvider: IHttpClientProvider
 let paymentProvider: IPaymentProvider
@@ -28,7 +32,7 @@ let dateProvider: IDateProvider
 let validationProvider: IValidationProvider
 let createTransactionUseCase: CreateTransactionUseCase
 
-function mockOrdersRouteResponse(transactionResponse: Record<string, string>) {
+function mockOrdersRouteResponse(transactionResponse: Record<string, unknown>) {
   pagarmeApiMock.use(
     http.post(`${envConfig.PAGAR_ME_API_URL}/orders`, () => {
       return HttpResponse.json(transactionResponse)
@@ -40,6 +44,7 @@ describe('Create Transaction Use Case', () => {
   beforeAll(() => pagarmeApiMock.listen())
   beforeEach(async () => {
     httpClientProvider = new AxiosHttpClientProvider()
+    dateProvider = new DayjsDateProvider()
     paymentProvider = new PagarMePaymentProvider(
       httpClientProvider,
       dateProvider,
@@ -69,14 +74,34 @@ describe('Create Transaction Use Case', () => {
     expect(response?.status).toBe('approved')
   })
 
-  it.only('should create ticket transaction', async () => {
+  it('should not create credit card transaction without token card', async () => {
     mockOrdersRouteResponse({
+      status: 'paid',
+    })
+
+    await expect(async () => {
+      await createTransactionUseCase.execute({
+        customer: customerMock,
+        paymentMethod: 'credit-card',
+        products: productsMock,
+        shipmentService: shipmentServiceMock,
+        cardToken: '',
+      })
+    }).rejects.toEqual(new AppError('credit card token is not provided', 400))
+  })
+
+  it('should create pix transaction', async () => {
+    const pixExpiresAt = dateProvider.addMinutes(
+      new Date(),
+      transactionConfig.PIX.EXPIRES_IN_MINUTES,
+    )
+
+    mockOrdersRouteResponse({
+      status: 'pending',
       charges: [
         {
-          status: 'pending',
           last_transaction: {
-            qr_code_url: 'qr_code_url mock',
-            expires_at: new Date(),
+            expires_at: pixExpiresAt,
           },
         },
       ],
@@ -84,12 +109,60 @@ describe('Create Transaction Use Case', () => {
 
     const response = await createTransactionUseCase.execute({
       customer: customerMock,
-      paymentMethod: 'credit-card',
+      paymentMethod: 'pix',
       products: productsMock,
       shipmentService: shipmentServiceMock,
-      cardToken: 'card token mock',
     })
 
-    expect(response?.status).toBe('approved')
+    if (response) {
+      expect(response.status).toBe('pending')
+      expect(response.expires_at?.toString()).toBe(pixExpiresAt.toISOString())
+    }
+  })
+
+  it('should create credit ticket transaction', async () => {
+    mockOrdersRouteResponse({
+      status: 'pending',
+    })
+
+    const response = await createTransactionUseCase.execute({
+      customer: customerMock,
+      paymentMethod: 'ticket',
+      products: productsMock,
+      shipmentService: shipmentServiceMock,
+    })
+
+    expect(response?.status).toBe('pending')
+  })
+
+  it('should not create transaction with invalid customer', async () => {
+    const invalidCustomer: Customer = {
+      id: '123456789',
+      email: 'clien',
+      name: 'Cliente Exemplo',
+      phone: '123-456-7890',
+      type: 'natural',
+      document: '12345678901',
+      address: {
+        number: 42,
+        street: 'Rua Ali peto',
+        neighborhood: 'Bairro dos Índios',
+        zipCode: '12345678',
+        city: 'Cidade Fantasma',
+        state: 'Estado de Ninguém',
+      },
+    }
+
+    await expect(async () => {
+      await createTransactionUseCase.execute({
+        customer: invalidCustomer,
+        paymentMethod: 'credit-card',
+        products: productsMock,
+        shipmentService: shipmentServiceMock,
+        cardToken: '',
+      })
+    }).rejects.toEqual(
+      new AppError('Customer data is invalid. Error: Email is invalid', 400),
+    )
   })
 })
