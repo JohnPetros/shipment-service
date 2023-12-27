@@ -1,7 +1,7 @@
 export interface PagarmetTransactionBaseData {
   id: string
   code: string
-  amount: 5850
+  amount: number
   currency: string
   closed: boolean
   status: 'paid'
