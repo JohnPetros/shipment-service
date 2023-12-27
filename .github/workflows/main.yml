@@ -33,4 +33,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           timeout: 120s
           source: "., !node_modules"
-          target: "~/"
+          target: "~/shipment-service"
