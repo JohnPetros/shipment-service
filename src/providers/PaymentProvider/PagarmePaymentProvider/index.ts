@@ -5,6 +5,8 @@ import { PagarmeBoletoTransaction } from './types/PagarmeBoletoTransaction'
 import { IPaymentProvider } from '../IPaymentProvider'
 
 import { envConfig } from '@configs/envConfig'
+import { fileConfig } from '@configs/fileConfig'
+import { transactionConfig } from '@configs/transactionConfig'
 
 import { Customer } from '@entities/Customer'
 import { Product } from '@entities/Product'
@@ -16,11 +18,10 @@ import { IDateProvider } from '@providers/DateProvider/IDateProvider'
 import { Console } from '@utils/Console'
 import { AppError } from '@utils/AppError'
 import { CreateTransactionDTO } from '@modules/payment/dtos/CreateTransactionDTO'
-import crypto from 'node:crypto'
 import { PagarmePixTransaction } from './types/PagarmePixTransaction'
 import { QRCode } from '@utils/QRCode'
 import { File } from '@utils/File'
-import { fileConfig } from '@configs/fileConfig'
+import crypto from 'node:crypto'
 
 const URL = envConfig.PAGAR_ME_API_URL
 const SECRET_KEY = envConfig.PAGAR_ME_SECRET_KEY
@@ -130,36 +131,8 @@ export class PagarMePaymentProvider implements IPaymentProvider {
       PagarmeTransactionResponse<PagarmeBoletoTransaction>
     >('/orders', ticketTransaction)
 
-    if (
-      !response.charges[0].last_transaction.success ||
-      response.charges[0].last_transaction.status !== 'generated'
-    ) {
-      throw new AppError('Failed to generate ticket')
-    }
-
-    new Console().log(response.charges[0].last_transaction)
-
-    const qrcode = new QRCode()
-
-    const code = await qrcode.decode(
-      response.charges[0].last_transaction.qr_code,
-    )
-
-    const file = new File(fileConfig.FOLDERS.TMP, `${documentNumber}.pdf`)
-
-    await file.downloadFromRemoteUrl(
-      'https://www.africau.edu/images/default/sample.pdf',
-    )
-
-    const pdf = await file.convertToBase64()
-
-    await file.delete()
-
     return {
       status: this.transationStatus[response.status],
-      qrCode: response.charges[0].last_transaction.qr_code,
-      code,
-      pdf,
     }
   }
 
@@ -247,7 +220,9 @@ export class PagarMePaymentProvider implements IPaymentProvider {
         {
           payment_method: 'pix',
           pix: {
-            expires_in: String(60 * 60 * 30), // 15 minutes
+            expires_in: this.date
+              .addMinutes(new Date(), transactionConfig.PIX.EXPIRES_IN_MINUTES)
+              .toDateString(), // 15 minutes
           },
         },
       ],
@@ -258,18 +233,10 @@ export class PagarMePaymentProvider implements IPaymentProvider {
       PagarmeTransactionResponse<PagarmePixTransaction>
     >('/orders', pixTransaction)
 
-    const qrcode = new QRCode()
-
-    const code = await qrcode.decode(
-      response.charges[0].last_transaction.qr_code_url,
-    )
-
     // new Console().log(response.charges[0].last_transaction)
 
     return {
       status: this.transationStatus[response.status],
-      qrCode: response.charges[0].last_transaction.qr_code_url,
-      code,
       expires_at: response.charges[0].last_transaction.expires_at,
     }
   }

@@ -64,6 +64,7 @@ export class CreateTransactionUseCase
           throw new AppError('Payment method is not provided', 400)
       }
     } catch (error) {
+      console.log({ error })
       this.paymentProvider.handleApiError(error)
     }
   }
