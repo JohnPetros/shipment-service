@@ -23,20 +23,19 @@ export class CalculateQuoteUseCase {
     if (!zipcode || !products.length)
       throw new AppError('Zipcode or skus are incorrect', 402)
 
-    const accessToken = await this.cache.get<string>(
-      cacheConfig.KEYS.ACCESS_TOKEN,
-    )
-
-    if (!accessToken) throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 402)
-
     try {
+      const accessToken = await this.cache.get<string>(
+        cacheConfig.KEYS.ACCESS_TOKEN,
+      )
+
+      if (!accessToken) throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 402)
       return await this.shippmentProvider.calculate(
         { products, zipcode },
         accessToken,
       )
     } catch (error) {
       console.error(error)
-      this.shippmentProvider.handleApiError(error)
+      // this.shippmentProvider.handleApiError(error)
       throw new AppError('Failed to calculate shipment quotes', 500)
     }
   }

@@ -1,24 +1,24 @@
 import Redis from 'ioredis'
 import { ICache } from './ICache'
-import { envConfig } from '@configs/envConfig'
 import { AppError } from '@utils/AppError'
+import { envConfig } from '@configs/envConfig'
 
 export class RedisCache implements ICache {
   private redis: Redis
 
   constructor() {
-    const URL =
-      envConfig.NODE_ENV === 'development'
-        ? envConfig.REDIS_INTERNAL_URL
-        : envConfig.REDIS_EXTERNAL_URL
+    const URL = envConfig.REDIS_EXTERNAL_URL
 
     if (!URL) throw new AppError('Redis connection url is not provided')
 
-    this.redis = new Redis({ port: 6379 })
+    try {
+      this.redis = new Redis(URL)
+    } catch (error) {
+      throw new AppError('Redis connection error')
+    }
   }
 
   async set(key: string, data: unknown): Promise<void> {
-    console.log({ key })
     await this.redis.set(key, JSON.stringify(data))
   }
 

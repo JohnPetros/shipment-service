@@ -133,8 +133,8 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     const { message } = this.api.getResponseError<{ message: string }>(error)
     console.error({ error })
 
-    // if (message === 'Unauthenticated.') {
-    //   throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 401)
-    // }
+    if (message === 'Unauthenticated.') {
+      throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 401)
+    }
   }
 }
