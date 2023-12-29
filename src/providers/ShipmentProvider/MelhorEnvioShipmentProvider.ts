@@ -10,19 +10,14 @@ import { AppError } from '@utils/AppError'
 
 const {
   DOMAIN,
-  NODE_ENV,
-  MELHOR_ENVIO_DEV_URL,
-  MELHOR_ENVIO_PROD_URL,
   MELHOR_ENVIO_CLIENT_ID,
   MELHOR_ENVIO_SECRET,
+  MELHOR_ENVIO_URL,
   MELHOR_ENVIO_REDIRECT_URI,
   ZIPCODE,
 } = envConfig
 
-const BASE_URL =
-  NODE_ENV === 'development' || NODE_ENV === 'test'
-    ? MELHOR_ENVIO_DEV_URL
-    : MELHOR_ENVIO_PROD_URL
+const BASE_URL = MELHOR_ENVIO_URL
 
 export type MelhorEnvioToken = {
   access_token: string
@@ -98,7 +93,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       grant_type: 'authorization_code',
       client_id: MELHOR_ENVIO_CLIENT_ID,
       client_secret: MELHOR_ENVIO_SECRET,
-      redirect_uri: 'https://sdl5yh-3333.csb.app/auth/callback',
+      redirect_uri: `${DOMAIN}${MELHOR_ENVIO_REDIRECT_URI}`,
       code,
     }
 
