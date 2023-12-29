@@ -3,7 +3,7 @@ import 'dotenv/config'
 import { ZodValidationProvider } from '@providers/ValidationProvider/ZodValidationProvider'
 
 const _envConfig: IEnvConfig = {
-  NODE_ENV: process.env.NODE_ENV,
+  NODE_ENV: process.env.NODE_ENV as 'production' | 'development' | 'test',
   DOMAIN: process.env.DOMAIN,
   PORT: Number(process.env.PORT) ?? 3333,
   ZIPCODE: Number(process.env.ZIPCODE),

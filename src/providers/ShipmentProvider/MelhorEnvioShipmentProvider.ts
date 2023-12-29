@@ -1,4 +1,4 @@
-import { appConfig } from '@configs/appConfig'
+import { errorConfig } from '@configs/errorConfig'
 import { envConfig } from '@configs/envConfig'
 
 import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
@@ -129,7 +129,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
     console.error({ error })
 
     if (message === 'Unauthenticated.') {
-      throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 401)
+      throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 401)
     }
   }
 }

@@ -4,7 +4,7 @@ import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider
 import { AppError } from '@utils/AppError'
 import { ICache } from '@cache/ICache'
 import { cacheConfig } from '@configs/cacheConfig'
-import { appConfig } from '@configs/appConfig'
+import { errorConfig } from '@configs/errorConfig'
 import { CalculateQuoteDTO } from '../dtos/CalculateQuoteDTO'
 
 export class CalculateQuoteUseCase {
@@ -28,7 +28,7 @@ export class CalculateQuoteUseCase {
         cacheConfig.KEYS.ACCESS_TOKEN,
       )
 
-      if (!accessToken) throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 402)
+      if (!accessToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
       return await this.shippmentProvider.calculate(
         { products, zipcode },
         accessToken,

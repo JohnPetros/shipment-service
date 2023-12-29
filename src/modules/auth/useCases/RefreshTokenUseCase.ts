@@ -1,7 +1,7 @@
 import { ICache } from '@cache/ICache'
 import { IShipmentProvider } from '../../../providers/ShipmentProvider/IShipmentProvider'
 import { AppError } from '../../../utils/AppError'
-import { appConfig } from '@configs/appConfig'
+import { errorConfig } from '@configs/errorConfig'
 import { cacheConfig } from '@configs/cacheConfig'
 
 export class RefreshTokenUseCase {
@@ -17,7 +17,7 @@ export class RefreshTokenUseCase {
     const refreshToken = await this.cache.get<string>(
       cacheConfig.KEYS.REFRESH_TOKEN,
     )
-    if (!refreshToken) throw new AppError(appConfig.ERRORS.INVALID_TOKEN, 402)
+    if (!refreshToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
 
     try {
       const jwt = await this.shippmentProvider.refreshToken(refreshToken)

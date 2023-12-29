@@ -1,5 +1,5 @@
 import { Cache } from '@cache/index'
-import { appConfig } from '@configs/appConfig'
+import { errorConfig } from '@configs/errorConfig'
 import { cacheConfig } from '@configs/cacheConfig'
 import { IHttp } from '@http/interfaces/IHttp'
 
@@ -20,7 +20,7 @@ export class AppError {
 
   async handleError(http: IHttp) {
     switch (this.message) {
-      case appConfig.ERRORS.INVALID_TOKEN:
+      case errorConfig.AUTH.INVALID_TOKEN:
         await this.handleIvalidTokenError(http)
         break
       default:
