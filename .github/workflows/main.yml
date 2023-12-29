@@ -43,7 +43,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/shipment-service
-            npm install
-            ls
-            pm2 restart shipment-service
+            echo $PATH
