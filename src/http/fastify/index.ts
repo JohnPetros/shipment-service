@@ -1,6 +1,7 @@
 import getFastifyInstance, { FastifyInstance } from 'fastify'
 import { FastifyRouter } from './FastifyRouter'
 import cookie from '@fastify/cookie'
+import rateLimit from '@fastify/rate-limit'
 
 import { Server } from 'node:http'
 
@@ -11,6 +12,7 @@ import { shipmentRoutes } from '@routes/shipmentRoutes'
 import { envConfig } from '@configs/envConfig'
 import { AppError } from '@utils/AppError'
 import { paymentRoutes } from '@routes/paymentRoutes'
+import { rateLimitConfig } from '@configs/rateLimitConfig'
 
 export class Fastify implements IApp {
   private fastify: FastifyInstance
@@ -21,6 +23,11 @@ export class Fastify implements IApp {
     const fastifyRouter = new FastifyRouter(fastify)
 
     fastify.register(cookie)
+
+    fastify.register(rateLimit, {
+      max: rateLimitConfig.MAX,
+      timeWindow: rateLimitConfig.INTERVAL,
+    })
 
     fastify.register(() => authRoutes(fastifyRouter), { prefix: 'auth' })
     fastify.register(() => shipmentRoutes(fastifyRouter), {
