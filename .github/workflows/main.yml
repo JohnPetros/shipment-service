@@ -35,6 +35,15 @@ jobs:
           source: "., !node_modules"
           target: "~/shipment-service"
 
-      - name: 'Create env file'
-        run: |
-          echo "${{ secrets.APP_ENV_FILE }}" > ~/shipment-service/.env
+      - name: multiple command
+        uses: appleboy/ssh-action@v1.0.1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/shipment-service
+            npm install
+            ls
+            pm2 restart shipment-service
