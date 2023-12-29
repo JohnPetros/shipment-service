@@ -43,9 +43,10 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            export PATH="$PATH:/home/ubuntu/.nvm/versions/node/v20.10.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
             cd ~/shipment-service
             npm -v
             ls
             npm install
-            echo  ${{ secrets.APP_ENV_FILE }} > ~/shipment-service/.env
+            echo teste > ~/shipment-service/.env
             pm2 restart server
