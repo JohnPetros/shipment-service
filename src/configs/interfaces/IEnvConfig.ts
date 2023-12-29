@@ -1,9 +1,9 @@
 export interface IEnvConfig {
   PORT: number
   DOMAIN: string | undefined
-  NODE_ENV: string | undefined
+  NODE_ENV: 'production' | 'development' | 'test' | undefined
   ZIPCODE: number | undefined
-  ALIAS:  string | undefined
+  ALIAS: string | undefined
   MELHOR_ENVIO_URL: string | undefined
   MELHOR_ENVIO_SECRET: string | undefined
   MELHOR_ENVIO_CLIENT_ID: number
