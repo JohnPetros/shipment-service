@@ -37,13 +37,16 @@ jobs:
 
       - name: multiple command
         uses: appleboy/ssh-action@v1.0.1
+        env:
+          ENV_FILE: ${{ secrets.APP_ENV_FILE }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
+          envs: ENV_FILE
           script: |
             cd ~/shipment-service
             npm install
-            echo ${{ secrets.APP_ENV_FILE }}
+            echo $ENV_FILE > ~/shipment-service/.env
             pm2 restart server
