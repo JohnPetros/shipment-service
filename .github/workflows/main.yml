@@ -44,6 +44,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/shipment-service
-            /usr/bin/npm install install
+            /usr/bin/npm install
+            echo $PATH
             ls
-            /usr/bin/pm2 install restart shipment-service
+            /usr/bin/pm2 restart shipment-service
