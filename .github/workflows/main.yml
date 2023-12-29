@@ -34,3 +34,7 @@ jobs:
           timeout: 120s
           source: "., !node_modules"
           target: "~/shipment-service"
+
+      - name: 'Create env file'
+        run: |
+          echo "${{ secrets.APP_ENV_FILE }}" > ~/shipment-service/.env
