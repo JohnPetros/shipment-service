@@ -5,7 +5,6 @@ import { PagarmeBoletoTransaction } from './types/PagarmeBoletoTransaction'
 import { IPaymentProvider } from '../IPaymentProvider'
 
 import { envConfig } from '@configs/envConfig'
-import { fileConfig } from '@configs/fileConfig'
 import { transactionConfig } from '@configs/transactionConfig'
 
 import { Customer } from '@entities/Customer'
@@ -19,8 +18,6 @@ import { Console } from '@utils/Console'
 import { AppError } from '@utils/AppError'
 import { CreateTransactionDTO } from '@modules/payment/dtos/CreateTransactionDTO'
 import { PagarmePixTransaction } from './types/PagarmePixTransaction'
-import { QRCode } from '@utils/QRCode'
-import { File } from '@utils/File'
 import crypto from 'node:crypto'
 
 const URL = envConfig.PAGAR_ME_API_URL
@@ -220,9 +217,10 @@ export class PagarMePaymentProvider implements IPaymentProvider {
         {
           payment_method: 'pix',
           pix: {
-            expires_in: this.date
-              .addMinutes(new Date(), transactionConfig.PIX.EXPIRES_IN_MINUTES)
-              .toDateString(), // 15 minutes
+            expires_in: this.date.addMinutes(
+              new Date(),
+              transactionConfig.PIX.EXPIRES_IN_MINUTES,
+            ),
           },
         },
       ],
@@ -233,7 +231,7 @@ export class PagarMePaymentProvider implements IPaymentProvider {
       PagarmeTransactionResponse<PagarmePixTransaction>
     >('/orders', pixTransaction)
 
-    // new Console().log(response.charges[0].last_transaction)
+    new Console().log(this.date.addMinutes(new Date(), 15))
 
     return {
       status: this.transationStatus[response.status],
@@ -242,18 +240,19 @@ export class PagarMePaymentProvider implements IPaymentProvider {
   }
 
   handleApiError(apiError: unknown) {
-    const console = new Console()
-    const error = this.api.getResponseError<{
+    const { message, errors, statusCode } = this.api.getResponseError<{
       message: string
       statusCode: number
+      errors: Record<string, string[]>
     }>(apiError)
 
-    console.error({ error })
-
-    if (error.message && error.statusCode) {
-      throw new AppError(error.message, error.statusCode)
+    if (message) {
+      throw new AppError(
+        `${message} ${Object.values(errors).join(' | ')}`,
+        statusCode,
+      )
     } else {
-      throw new AppError(String(error), 500)
+      throw new AppError('Pagar.Me error', 500)
     }
   }
 }

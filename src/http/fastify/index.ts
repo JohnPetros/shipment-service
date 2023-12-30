@@ -11,8 +11,10 @@ import { authRoutes } from '@routes/authRoutes'
 import { shipmentRoutes } from '@routes/shipmentRoutes'
 import { envConfig } from '@configs/envConfig'
 import { AppError } from '@utils/AppError'
+import { Console } from '@utils/Console'
 import { paymentRoutes } from '@routes/paymentRoutes'
 import { rateLimitConfig } from '@configs/rateLimitConfig'
+import { SentryMonitor } from '@providers/MonitorProvider/SentryMonitor'
 
 export class Fastify implements IApp {
   private fastify: FastifyInstance
@@ -37,10 +39,19 @@ export class Fastify implements IApp {
       prefix: 'payment',
     })
 
+    const sentryMonitor = new SentryMonitor()
+    const console = new Console()
+
     fastify.setErrorHandler(async (error, request, reply) => {
+      console.error(error)
+
       if (error instanceof AppError) {
         const fastifyHttp = new FastifyHttp(request, reply)
         await error.handleError(fastifyHttp)
+
+        if (error.statusCode === 500 || error.statusCode === 429) {
+          sentryMonitor.logError(error)
+        }
       }
 
       return reply.status(500).send({
