@@ -1,21 +1,24 @@
-import 'dayjs/locale/pt-br'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
 import { IDateProvider } from './IDateProvider'
 
+dayjs.extend(utc)
+
 export class DayjsDateProvider implements IDateProvider {
-  private convertToSaoPauloTimeZone(date: Date): Dayjs {
-    return dayjs(date).subtract(3, 'hour')
+  convertToUtc(date: Date) {
+    return dayjs(date).utc().local().format()
   }
 
   addDays(date: Date, days: number): Date {
-    const currentDate = this.convertToSaoPauloTimeZone(date)
-    return currentDate.add(days, 'day').toDate()
+    const currentDate = this.convertToUtc(date)
+
+    return dayjs(currentDate).add(days, 'day').toDate()
   }
 
   addMinutes(date: Date, minutes: number): Date {
-    const currentDate = this.convertToSaoPauloTimeZone(date)
+    const currentDate = this.convertToUtc(date)
 
-    return currentDate.add(15, 'minute').toDate()
+    return dayjs(currentDate).add(minutes, 'minute').toDate()
   }
 }

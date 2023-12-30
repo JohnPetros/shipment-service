@@ -124,7 +124,7 @@ export type PagarmeTransactionRequest = {
       instructions: string
     }
     pix?: {
-      expires_in?: string
+      expires_in?: number
       expires_at?: Date
       additional_information?: Record<string, string>[]
     }
