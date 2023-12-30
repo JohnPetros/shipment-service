@@ -10,8 +10,9 @@
     "dev": "tsx watch src/server.ts",
     "start": "node build/server",
     "lint": "eslint src --ext .ts --fix",
-    "build": "tsup src --out-dir build",
-    "test": "vitest"
+    "build": "tsup src --out-dir build && yarn sentry:sourcemaps",
+    "test": "vitest",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sertton-industrial --project node ./build && sentry-cli sourcemaps upload --org sertton-industrial --project node ./build"
   },
   "keywords": [],
   "author": "John Petros",
@@ -32,7 +33,14 @@
   "dependencies": {
     "@fastify/cookie": "^9.2.0",
     "@fastify/rate-limit": "^9.0.1",
+    "@immobiliarelabs/fastify-sentry": "^8.0.0",
+    "@sentry/cli": "^2.23.1",
+    "@sentry/node": "^7.91.0",
+    "@sentry/profiling-node": "^1.3.2",
     "axios": "^1.6.2",
+    "date-fn": "^0.0.2",
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
