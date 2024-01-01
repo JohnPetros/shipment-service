@@ -8,27 +8,13 @@ export class RedisCache implements ICache {
 
   constructor() {
     const URL = envConfig.REDIS_EXTERNAL_URL;
-    const PORT = envConfig.REDIS_PORT;
-    const NODE_ENV = envConfig.NODE_ENV;
 
-    if (NODE_ENV === "development") {
-      try {
-        this.redis = new Redis({
-          port: PORT,
-        });
-      } catch (error) {
-        throw new AppError("Redis connection error");
-      }
-    }
+    if (!URL) throw new AppError("Redis connection url is not provided");
 
-    if (NODE_ENV === "production") {
-      if (!URL) throw new AppError("Redis connection url is not provided");
-
-      try {
-        this.redis = new Redis(URL);
-      } catch (error) {
-        throw new AppError("Redis connection error");
-      }
+    try {
+      this.redis = new Redis(URL);
+    } catch (error) {
+      throw new AppError("Redis connection error");
     }
 
     this.redis = new Redis();
