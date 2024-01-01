@@ -51,4 +51,5 @@ jobs:
             npm install
             env_file_string=$(echo $ENV_FILE)
             echo $env_file_string | tr ' ' '\n' | sed 's/\([^=]\+\)=\([^ ]\+\)/\1=\2/' > ~/shipment-service/.env
+            sudo docker compose up -d
             pm2 restart server
