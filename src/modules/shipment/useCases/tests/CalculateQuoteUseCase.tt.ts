@@ -9,7 +9,7 @@ import {
 } from 'vitest'
 import { AppError } from '@utils/AppError'
 import { httpClientProviderMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
-import { CalculateQuoteUseCase } from '../CalculateShipmentServicesUseCase'
+import { CalculateShipmentServicesUseCase } from '../CalculateShipmentServicesUseCase'
 import { shipmentServiceMock } from '@entities/mocks/shipmentServiceMock'
 import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider'
 import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
@@ -22,7 +22,7 @@ import { CacheMock } from '@cache/CacheMock'
 let httpClientProvider: IHttpClientProvider
 let shipmentProvider: IShipmentProvider
 let cache: ICache
-let calculateQuoteUseCase: CalculateQuoteUseCase
+let calculateShipmentServicesUseCase: CalculateShipmentServicesUseCase
 
 describe('Generate Token Use Case', () => {
   beforeAll(() => httpClientProviderMock.listen())
@@ -31,7 +31,7 @@ describe('Generate Token Use Case', () => {
     shipmentProvider = new MelhorEnvioShipmentProvider(httpClientProvider)
     cache = new CacheMock()
 
-    calculateQuoteUseCase = new CalculateQuoteUseCase(shipmentProvider, cache)
+    calculateShipmentServicesUseCase = new CalculateShipmentServicesUseCase(shipmentProvider, cache)
   })
   afterEach(() => httpClientProviderMock.resetHandlers())
   afterAll(() => httpClientProviderMock.close())
@@ -39,7 +39,7 @@ describe('Generate Token Use Case', () => {
   // it('should not be able to calculate quote when zipcode is not defined', async () => {
   //   expect(
   //     async () =>
-  //       await calculateQuoteUseCase.execute({
+  //       await CalculateShipmentServicesUseCase.execute({
   //         products: productsMock,
   //         zipcode: 0,
   //       }),
@@ -49,7 +49,7 @@ describe('Generate Token Use Case', () => {
   // it('should not be able to calculate quote when skus are not defined', async () => {
   //   expect(
   //     async () =>
-  //       await calculateQuoteUseCase.execute({
+  //       await CalculateShipmentServicesUseCase.execute({
   //         zipcode: 929292,
   //         // eslint-disable-next-line
   //           // @ts-ignore
@@ -59,7 +59,7 @@ describe('Generate Token Use Case', () => {
   // })
 
   // it('should be able to calculate quote', async () => {
-  //   const response = await calculateQuoteUseCase.execute({
+  //   const response = await CalculateShipmentServicesUseCase.execute({
   //     zipcode: 929292,
   //     products: productsMock,
   //   })
