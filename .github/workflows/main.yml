@@ -19,7 +19,7 @@ jobs:
           node-version: 20
       
       - name: Install dependencies
-        run: npm i
+        run: npm install
 
       - name: Build
         run: npm run build
@@ -47,6 +47,7 @@ jobs:
           envs: ENV_FILE
           script: |
             export PATH="$PATH:/home/ubuntu/.nvm/versions/node/v20.10.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+            cd ~/shipment-service
             npm install
             env_file_string=$(echo $ENV_FILE)
             echo $env_file_string | tr ' ' '\n' | sed 's/\([^=]\+\)=\([^ ]\+\)/\1=\2/' > ~/shipment-service/.env
