@@ -10,7 +10,7 @@
     "dev": "tsx watch src/server.ts",
     "start": "node build/server",
     "lint": "eslint src --ext .ts --fix",
-    "build": "tsup src --out-dir build && yarn sentry:sourcemaps",
+    "build": "tsup src --out-dir build",
     "test": "vitest",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sertton-industrial --project node ./build && sentry-cli sourcemaps upload --org sertton-industrial --project node ./build"
   },
