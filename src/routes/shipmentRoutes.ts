@@ -1,8 +1,8 @@
-import { CalculateQuoteController } from '@modules/shipment/controllers/CalculateQuoteController'
+import { CalculateShipmentServicesController } from '@modules/shipment/controllers/CalculateShipmentServicesController'
 import { IRouter } from '../http/interfaces/IRouter'
 
-const calculateQuoteController = new CalculateQuoteController()
+const calculateShipmentServicesController = new CalculateShipmentServicesController()
 
 export async function shipmentRoutes(router: IRouter) {
-  router.post('/shipment/calculate', calculateQuoteController)
+  router.post('/shipment/calculate', calculateShipmentServicesController)
 }

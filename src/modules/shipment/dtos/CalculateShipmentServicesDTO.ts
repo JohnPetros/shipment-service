@@ -1,6 +1,6 @@
 import { Product } from '@entities/Product'
 
-export interface CalculateQuoteDTO {
+export interface CalculateShipmentServicesDTO {
   zipcode: number
   products: Product[]
 }

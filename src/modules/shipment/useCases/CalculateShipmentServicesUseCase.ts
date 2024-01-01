@@ -5,21 +5,22 @@ import { AppError } from '@utils/AppError'
 import { ICache } from '@cache/ICache'
 import { cacheConfig } from '@configs/cacheConfig'
 import { errorConfig } from '@configs/errorConfig'
-import { CalculateQuoteDTO } from '../dtos/CalculateQuoteDTO'
+import { CalculateShipmentServicesDTO } from '../dtos/CalculateShipmentServicesDTO'
+import { IUseCase } from '@http/interfaces/IUseCase'
 
-export class CalculateQuoteUseCase {
-  private shippmentProvider: IShipmentProvider
+export class CalculateShipmentServicesUseCase implements IUseCase<CalculateShipmentServicesDTO, ShipmentService[]> {
+  private shipmentProvider: IShipmentProvider
   private cache: ICache
 
-  constructor(shippmentProvider: IShipmentProvider, cache: ICache) {
-    this.shippmentProvider = shippmentProvider
+  constructor(shipmentProvider: IShipmentProvider, cache: ICache) {
+    this.shipmentProvider = shipmentProvider
     this.cache = cache
   }
 
   async execute({
     products,
     zipcode,
-  }: CalculateQuoteDTO): Promise<ShipmentService[]> {
+  }: CalculateShipmentServicesDTO): Promise<ShipmentService[]> {
     if (!zipcode || !products.length)
       throw new AppError('Zipcode or skus are incorrect', 402)
 
@@ -29,13 +30,15 @@ export class CalculateQuoteUseCase {
       )
 
       if (!accessToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
-      return await this.shippmentProvider.calculate(
+      const shipmentServices = await this.shipmentProvider.calculate(
         { products, zipcode },
         accessToken,
       )
+
+      return shipmentServices.sort((a, b) => a.price > b.price ? 1 : -1)
     } catch (error) {
       console.error(error)
-      // this.shippmentProvider.handleApiError(error)
+      this.shipmentProvider.handleApiError(error)
       throw new AppError('Failed to calculate shipment quotes', 500)
     }
   }

@@ -9,7 +9,7 @@ import {
 } from 'vitest'
 import { AppError } from '@utils/AppError'
 import { httpClientProviderMock } from '@providers/HttpClientProvider/mocks/httpClientProviderMock'
-import { CalculateQuoteUseCase } from '../CalculateQuoteUseCase'
+import { CalculateQuoteUseCase } from '../CalculateShipmentServicesUseCase'
 import { shipmentServiceMock } from '@entities/mocks/shipmentServiceMock'
 import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider'
 import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'

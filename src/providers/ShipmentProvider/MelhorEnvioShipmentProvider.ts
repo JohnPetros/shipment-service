@@ -5,7 +5,7 @@ import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientPr
 import { IShipmentProvider } from './IShipmentProvider'
 import { ShipmentService } from '@entities/ShipmentService'
 import { Jwt } from '@entities/Jwt'
-import { CalculateQuoteDTO } from '@modules/shipment/dtos/CalculateQuoteDTO'
+import { CalculateShipmentServicesDTO } from '@modules/shipment/dtos/CalculateShipmentServicesDTO'
 import { AppError } from '@utils/AppError'
 
 const {
@@ -47,7 +47,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   }
 
   async calculate(
-    { zipcode, products }: CalculateQuoteDTO,
+    { zipcode, products }: CalculateShipmentServicesDTO,
     token: string,
   ): Promise<ShipmentService[]> {
     this.api.setJwt(`Bearer ${token}`)

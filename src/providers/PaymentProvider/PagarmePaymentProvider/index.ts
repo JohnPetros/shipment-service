@@ -217,10 +217,8 @@ export class PagarMePaymentProvider implements IPaymentProvider {
         {
           payment_method: 'pix',
           pix: {
-            expires_in: this.date.addMinutes(
-              new Date(),
-              transactionConfig.PIX.EXPIRES_IN_MINUTES,
-            ),
+            expires_in:
+              transactionConfig.PIX.EXPIRES_IN_MINUTES * 60,
           },
         },
       ],
