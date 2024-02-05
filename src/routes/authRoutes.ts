@@ -7,7 +7,7 @@ const authorizeController = new AuthorizeController()
 const callbackController = new CallbackController()
 const refreshTokenController = new RefreshTokenController()
 
-export async function authRoutes(router: IRouter) {
+export function authRoutes(router: IRouter) {
   router.get('/auth/authorize', authorizeController)
   router.get('/auth/callback', callbackController)
   router.get('/auth/refresh_token', refreshTokenController)
