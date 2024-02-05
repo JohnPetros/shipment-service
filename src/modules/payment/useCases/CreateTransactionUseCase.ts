@@ -1,6 +1,6 @@
 import { CreateTransactionDTO } from '../dtos/CreateTransactionDTO'
 
-import { IUseCase } from '@http/interfaces/IUseCase'
+import { IUseCase } from 'app/interfaces/IUseCase'
 
 import { IPaymentProvider } from '@providers/PaymentProvider/IPaymentProvider'
 import { IValidationProvider } from '@providers/ValidationProvider/IValidationProvider'

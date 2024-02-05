@@ -1,4 +1,4 @@
-import { IUseCase } from '@http/interfaces/IUseCase'
+import { IUseCase } from 'app/interfaces/IUseCase'
 
 import { PagarmeWebhook } from '@providers/PaymentProvider/PagarmePaymentProvider/types/PagarmeWebhook'
 import { IDatabaseProvider } from '@providers/DatabaseProvider/IDatabaseProvider'

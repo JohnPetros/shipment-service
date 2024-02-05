@@ -16,7 +16,7 @@ import { paymentRoutes } from '@routes/paymentRoutes'
 import { rateLimitConfig } from '@configs/rateLimitConfig'
 import { SentryMonitor } from '@providers/MonitorProvider/SentryMonitor'
 
-export class Fastify implements IApp {
+export class FastifyApp implements IApp {
   private fastify: FastifyInstance
 
   constructor() {
@@ -26,18 +26,14 @@ export class Fastify implements IApp {
 
     fastify.register(cookie)
 
-    fastify.register(rateLimit, {
-      max: rateLimitConfig.MAX,
-      timeWindow: rateLimitConfig.INTERVAL,
-    })
+    // fastify.register(rateLimit, {
+    //   max: rateLimitConfig.MAX,
+    //   timeWindow: rateLimitConfig.INTERVAL,
+    // })
 
-    fastify.register(() => authRoutes(fastifyRouter), { prefix: 'auth' })
-    fastify.register(() => shipmentRoutes(fastifyRouter), {
-      prefix: 'shipment',
-    })
-    fastify.register(() => paymentRoutes(fastifyRouter), {
-      prefix: 'payment',
-    })
+    // fastify.register(() => authRoutes(fastifyRouter))
+    // fastify.register(() => shipmentRoutes(fastifyRouter))
+    fastify.register(() => paymentRoutes(fastifyRouter))
 
     const sentryMonitor = new SentryMonitor()
     const console = new Console()
@@ -62,7 +58,7 @@ export class Fastify implements IApp {
     this.fastify = fastify
   }
 
-  async initServer() {
+  async startServer() {
     this.fastify
       .listen({
         port: envConfig.PORT,
@@ -72,12 +68,12 @@ export class Fastify implements IApp {
       })
   }
 
-  async waitServerAvailability() {
-    await this.fastify.ready()
+  async stopServer() {
+    this.fastify.close()
   }
 
-  async closeServer() {
-    this.fastify.close()
+  async waitServerAvailability() {
+    await this.fastify.ready()
   }
 
   getServer() {

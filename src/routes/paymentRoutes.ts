@@ -1,4 +1,4 @@
-import { IRouter } from '@http/interfaces/IRouter'
+import { IRouter } from 'app/interfaces/IRouter'
 import { CreateTransactionController } from '@modules/payment/controllers/CreateTransactionController'
 
 import { WebhookController } from '@modules/payment/controllers/WebhookController'

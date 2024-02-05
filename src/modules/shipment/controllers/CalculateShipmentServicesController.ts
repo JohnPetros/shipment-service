@@ -1,6 +1,6 @@
-import { IHttp } from '../../../http/interfaces/IHttp'
+import { IHttp } from '../../../app/interfaces/IHttp'
 import { CalculateShipmentServicesUseCase } from '../useCases/CalculateShipmentServicesUseCase'
-import { ICrontroller } from '../../../http/interfaces/IController'
+import { ICrontroller } from '../../../app/interfaces/IController'
 import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
 import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttpClientProvider'
 import { CalculateShipmentServicesDTO } from '../dtos/CalculateShipmentServicesDTO'

@@ -1,5 +1,5 @@
-import { Fastify } from '@http/fastify'
+import { FastifyApp } from 'app/fastify'
 
-const app = new Fastify()
+const app = new FastifyApp()
 
 export { app }

@@ -1,3 +1,3 @@
 import { app } from 'app'
 
-app.initServer()
+app.startServer()
