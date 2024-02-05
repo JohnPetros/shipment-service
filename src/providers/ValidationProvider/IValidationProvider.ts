@@ -11,3 +11,5 @@ export interface IValidationProvider {
   validateShipmentService(shipmentService: ShipmentService): void
   validateCreditCard(creditCard: CreditCard): void
 }
+
+

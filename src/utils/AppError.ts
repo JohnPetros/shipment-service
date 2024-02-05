@@ -1,7 +1,7 @@
 import { Cache } from '@cache/index'
 import { errorConfig } from '@configs/errorConfig'
 import { cacheConfig } from '@configs/cacheConfig'
-import { IHttp } from '@http/interfaces/IHttp'
+import { IHttp } from 'app/interfaces/IHttp'
 
 export class AppError {
   public readonly message: string

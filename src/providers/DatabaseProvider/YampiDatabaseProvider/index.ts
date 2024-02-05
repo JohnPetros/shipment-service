@@ -4,7 +4,8 @@ import { AppError } from '@utils/AppError'
 
 import { envConfig } from '@configs/envConfig'
 import { IDatabaseProvider } from '../IDatabaseProvider'
-import { Order } from '@entities/Order'
+import { YampiOrder } from '@providers/DatabaseProvider/YampiDatabaseProvider/types/YampiOrder'
+
 const { ALIAS, YAMPI_BASE_URL, YAMPI_SECRET_KEY, YAMPI_TOKEN } = envConfig
 
 export class YampiDatabaseProvider implements IDatabaseProvider {
@@ -21,7 +22,7 @@ export class YampiDatabaseProvider implements IDatabaseProvider {
     this.api.setHeader('User-Secret-Key', YAMPI_SECRET_KEY)
   }
 
-  async saveOrder(order: Order) {
+  async saveOrder(order: YampiOrder) {
     await this.api.post('/orders', order)
   }
 }

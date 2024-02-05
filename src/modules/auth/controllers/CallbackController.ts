@@ -1,5 +1,5 @@
-import { IHttp } from '@http/interfaces/IHttp'
-import { ICrontroller } from '@http/interfaces/IController'
+import { IHttp } from 'app/interfaces/IHttp'
+import { ICrontroller } from 'app/interfaces/IController'
 import { GenerateTokenUseCase } from '../useCases/GenerateTokenUseCase'
 import { Cache } from '@cache/index'
 import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
@@ -8,8 +8,6 @@ import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttp
 export class CallbackController implements ICrontroller {
   async handle(http: IHttp) {
     const { code } = http.getQuery<{ code: string }>()
-
-    console.log('callback')
 
     const cache = new Cache()
     const axiosHttpClientProvider = new AxiosHttpClientProvider()

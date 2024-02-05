@@ -1,4 +1,4 @@
-export type OrderStatus =
+export type YampiOrderStatus =
   | 'paid'
   | 'created'
   | 'cancelled'
@@ -7,8 +7,8 @@ export type OrderStatus =
   | 'delivered'
   | 'waiting_payment'
 
-export type Order = {
-  status: OrderStatus
+export type YampiOrder = {
+  status: YampiOrderStatus
   number: number
   customer_id: string
   value_products: number
@@ -38,7 +38,7 @@ export type Order = {
     customer_id: string
     amount: number
     installments: number
-    status: OrderStatus
+    status: YampiOrderStatus
     holder_name: string
     holder_document: string
     authorized_at: string

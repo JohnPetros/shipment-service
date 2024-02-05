@@ -1,7 +1,7 @@
 import { AuthorizeController } from '@modules/auth/controllers/AuthorizeControler'
 import { CallbackController } from '@modules/auth/controllers/CallbackController'
 import { RefreshTokenController } from '@modules/auth/controllers/RefreshTokenController'
-import { IRouter } from '@http/interfaces/IRouter'
+import { IRouter } from 'app/interfaces/IRouter'
 
 const authorizeController = new AuthorizeController()
 const callbackController = new CallbackController()

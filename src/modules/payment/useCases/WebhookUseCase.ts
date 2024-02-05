@@ -1,4 +1,4 @@
-import { IUseCase } from '@http/interfaces/IUseCase'
+import { IUseCase } from 'app/interfaces/IUseCase'
 
 import { PagarmeWebhook } from '@providers/PaymentProvider/PagarmePaymentProvider/types/PagarmeWebhook'
 import { IDatabaseProvider } from '@providers/DatabaseProvider/IDatabaseProvider'
@@ -24,7 +24,7 @@ export class WebhookUseCase implements IUseCase<PagarmeWebhook, void> {
 
     try {
       this.databaseProvider.saveOrder({
-        status: 'paid',
+        status: 'waiting_payment',
         customer_id: customer.id,
         items: items.map((item) => ({
           price: item.amount,

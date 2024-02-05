@@ -6,7 +6,7 @@ import { ICache } from '@cache/ICache'
 import { cacheConfig } from '@configs/cacheConfig'
 import { errorConfig } from '@configs/errorConfig'
 import { CalculateShipmentServicesDTO } from '../dtos/CalculateShipmentServicesDTO'
-import { IUseCase } from '@http/interfaces/IUseCase'
+import { IUseCase } from 'app/interfaces/IUseCase'
 
 export class CalculateShipmentServicesUseCase implements IUseCase<CalculateShipmentServicesDTO, ShipmentService[]> {
   private shipmentProvider: IShipmentProvider

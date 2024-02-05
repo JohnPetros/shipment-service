@@ -229,7 +229,8 @@ export class PagarMePaymentProvider implements IPaymentProvider {
       PagarmeTransactionResponse<PagarmePixTransaction>
     >('/orders', pixTransaction)
 
-    new Console().log(this.date.addMinutes(new Date(), 15))
+
+    // new Console().log({ response })
 
     return {
       status: this.transationStatus[response.status],
