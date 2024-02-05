@@ -1,5 +1,5 @@
 import { CalculateShipmentServicesController } from '@modules/shipment/controllers/CalculateShipmentServicesController'
-import { IRouter } from '../http/interfaces/IRouter'
+import { IRouter } from '../app/interfaces/IRouter'
 
 const calculateShipmentServicesController = new CalculateShipmentServicesController()
 

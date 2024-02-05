@@ -1,5 +1,5 @@
-import { IHttp } from '@http/interfaces/IHttp'
-import { ICrontroller } from '../../../http/interfaces/IController'
+import { IHttp } from 'app/interfaces/IHttp'
+import { ICrontroller } from '../../../app/interfaces/IController'
 import { RefreshTokenUseCase } from 'modules/auth/useCases/RefreshTokenUseCase'
 import { Cache } from '@cache/index'
 import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'

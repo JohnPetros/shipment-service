@@ -1,5 +1,5 @@
-import { ICrontroller } from '@http/interfaces/IController'
-import { IHttp } from '@http/interfaces/IHttp'
+import { ICrontroller } from 'app/interfaces/IController'
+import { IHttp } from 'app/interfaces/IHttp'
 
 import { CreateTransactionDTO } from '../dtos/CreateTransactionDTO'
 import { CreateTransactionUseCase } from '../useCases/CreateTransactionUseCase'
