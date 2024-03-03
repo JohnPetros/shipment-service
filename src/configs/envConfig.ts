@@ -7,7 +7,6 @@ const _envConfig: IEnvConfig = {
   DOMAIN: process.env.DOMAIN,
   PORT: Number(process.env.PORT) ?? 3333,
   ZIPCODE: Number(process.env.ZIPCODE),
-  ALIAS: process.env.ALIAS,
   MELHOR_ENVIO_URL: process.env.MELHOR_ENVIO_URL,
   MELHOR_ENVIO_CLIENT_ID: Number(process.env.MELHOR_ENVIO_CLIENT_ID),
   MELHOR_ENVIO_SECRET: process.env.MELHOR_ENVIO_SECRET,

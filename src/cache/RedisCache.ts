@@ -9,7 +9,6 @@ const URL = process.env.NODE_ENV === 'development'
 
 // redis://red-clmc2e1fb9qs739b6cl0:iXwYwU7pV675NNAegTbmoyABnProb758@oregon-redis.render.com:6379
 
-
 export class RedisCache implements ICache {
   private redis: Redis
 
@@ -17,7 +16,13 @@ export class RedisCache implements ICache {
     if (!URL) throw new AppError('Redis url connection is not provided')
 
     try {
-      const client = this.redis = new Redis(URL)
+      const client = this.redis = new Redis({
+        host: 'oregon-redis.render.com',
+        username: 'red-clmc2e1fb9qs739b6cl0',
+        password: 'iXwYwU7pV675NNAegTbmoyABnProb758',
+        port: 6379,
+        tls: {},
+      })
       client.on('error', error => {
         console.log(error);
       });

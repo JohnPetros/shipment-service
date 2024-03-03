@@ -1,9 +1,12 @@
-import { IHttp } from '../../../app/interfaces/IHttp'
-import { CalculateShipmentServicesUseCase } from '../useCases/CalculateShipmentServicesUseCase'
-import { ICrontroller } from '../../../app/interfaces/IController'
 import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
 import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttpClientProvider'
+
 import { CalculateShipmentServicesDTO } from '../dtos/CalculateShipmentServicesDTO'
+
+import { CalculateShipmentServicesUseCase } from '../useCases/CalculateShipmentServicesUseCase'
+
+import { IHttp } from '../../../app/interfaces/IHttp'
+import { ICrontroller } from '../../../app/interfaces/IController'
 import { RedisCache } from '@cache/RedisCache'
 
 export class CalculateShipmentServicesController implements ICrontroller {
