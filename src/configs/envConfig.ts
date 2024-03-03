@@ -12,6 +12,8 @@ const _envConfig: IEnvConfig = {
   MELHOR_ENVIO_SECRET: process.env.MELHOR_ENVIO_SECRET,
   MELHOR_ENVIO_REDIRECT_URI: process.env.MELHOR_ENVIO_REDIRECT_URI,
   REDIS_PORT: Number(process.env.REDIS_PORT),
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_USERNAME: process.env.REDIS_USERNAME,
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 }
 
