@@ -1,26 +1,40 @@
-import Redis from 'ioredis'
+import Redis, { RedisOptions } from 'ioredis'
 import { ICache } from './ICache'
 import { AppError } from '@utils/AppError'
 
-const URL = process.env.NODE_ENV === 'development'
-  ? process.env.REDIS_EXTERNAL_URL
-  : process.env.REDIS_INTERNAL_URL
+const IS_DEV_ENV = process.env.NODE_ENV === 'development'
 
-
-// redis://red-clmc2e1fb9qs739b6cl0:iXwYwU7pV675NNAegTbmoyABnProb758@oregon-redis.render.com:6379
+const USERNAME = process.env.REDIS_USERNAME
+const PASSWORD = process.env.REDIS_PASSWORD
+const HOST = process.env.REDIS_HOST
+const PORT = process.env.REDIS_PORT
 
 export class RedisCache implements ICache {
   private redis: Redis
 
   constructor() {
-    if (!URL) throw new AppError('Redis url connection is not provided')
+    if (!HOST || !USERNAME || !PASSWORD || !PORT) throw new AppError('Redis url connection is not provided')
+
+    let redisOptions: Partial<RedisOptions> = {}
+
+    if (IS_DEV_ENV) {
+      redisOptions = {
+        host: HOST,
+        username: USERNAME,
+        password: PASSWORD,
+        port: Number(PORT),
+      }
+
+    } else {
+      redisOptions = {
+        host: HOST,
+        port: Number(PORT),
+      }
+    }
 
     try {
       const client = this.redis = new Redis({
-        host: 'oregon-redis.render.com',
-        username: 'red-clmc2e1fb9qs739b6cl0',
-        password: 'iXwYwU7pV675NNAegTbmoyABnProb758',
-        port: 6379,
+        ...redisOptions,
         tls: {},
       })
       client.on('error', error => {
