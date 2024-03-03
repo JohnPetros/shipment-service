@@ -21,6 +21,7 @@ import { IHttp } from '../interfaces/IHttp'
 import { FastifyHttp } from './FastifyHttp'
 import { File } from '@utils/File'
 import { fileConfig } from '@configs/fileConfig'
+import { RedisCache } from '@cache/RedisCache'
 
 export class FastifyApp implements IApp {
   private fastify: FastifyInstance
@@ -49,7 +50,10 @@ export class FastifyApp implements IApp {
 
     fastifyRouter.get('/', {
       async handle(http: IHttp) {
-        http.send(200, 'ok')
+        const cache = new RedisCache()
+        await cache.set('teste', 'Shipment Service')
+
+        http.send(200, 'Shipment Service')
       },
     })
 
