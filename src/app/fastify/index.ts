@@ -1,20 +1,23 @@
+import { Server } from 'node:http'
+
 import getFastifyInstance, { FastifyInstance } from 'fastify'
 import { FastifyRouter } from './FastifyRouter'
 import cookie from '@fastify/cookie'
 import rateLimit from '@fastify/rate-limit'
 
-import { Server } from 'node:http'
+import { envConfig } from '@configs/envConfig'
+import { rateLimitConfig } from '@configs/rateLimitConfig'
+
+import { authRoutes } from '@routes/authRoutes'
+import { shipmentRoutes } from '@routes/shipmentRoutes'
+
+import { SentryMonitor } from '@providers/MonitorProvider/SentryMonitor'
+
+import { AppError } from '@utils/AppError'
+import { Console } from '@utils/Console'
 
 import { IApp } from '../interfaces/IApp'
 import { FastifyHttp } from './FastifyHttp'
-import { authRoutes } from '@routes/authRoutes'
-import { shipmentRoutes } from '@routes/shipmentRoutes'
-import { envConfig } from '@configs/envConfig'
-import { AppError } from '@utils/AppError'
-import { Console } from '@utils/Console'
-import { paymentRoutes } from '@routes/paymentRoutes'
-import { rateLimitConfig } from '@configs/rateLimitConfig'
-import { SentryMonitor } from '@providers/MonitorProvider/SentryMonitor'
 
 export class FastifyApp implements IApp {
   private fastify: FastifyInstance
@@ -33,7 +36,6 @@ export class FastifyApp implements IApp {
 
     fastify.register(() => authRoutes(fastifyRouter))
     fastify.register(() => shipmentRoutes(fastifyRouter))
-    fastify.register(() => paymentRoutes(fastifyRouter))
 
     const sentryMonitor = new SentryMonitor()
     const console = new Console()

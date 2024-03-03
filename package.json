@@ -10,7 +10,7 @@
     "dev": "tsx watch src/server.ts",
     "start": "node build/server",
     "lint": "eslint src --ext .ts --fix",
-    "build": "tsup src --out-dir build",
+    "build": "tsup --out-dir build",
     "test": "vitest",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sertton-industrial --project node ./build && sentry-cli sourcemaps upload --org sertton-industrial --project node ./build"
   },
@@ -21,7 +21,6 @@
     "@biomejs/biome": "^1.5.3",
     "@types/node": "^20.10.0",
     "@types/supertest": "^2.0.16",
-    "msw": "^2.0.11",
     "supertest": "^6.3.3",
     "tsx": "^4.6.0",
     "vitest": "^0.34.6"
@@ -46,6 +45,7 @@
     "jsqr": "^1.4.0",
     "melhor-envio": "^1.6.3",
     "mercadopago": "^2.0.5",
+    "msw": "^2.0.11",
     "node-downloader-helper": "^2.1.9",
     "pagarme": "^4.33.1",
     "typescript": ">=4",
