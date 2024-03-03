@@ -11,7 +11,8 @@ export class CacheMock implements ICache {
     const data = this.chache[key]
 
     if (data) return JSON.parse(data)
-    else return null
+
+    return null
   }
 
   async delete(key: string): Promise<void> {

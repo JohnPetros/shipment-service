@@ -7,7 +7,7 @@ import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider
 import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
 import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttpClientProvider'
 import { ICache } from '@cache/ICache'
-import { CacheMock } from '@cache/CacheMock'
+import { CacheMock } from '@cache/tests/mocks/CacheMock'
 import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
 
 let httpClientProvider: IHttpClientProvider
