@@ -1,4 +1,5 @@
 import { Server } from 'node:http'
+import https from 'node:https'
 
 import getFastifyInstance, { FastifyInstance } from 'fastify'
 import { FastifyRouter } from './FastifyRouter'
@@ -18,12 +19,22 @@ import { Console } from '@utils/Console'
 
 import { IApp } from '../interfaces/IApp'
 import { FastifyHttp } from './FastifyHttp'
+import { File } from '@utils/File'
+import { fileConfig } from '@configs/fileConfig'
 
 export class FastifyApp implements IApp {
   private fastify: FastifyInstance
 
   constructor() {
-    const fastify = getFastifyInstance()
+    const sslKeyFile = new File(fileConfig.FOLDERS.CERTIFICATES, fileConfig.FILES.SSL_KEY)
+    const sslCrtFile = new File(fileConfig.FOLDERS.CERTIFICATES, fileConfig.FILES.SSL_CRT)
+
+    const fastify = getFastifyInstance({
+      https: {
+        key: sslKeyFile.read(),
+        cert: sslCrtFile.read(),
+      }
+    })
 
     const fastifyRouter = new FastifyRouter(fastify)
 
@@ -66,7 +77,7 @@ export class FastifyApp implements IApp {
         port: envConfig.PORT,
       })
       .then(async () => {
-        console.log('HTTP Server Running on Port: ' + envConfig.PORT)
+        console.log(`HTTP Server Running on Port: ${envConfig.PORT}`)
       })
   }
 

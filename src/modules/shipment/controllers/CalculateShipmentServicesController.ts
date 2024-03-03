@@ -11,23 +11,23 @@ import { RedisCache } from '@cache/RedisCache'
 
 export class CalculateShipmentServicesController implements ICrontroller {
   async handle(http: IHttp) {
-    const { zipcode, products } = http.getBody<CalculateShipmentServicesDTO>()
+    // const { zipcode, products } = http.getBody<CalculateShipmentServicesDTO>()
 
-    const axiosHttpClientProvider = new AxiosHttpClientProvider()
-    const shippmentProvider = new MelhorEnvioShipmentProvider(
-      axiosHttpClientProvider,
-    )
+    // const axiosHttpClientProvider = new AxiosHttpClientProvider()
+    // const shippmentProvider = new MelhorEnvioShipmentProvider(
+    //   axiosHttpClientProvider,
+    // )
 
-    const calculateUseCase = new CalculateShipmentServicesUseCase(
-      shippmentProvider,
-      new RedisCache(),
-    )
+    // const calculateUseCase = new CalculateShipmentServicesUseCase(
+    //   shippmentProvider,
+    //   new RedisCache(),
+    // )
 
-    const shipmentServices = await calculateUseCase.execute({
-      zipcode,
-      products,
-    })
+    // const shipmentServices = await calculateUseCase.execute({
+    //   zipcode,
+    //   products,
+    // })
 
-    http.send(200, shipmentServices)
+    http.send(200, 'ok')
   }
 }
