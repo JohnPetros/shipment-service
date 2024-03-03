@@ -17,6 +17,7 @@ import { AppError } from '@utils/AppError'
 import { Console } from '@utils/Console'
 
 import { IApp } from '../interfaces/IApp'
+import { IHttp } from '../interfaces/IHttp'
 import { FastifyHttp } from './FastifyHttp'
 import { File } from '@utils/File'
 import { fileConfig } from '@configs/fileConfig'
@@ -45,6 +46,12 @@ export class FastifyApp implements IApp {
     //   max: rateLimitConfig.MAX,
     //   timeWindow: rateLimitConfig.INTERVAL,
     // })
+
+    fastifyRouter.get('/', {
+      async handle(http: IHttp) {
+        http.send(200, 'ok')
+      },
+    })
 
     fastify.register(() => authRoutes(fastifyRouter))
     fastify.register(() => shipmentRoutes(fastifyRouter))
