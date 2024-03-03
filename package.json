@@ -25,6 +25,7 @@
     "supertest": "^6.3.3",
     "tsx": "^4.6.0",
     "typescript": ">=4",
+    "tsup": "^8.0.1",
     "vitest": "^0.34.6"
   },
   "dependencies": {
@@ -49,7 +50,6 @@
     "mercadopago": "^2.0.5",
     "node-downloader-helper": "^2.1.9",
     "pagarme": "^4.33.1",
-    "tsup": "^8.0.1",
     "uuid-int": "^3.1.0",
     "vite-tsconfig-paths": "^4.2.1",
     "zod": "^3.22.4"
