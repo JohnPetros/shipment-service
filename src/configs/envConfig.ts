@@ -13,8 +13,6 @@ const _envConfig: IEnvConfig = {
   MELHOR_ENVIO_REDIRECT_URI: process.env.MELHOR_ENVIO_REDIRECT_URI,
   REDIS_PORT: Number(process.env.REDIS_PORT),
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
-  REDIS_INTERNAL_URL: process.env.REDIS_INTERNAL_URL,
-  REDIS_EXTERNAL_URL: process.env.REDIS_EXTERNAL_URL,
 }
 
 console.log({ _envConfig })

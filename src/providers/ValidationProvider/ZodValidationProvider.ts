@@ -29,20 +29,10 @@ export class ZodValidationProvider implements IValidationProvider {
       PORT: z.number().default(3333),
       REDIS_PASSWORD: z.string(),
       REDIS_PORT: z.number(),
-      REDIS_EXTERNAL_URL: z.string(),
-      REDIS_INTERNAL_URL: z.string(),
       MELHOR_ENVIO_URL: z.string(),
       MELHOR_ENVIO_SECRET: z.string(),
       MELHOR_ENVIO_CLIENT_ID: z.number(),
       MELHOR_ENVIO_REDIRECT_URI: z.string(),
-      // MERCADO_PAGO_ACCESS_TOKEN: z.string(),
-      // MERCADO_PAGO_PUBLIC_KEY: z.string(),
-      // PAGAR_ME_API_URL: z.string(),
-      // PAGAR_ME_PUBLIC_KEY: z.string(),
-      // PAGAR_ME_SECRET_KEY: z.string(),
-      // YAMPI_BASE_URL: z.string(),
-      // YAMPI_SECRET_KEY: z.string(),
-      // YAMPI_TOKEN: z.string(),
     })
 
     const validation = envConfigSchema.safeParse(envVars)

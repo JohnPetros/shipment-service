@@ -9,6 +9,4 @@ export interface IEnvConfig {
   MELHOR_ENVIO_REDIRECT_URI: string | undefined
   REDIS_PORT: number | undefined
   REDIS_PASSWORD: string | undefined
-  REDIS_INTERNAL_URL: string | undefined
-  REDIS_EXTERNAL_URL: string | undefined
 }
