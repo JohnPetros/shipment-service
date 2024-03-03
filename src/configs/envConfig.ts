@@ -17,8 +17,6 @@ const _envConfig: IEnvConfig = {
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 }
 
-console.log('HOST', process.env.HOST)
-
 const zodValidationProvider = new ZodValidationProvider()
 
 zodValidationProvider.validateEnvConfig(_envConfig)

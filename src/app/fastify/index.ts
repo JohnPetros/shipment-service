@@ -83,6 +83,7 @@ export class FastifyApp implements IApp {
     this.fastify
       .listen({
         port: envConfig.PORT,
+        host: '0.0.0.0'
       })
       .then(async () => {
         console.log(`HTTP Server Running on Port: ${envConfig.PORT}`)
