@@ -1,5 +1,4 @@
 import { Server } from 'node:http'
-import https from 'node:https'
 
 import getFastifyInstance, { FastifyInstance } from 'fastify'
 import { FastifyRouter } from './FastifyRouter'
