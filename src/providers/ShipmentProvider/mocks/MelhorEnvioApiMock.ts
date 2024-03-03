@@ -16,14 +16,14 @@ const melhorEnvioShipmentServiceMock: MelhorEnvioQuote = {
 }
 
 export const melhorEnvioApiMock = [
-  http.post(`${envConfig.MELHOR_ENVIO_DEV_URL}/oauth/token`, () => {
+  http.post(`${envConfig.MELHOR_ENVIO_URL}/oauth/token`, () => {
     return HttpResponse.json({
       access_token: jwtMock.accessToken,
       refresh_token: jwtMock.refreshToken,
     })
   }),
   http.post(
-    `${envConfig.MELHOR_ENVIO_DEV_URL}/api/v2/me/shipment/calculate`,
+    `${envConfig.MELHOR_ENVIO_URL}/api/v2/me/shipment/calculate`,
     () => {
       return HttpResponse.json([melhorEnvioShipmentServiceMock])
     },
