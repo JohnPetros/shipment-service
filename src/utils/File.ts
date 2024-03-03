@@ -12,9 +12,12 @@ export class File {
     this.fileName = fileName
   }
 
+  getPath() {
+    return path.resolve(this.folder, this.fileName)
+  }
+
   async downloadFromRemoteUrl(url: string) {
-    const isFileExists = await this.checkFileExists()
-    if (isFileExists) throw new AppError('File already exists', 500)
+    this.checkFileExists()
 
     await new Promise((resolve, reject) => {
       const download = new DownloaderHelper(url, this.folder, {
@@ -27,14 +30,18 @@ export class File {
   }
 
   async checkFileExists() {
-    return fs.existsSync(path.resolve(this.folder, this.fileName))
+    const isFileExists = fs.existsSync(this.getPath())
+    if (!isFileExists) throw new AppError('File does not exist', 500)
+  }
+
+  read() {
+    return fs.readFileSync(this.getPath())
   }
 
   async convertToBase64() {
-    const isFileExists = await this.checkFileExists()
-    if (!isFileExists) throw new AppError('File does not exist', 500)
+    this.checkFileExists()
 
-    const binaryData = fs.readFileSync(path.resolve(this.folder, this.fileName))
+    const binaryData = fs.readFileSync(this.getPath())
 
     return Buffer.from(binaryData).toString('base64')
   }
@@ -44,7 +51,7 @@ export class File {
     if (!isFileExists) throw new AppError('File does not exist', 500)
 
     try {
-      await fs.promises.unlink(path.resolve(this.folder, this.fileName))
+      await fs.promises.unlink(this.getPath())
     } catch (error) {
       throw new AppError('Failed to delete file', 500)
     }
