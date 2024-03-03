@@ -8,7 +8,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "node build/server",
+    "start": "HOST=0.0.0.0 node build/server",
     "build": "tsup --out-dir build",
     "test": "vitest",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sertton-industrial --project node ./build && sentry-cli sourcemaps upload --org sertton-industrial --project node ./build"
