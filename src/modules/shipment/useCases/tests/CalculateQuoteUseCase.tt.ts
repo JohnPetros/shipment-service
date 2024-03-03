@@ -17,7 +17,7 @@ import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttp
 import { MelhorEnvioShipmentProvider } from '@providers/ShipmentProvider/MelhorEnvioShipmentProvider'
 import { productsMock } from '@entities/mocks/productsMock'
 import { ICache } from '@cache/ICache'
-import { CacheMock } from '@cache/tests/mocks/CacheMock'
+import { CacheMock } from '@cache/CacheMock'
 
 let httpClientProvider: IHttpClientProvider
 let shipmentProvider: IShipmentProvider
