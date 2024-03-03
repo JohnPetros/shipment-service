@@ -25,15 +25,17 @@ export class FastifyApp implements IApp {
   private fastify: FastifyInstance
 
   constructor() {
-    const sslKeyFile = new File(fileConfig.FOLDERS.CERTIFICATES, fileConfig.FILES.SSL_KEY)
-    const sslCrtFile = new File(fileConfig.FOLDERS.CERTIFICATES, fileConfig.FILES.SSL_CRT)
+    // const sslKeyFile = new File(fileConfig.FOLDERS.CERTIFICATES, fileConfig.FILES.SSL_KEY)
+    // const sslCrtFile = new File(fileConfig.FOLDERS.CERTIFICATES, fileConfig.FILES.SSL_CRT)
 
-    const fastify = getFastifyInstance({
-      https: {
-        key: sslKeyFile.read(),
-        cert: sslCrtFile.read(),
-      }
-    })
+    // const httpsConfig = {
+    //   https: {
+    //     key: sslKeyFile.read(),
+    //     cert: sslCrtFile.read(),
+    //   }
+    // }
+
+    const fastify = getFastifyInstance()
 
     const fastifyRouter = new FastifyRouter(fastify)
 
