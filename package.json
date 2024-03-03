@@ -8,7 +8,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "HOST=0.0.0.0 node build/server",
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "build": "tsup --out-dir build",
     "test": "vitest",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sertton-industrial --project node ./build && sentry-cli sourcemaps upload --org sertton-industrial --project node ./build"
@@ -47,8 +47,9 @@
     "msw": "^2.0.11",
     "node-downloader-helper": "^2.1.9",
     "pagarme": "^4.33.1",
-    "typescript": ">=4",
+    "pm2": "^5.3.1",
     "tsup": "^8.0.1",
+    "typescript": ">=4",
     "uuid-int": "^3.1.0",
     "vite-tsconfig-paths": "^4.2.1",
     "zod": "^3.22.4"
