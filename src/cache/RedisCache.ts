@@ -32,6 +32,8 @@ export class RedisCache implements ICache {
       }
     }
 
+    console.log({ redisOptions })
+
     try {
       const client = this.redis = new Redis({
         ...redisOptions,
