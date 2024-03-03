@@ -20,7 +20,7 @@
         "noArrayIndexKey": "warn",
         "noDoubleEquals": "warn",
         "noConsoleLog": "off",
-        "noAssignInExpressions": "warn",
+        "noAssignInExpressions": "off",
         "noRedeclare": "warn"
       },
       "style": {

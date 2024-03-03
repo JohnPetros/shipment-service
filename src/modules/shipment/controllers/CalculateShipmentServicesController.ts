@@ -14,6 +14,7 @@ export class CalculateShipmentServicesController implements ICrontroller {
     const shippmentProvider = new MelhorEnvioShipmentProvider(
       axiosHttpClientProvider,
     )
+
     const calculateUseCase = new CalculateShipmentServicesUseCase(
       shippmentProvider,
       new RedisCache(),
