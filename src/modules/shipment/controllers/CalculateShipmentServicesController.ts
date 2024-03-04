@@ -28,6 +28,6 @@ export class CalculateShipmentServicesController implements ICrontroller {
       products,
     })
 
-    http.send(200, 'ok')
+    http.send(200, shipmentServices)
   }
 }
