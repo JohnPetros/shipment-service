@@ -8,12 +8,13 @@ const USERNAME = process.env.REDIS_USERNAME
 const PASSWORD = process.env.REDIS_PASSWORD
 const HOST = process.env.REDIS_HOST
 const PORT = process.env.REDIS_PORT
+const URL = process.env.REDIS_INTERNAL_URL
 
 export class RedisCache implements ICache {
   private redis: Redis
 
   constructor() {
-    if (!HOST || !USERNAME || !PASSWORD || !PORT) throw new AppError('Redis url connection is not provided')
+    if (!HOST || !USERNAME || !PASSWORD || !PORT || !URL) throw new AppError('Redis url connection is not provided')
 
     let redisOptions: Partial<RedisOptions> = {}
 
@@ -23,27 +24,29 @@ export class RedisCache implements ICache {
         username: USERNAME,
         password: PASSWORD,
         port: Number(PORT),
+        tls: {}
       }
 
-    } else {
-      redisOptions = {
-        host: HOST,
-        port: Number(PORT),
+      try {
+        const client = this.redis = new Redis(redisOptions)
+        client.on('error', error => {
+          console.log(error)
+        })
+      } catch (error) {
+        throw new AppError('Redis connection error')
       }
+
+      return
     }
 
-    console.log({ redisOptions })
-
     try {
-      const client = this.redis = new Redis('redis://red-clmc2e1fb9qs739b6cl0:6379')
+      const client = this.redis = new Redis(URL)
       client.on('error', error => {
-        console.log(error);
-      });
+        console.log(error)
+      })
     } catch (error) {
       throw new AppError('Redis connection error')
     }
-
-    // this.redis = new Redis(URL)
   }
 
   async set(key: string, data: unknown): Promise<void> {
