@@ -35,10 +35,7 @@ export class RedisCache implements ICache {
     console.log({ redisOptions })
 
     try {
-      const client = this.redis = new Redis({
-        ...redisOptions,
-        tls: {},
-      })
+      const client = this.redis = new Redis('redis://red-clmc2e1fb9qs739b6cl0:6379')
       client.on('error', error => {
         console.log(error);
       });
