@@ -2,18 +2,18 @@ import { IShipmentProvider } from '@providers/ShipmentProvider/IShipmentProvider
 import { AppError } from '@utils/AppError'
 
 export class AuthorizeUseCase {
-  private shippmentProvider: IShipmentProvider
+  private shipmentProvider: IShipmentProvider
 
-  constructor(shippmentProvider: IShipmentProvider) {
-    this.shippmentProvider = shippmentProvider
+  constructor(shipmentProvider: IShipmentProvider) {
+    this.shipmentProvider = shipmentProvider
   }
 
   async execute() {
     try {
-      return await this.shippmentProvider.authorize()
+      return await this.shipmentProvider.authorize()
     } catch (error) {
       console.error(error)
-      this.shippmentProvider.handleApiError(error)
+      this.shipmentProvider.handleApiError(error)
       throw new AppError('Failed to authorize user', 401)
     }
   }

@@ -14,13 +14,12 @@ export class CalculateShipmentServicesController implements ICrontroller {
     const { zipcode, products } = http.getBody<CalculateShipmentServicesDTO>()
 
     const axiosHttpClientProvider = new AxiosHttpClientProvider()
-    const shippmentProvider = new MelhorEnvioShipmentProvider(
-      axiosHttpClientProvider,
-    )
+    const shippmentProvider = new MelhorEnvioShipmentProvider(axiosHttpClientProvider)
+    const cache = new RedisCache()
 
     const calculateUseCase = new CalculateShipmentServicesUseCase(
       shippmentProvider,
-      new RedisCache(),
+      cache
     )
 
     const shipmentServices = await calculateUseCase.execute({

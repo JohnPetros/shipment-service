@@ -14,9 +14,7 @@ export class RefreshTokenUseCase {
   }
 
   async execute() {
-    const refreshToken = await this.cache.get<string>(
-      cacheConfig.KEYS.REFRESH_TOKEN,
-    )
+    const refreshToken = await this.cache.get(cacheConfig.KEYS.REFRESH_TOKEN)
     if (!refreshToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
 
     try {
@@ -25,12 +23,11 @@ export class RefreshTokenUseCase {
       const [, , previousRoute] = await Promise.all([
         this.cache.set(cacheConfig.KEYS.ACCESS_TOKEN, jwt.accessToken),
         this.cache.set(cacheConfig.KEYS.REFRESH_TOKEN, jwt.refreshToken),
-        this.cache.get<string>(cacheConfig.KEYS.PREVIOUS_ROUTE),
+        this.cache.get(cacheConfig.KEYS.PREVIOUS_ROUTE),
         this.cache.delete(cacheConfig.KEYS.PREVIOUS_ROUTE),
       ])
 
-      if (!previousRoute)
-        throw new AppError('Failed to get previous route', 500)
+      if (!previousRoute) throw new AppError('Failed to get previous route', 500)
 
       return previousRoute
     } catch (error) {

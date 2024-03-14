@@ -8,7 +8,9 @@ import { errorConfig } from '@configs/errorConfig'
 import { CalculateShipmentServicesDTO } from '../dtos/CalculateShipmentServicesDTO'
 import { IUseCase } from 'app/interfaces/IUseCase'
 
-export class CalculateShipmentServicesUseCase implements IUseCase<CalculateShipmentServicesDTO, ShipmentService[]> {
+export class CalculateShipmentServicesUseCase
+  implements IUseCase<CalculateShipmentServicesDTO, ShipmentService[]>
+{
   private shipmentProvider: IShipmentProvider
   private cache: ICache
 
@@ -22,20 +24,19 @@ export class CalculateShipmentServicesUseCase implements IUseCase<CalculateShipm
     zipcode,
   }: CalculateShipmentServicesDTO): Promise<ShipmentService[]> {
     if (!zipcode || !products.length)
-      throw new AppError('Zipcode or skus are incorrect', 402)
+      throw new AppError('Zipcode or products are incorrect', 402)
+
+    const accessToken = await this.cache.get(cacheConfig.KEYS.ACCESS_TOKEN)
+
+    if (!accessToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
 
     try {
-      const accessToken = await this.cache.get<string>(
-        cacheConfig.KEYS.ACCESS_TOKEN,
-      )
-
-      if (!accessToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
       const shipmentServices = await this.shipmentProvider.calculate(
         { products, zipcode },
-        accessToken,
+        accessToken
       )
 
-      return shipmentServices.sort((a, b) => a.price > b.price ? 1 : -1)
+      return shipmentServices.sort((a, b) => (a.price > b.price ? 1 : -1))
     } catch (error) {
       console.error(error)
       this.shipmentProvider.handleApiError(error)
