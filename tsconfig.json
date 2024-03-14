@@ -27,6 +27,7 @@
     /* Modules */
     "module": "commonjs", 
     "paths": {
+      "@app/*": ["app/*"],
       "@http/*": ["http/*"],
       "@routes/*": ["routes/*"],
       "@modules/*": ["modules/*"],
@@ -35,6 +36,7 @@
       "@configs/*": ["configs/*"],
       "@providers/*": ["providers/*"],
       "@cache/*": ["cache/*"],
+      "@helpers/*": ["helpers/*"],
       "@utils/*": ["utils/*"]
     },                               /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
