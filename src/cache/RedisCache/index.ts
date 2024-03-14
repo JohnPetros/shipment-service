@@ -1,6 +1,6 @@
 import Redis, { RedisOptions } from 'ioredis'
-import { ICache } from './ICache'
 import { AppError } from '@utils/AppError'
+import { ICache } from '@cache/ICache'
 
 const IS_DEV_ENV = process.env.NODE_ENV === 'development'
 
@@ -14,7 +14,8 @@ export class RedisCache implements ICache {
   private redis: Redis
 
   constructor() {
-    if (!HOST || !USERNAME || !PASSWORD || !PORT || !URL) throw new AppError('Redis url connection is not provided')
+    if (!HOST || !USERNAME || !PASSWORD || !PORT || !URL)
+      throw new AppError('Redis url connection is not provided')
 
     let redisOptions: Partial<RedisOptions> = {}
 
@@ -24,12 +25,12 @@ export class RedisCache implements ICache {
         username: USERNAME,
         password: PASSWORD,
         port: Number(PORT),
-        tls: {}
+        tls: {},
       }
 
       try {
-        const client = this.redis = new Redis(redisOptions)
-        client.on('error', error => {
+        const client = (this.redis = new Redis(redisOptions))
+        client.on('error', (error) => {
           console.log(error)
         })
       } catch (error) {
@@ -40,8 +41,8 @@ export class RedisCache implements ICache {
     }
 
     try {
-      const client = this.redis = new Redis(URL)
-      client.on('error', error => {
+      const client = (this.redis = new Redis(URL))
+      client.on('error', (error) => {
         console.log(error)
       })
     } catch (error) {
