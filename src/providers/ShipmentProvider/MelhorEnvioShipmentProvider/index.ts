@@ -1,12 +1,18 @@
+import { ShipmentService } from '@entities/ShipmentService'
+import { Jwt } from '@entities/Jwt'
+
 import { errorConfig } from '@configs/errorConfig'
 import { envConfig } from '@configs/envConfig'
 
 import { IHttpClientProvider } from '@providers/HttpClientProvider/IHttpClientProvider'
-import { IShipmentProvider } from './IShipmentProvider'
-import { ShipmentService } from '@entities/ShipmentService'
-import { Jwt } from '@entities/Jwt'
+
 import { CalculateShipmentServicesDTO } from '@modules/shipment/dtos/CalculateShipmentServicesDTO'
+
 import { AppError } from '@utils/AppError'
+
+import { MelhorEnvioQuote } from './types/MelhorEnvioQuote'
+import { MelhorEnvioToken } from './types/MelhorEnvioToken'
+import { IShipmentProvider } from '../IShipmentProvider'
 
 const {
   DOMAIN,
@@ -19,24 +25,6 @@ const {
 
 const BASE_URL = MELHOR_ENVIO_URL
 
-export type MelhorEnvioToken = {
-  access_token: string
-  refresh_token: string
-  expires_in: number
-}
-
-export type MelhorEnvioQuote = {
-  id: number
-  name: string
-  price: string
-  custom_price: string
-  discount: string
-  currency: string
-  delivery_time: number
-  custom_delivery_time: number
-  error?: string
-}
-
 export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   private api: IHttpClientProvider
 
@@ -48,7 +36,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
 
   async calculate(
     { zipcode, products }: CalculateShipmentServicesDTO,
-    token: string,
+    token: string
   ): Promise<ShipmentService[]> {
     this.api.setJwt(`Bearer ${token}`)
 
@@ -69,7 +57,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
           insurance_value: product.price,
           quantity: product.quantity,
         })),
-      },
+      }
     )
 
     return quotes
@@ -97,8 +85,10 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
       code,
     }
 
-    const { access_token, refresh_token } =
-      await this.api.post<MelhorEnvioToken>('/oauth/token', body)
+    const { access_token, refresh_token } = await this.api.post<MelhorEnvioToken>(
+      '/oauth/token',
+      body
+    )
 
     return {
       accessToken: access_token,
