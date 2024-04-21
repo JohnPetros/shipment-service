@@ -32,6 +32,7 @@
         "useConst": "warn",
         "useEnumInitializers": "warn",
         "useTemplate": "warn",
+        "useImportType": "off",
         "useSelfClosingElements": "warn"
       },
       "security": {
@@ -64,7 +65,10 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 90,
-    "ignore": ["**/*/generated-new.ts", "**/*/generated-v2.ts"]
+    "ignore": [
+      "**/*/generated-new.ts",
+      "**/*/generated-v2.ts"
+    ]
   },
   "javascript": {
     "formatter": {
