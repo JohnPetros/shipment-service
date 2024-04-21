@@ -6,9 +6,6 @@ type NodeEnv = 'production' | 'development' | 'test'
 
 const isTestEnv = process.env.NODE_ENV === 'test'
 
-console.log({ isTestEnv })
-console.log(process.env.MELHOR_ENVIO_URL)
-
 let _envConfig: IEnvConfig | null = null
 
 if (isTestEnv) {

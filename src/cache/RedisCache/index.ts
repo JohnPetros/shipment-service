@@ -1,6 +1,7 @@
-import Redis, { RedisOptions } from 'ioredis'
-import { AppError } from '@utils/AppError'
 import { ICache } from '@cache/ICache'
+import { envConfig } from '@configs/envConfig'
+import { AppError } from '@utils/AppError'
+import Redis, { RedisOptions } from 'ioredis'
 
 const IS_DEV_ENV =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
@@ -15,12 +16,12 @@ export class RedisCache implements ICache {
   private redis: Redis
 
   constructor() {
-    if (!HOST || !USERNAME || !PASSWORD || !PORT)
-      throw new AppError('Redis env variables connection is not provided')
-
     let redisOptions: Partial<RedisOptions> = {}
 
     if (IS_DEV_ENV) {
+      if (!HOST || !USERNAME || !PASSWORD || !PORT)
+        throw new AppError('Redis env variables connection is not provided')
+
       redisOptions = {
         host: HOST,
         password: 'sertton',
