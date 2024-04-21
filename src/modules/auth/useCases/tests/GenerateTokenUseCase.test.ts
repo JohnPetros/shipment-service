@@ -17,7 +17,7 @@ describe('Generate Token Use Case', () => {
   it('Should throw an error if the code to generate the token is not provided', () => {
     const generateTokenUseCase = new GenerateTokenUseCase(shipmentProvider, cache)
 
-    expect(async () => await generateTokenUseCase.execute('ggg')).rejects.toThrow(
+    expect(async () => await generateTokenUseCase.execute('')).rejects.toThrow(
       'Invalid code'
     )
   })

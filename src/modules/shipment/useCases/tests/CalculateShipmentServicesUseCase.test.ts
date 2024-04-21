@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import { InMemoryShipmentProvider } from '@providers/ShipmentProvider/InMemoryShipmentProvider'
 
-import { productsMock } from '@entities/mocks/productsMock'
 import { ShipmentService } from '@entities/ShipmentService'
+import { productsMock } from '@entities/mocks/productsMock'
 
 import { InMemoryCache } from '@cache/InMemoryCache'
 
@@ -32,7 +32,7 @@ describe('Calculate Shipment Services Use Case', () => {
           products: productsMock,
           zipcode: 0,
         })
-    ).rejects.toEqual(new AppError('Zipcode or products are incorrect', 402))
+    ).rejects.toEqual(new AppError('Zipcode or products are empty', 400))
   })
 
   it('should not be able to calculate quote when products are not defined', async () => {
@@ -47,7 +47,7 @@ describe('Calculate Shipment Services Use Case', () => {
           zipcode: 929292,
           products: [],
         })
-    ).rejects.toEqual(new AppError('Zipcode or products are incorrect', 402))
+    ).rejects.toEqual(new AppError('Zipcode or products are empty', 400))
   })
 
   it('should not be able to calculate shipment service if there is no access token', async () => {
@@ -62,7 +62,7 @@ describe('Calculate Shipment Services Use Case', () => {
           zipcode: 929292,
           products: productsMock,
         })
-    ).rejects.toEqual(new AppError(errorConfig.AUTH.INVALID_TOKEN, 402))
+    ).rejects.toEqual(new AppError(errorConfig.AUTH.INVALID_TOKEN, 401))
   })
 
   it('should handle api error if use case throws a error on calculate shipment service', async () => {
