@@ -8,18 +8,11 @@ import { AxiosHttpClientProvider } from '@providers/HttpClientProvider/AxiosHttp
 export class RefreshTokenController implements ICrontroller {
   async handle(http: IHttp) {
     const axiosHttpClientProvider = new AxiosHttpClientProvider()
-    const shippmentProvider = new MelhorEnvioShipmentProvider(
-      axiosHttpClientProvider,
-    )
-    const refreshTokenUseCase = new RefreshTokenUseCase(
-      shippmentProvider,
-      new Cache(),
-    )
+    const shippmentProvider = new MelhorEnvioShipmentProvider(axiosHttpClientProvider)
+    const refreshTokenUseCase = new RefreshTokenUseCase(shippmentProvider, new Cache())
 
-    const previousRoute = await refreshTokenUseCase.execute()
+    const jwt = await refreshTokenUseCase.execute()
 
-    console.log(previousRoute)
-
-    http.redirect(previousRoute)
+    http.send(200, jwt)
   }
 }

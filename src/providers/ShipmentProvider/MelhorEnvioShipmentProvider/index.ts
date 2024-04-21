@@ -77,6 +77,8 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   }
 
   async getToken(code: string): Promise<Jwt> {
+
+
     const body = {
       grant_type: 'authorization_code',
       client_id: MELHOR_ENVIO_CLIENT_ID,

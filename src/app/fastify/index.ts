@@ -3,6 +3,7 @@ import { Server } from 'node:http'
 import getFastifyInstance, { FastifyInstance } from 'fastify'
 import { FastifyRouter } from './FastifyRouter'
 import cookie from '@fastify/cookie'
+import cron from "node-cron"
 import rateLimit from '@fastify/rate-limit'
 
 import { envConfig } from '@configs/envConfig'
@@ -19,8 +20,6 @@ import { Console } from '@utils/Console'
 import { IApp } from '../interfaces/IApp'
 import { IHttp } from '../interfaces/IHttp'
 import { FastifyHttp } from './FastifyHttp'
-import { File } from '@utils/File'
-import { fileConfig } from '@configs/fileConfig'
 import { RedisCache } from '@cache/RedisCache'
 
 export class FastifyApp implements IApp {
@@ -63,12 +62,11 @@ export class FastifyApp implements IApp {
     const sentryMonitor = new SentryMonitor()
     const console = new Console()
 
-    fastify.setErrorHandler(async (error, request, reply) => {
+    fastify.setErrorHandler(async (error, _, reply) => {
       console.error(error)
 
       if (error instanceof AppError) {
-        const fastifyHttp = new FastifyHttp(request, reply)
-        await error.handleError(fastifyHttp)
+        reply.status(error.statusCode).send({ message: error.message })
 
         if (error.statusCode === 500 || error.statusCode === 429) {
           sentryMonitor.logError(error)
@@ -81,6 +79,10 @@ export class FastifyApp implements IApp {
     })
 
     this.fastify = fastify
+  }
+
+  setCron(expresion: string, callback: () => Promise<void>) {
+    cron.schedule(expresion, callback)
   }
 
   async startServer() {
