@@ -23,15 +23,15 @@ const {
   ZIPCODE,
 } = envConfig
 
-const BASE_URL = MELHOR_ENVIO_URL
-
 export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   private api: IHttpClientProvider
 
   constructor(api: IHttpClientProvider) {
     this.api = api
 
-    api.setBaseUrl(String(BASE_URL))
+    if (!MELHOR_ENVIO_URL) throw new AppError('MELHOR ENVIO URL is not provided')
+
+    api.setBaseUrl(MELHOR_ENVIO_URL)
   }
 
   async calculate(
@@ -73,7 +73,7 @@ export class MelhorEnvioShipmentProvider implements IShipmentProvider {
   async authorize() {
     const uri = `/oauth/authorize?client_id=${MELHOR_ENVIO_CLIENT_ID}&redirect_uri=${`${DOMAIN}${MELHOR_ENVIO_REDIRECT_URI}`}&response_type=code&scope=shipping-calculate`
 
-    return `${BASE_URL}${uri}`
+    return `${MELHOR_ENVIO_URL}${uri}`
   }
 
   async getToken(code: string): Promise<Jwt> {
