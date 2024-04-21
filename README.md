@@ -47,15 +47,6 @@ This API Rest uses [Melhor Envio API](https://docs.melhorenvio.com.br/reference/
 
 ---
 
-## Routes 🪧
-
-<table>
-  <tr>
-    <td>
-  </tr>
-
-</table>
-
 ## ⚙️ Architecture
 
 ## 🛠️ Technologies, tools and services
