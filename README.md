@@ -1,5 +1,5 @@
 <h1 align="center">
-  Shipping Service 📦
+  Shipment Service 📦
 </h1>
 
 <div align="center">
@@ -23,7 +23,7 @@
 
 ## 🖥️ About the project
 
-Shipping service is a simple **API Rest** that calculates the price of each shipping quote available to a given zipcode.
+Shipment service is a simple **API Rest** that calculates the price of each shipping quote available to a given zipcode.
 
 It has been used for the mobile app **[Sertton](https://github.com/JohnPetros/sertton)** where the user can calculate the price based on their zipcode before buying an item on the e-commerce.
 
@@ -46,15 +46,6 @@ This API Rest uses [Melhor Envio API](https://docs.melhorenvio.com.br/reference/
 - [x] This API should return the shipping quotes based on **Sertton**'s zipcode and the customer's zipcode and price, quantity and dimensions of the requested products (width, height, weight and length)
 
 ---
-
-## Routes 🪧
-
-<table>
-  <tr>
-    <td>
-  </tr>
-
-</table>
 
 ## ⚙️ Architecture
 
@@ -151,3 +142,7 @@ This application is under MIT Licence. See [the licence file](https://github.com
 <p align="center">
   Made with 💜 by John Petros 👋🏻
 </p>
+
+
+## Thiago
+- 
