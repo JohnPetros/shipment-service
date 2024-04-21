@@ -1,7 +1,6 @@
-import { DownloaderHelper } from 'node-downloader-helper'
-import { AppError } from './AppError'
 import fs from 'node:fs'
 import path from 'node:path'
+import { AppError } from './AppError'
 
 export class File {
   folder: string
@@ -14,19 +13,6 @@ export class File {
 
   getPath() {
     return path.resolve(this.folder, this.fileName)
-  }
-
-  async downloadFromRemoteUrl(url: string) {
-    this.checkFileExists()
-
-    await new Promise((resolve, reject) => {
-      const download = new DownloaderHelper(url, this.folder, {
-        fileName: this.fileName,
-      })
-      download.on('end', resolve)
-      download.on('error', reject)
-      download.start()
-    })
   }
 
   async checkFileExists() {
