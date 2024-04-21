@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { InMemoryShipmentProvider } from '@providers/ShipmentProvider/InMemoryShipmentProvider'
 
 import { productsMock } from '@entities/mocks/productsMock'
+import { ShipmentService } from '@entities/ShipmentService'
 
 import { InMemoryCache } from '@cache/InMemoryCache'
 
@@ -14,7 +15,6 @@ import { shuffleArray } from '@helpers/shuffleArray'
 import { AppError } from '@utils/AppError'
 
 import { CalculateShipmentServicesUseCase } from '../CalculateShipmentServicesUseCase'
-import { ShipmentService } from '@entities/ShipmentService'
 
 const shipmentProvider = new InMemoryShipmentProvider()
 const cache = new InMemoryCache()
@@ -45,8 +45,6 @@ describe('Calculate Shipment Services Use Case', () => {
       async () =>
         await calculateShipmentServicesUseCase.execute({
           zipcode: 929292,
-          // eslint-disable-next-line
-          // @ts-ignore
           products: [],
         })
     ).rejects.toEqual(new AppError('Zipcode or products are incorrect', 402))
