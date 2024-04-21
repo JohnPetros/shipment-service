@@ -24,11 +24,11 @@ export class CalculateShipmentServicesUseCase
     zipcode,
   }: CalculateShipmentServicesDTO): Promise<ShipmentService[]> {
     if (!zipcode || !products.length)
-      throw new AppError('Zipcode or products are incorrect', 402)
+      throw new AppError('Zipcode or products are empty', 400)
 
     const accessToken = await this.cache.get(cacheConfig.KEYS.ACCESS_TOKEN)
 
-    if (!accessToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
+    if (!accessToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 401)
 
     try {
       const shipmentServices = await this.shipmentProvider.calculate(

@@ -11,4 +11,5 @@ export interface IEnvConfig {
   REDIS_HOST: string | undefined
   REDIS_USERNAME: string | undefined
   REDIS_PASSWORD: string | undefined
+  REDIS_URL: string | undefined
 }

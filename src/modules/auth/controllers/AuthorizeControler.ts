@@ -14,6 +14,8 @@ export class AuthorizeController implements ICrontroller {
 
     const url = await authorizeUseCase.execute()
 
+    console.log({ url })
+
     http.redirect(url)
 
     // http.send(200, { url })

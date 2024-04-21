@@ -2,30 +2,28 @@ import Redis, { RedisOptions } from 'ioredis'
 import { AppError } from '@utils/AppError'
 import { ICache } from '@cache/ICache'
 
-const IS_DEV_ENV = process.env.NODE_ENV === 'development'
+const IS_DEV_ENV =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
-const USERNAME = process.env.REDIS_USERNAME
-const PASSWORD = process.env.REDIS_PASSWORD
-const HOST = process.env.REDIS_HOST
-const PORT = process.env.REDIS_PORT
-const URL = process.env.REDIS_INTERNAL_URL
+const USERNAME = process.env.VITE_REDIS_USERNAME
+const PASSWORD = process.env.VITE_REDIS_PASSWORD
+const HOST = process.env.VITE_REDIS_HOST
+const PORT = process.env.VITE_REDIS_PORT
+const URL = process.env.VITE_REDIS_URL
 
 export class RedisCache implements ICache {
   private redis: Redis
 
   constructor() {
-    if (!HOST || !USERNAME || !PASSWORD || !PORT || !URL)
-      throw new AppError('Redis url connection is not provided')
+    if (!HOST || !USERNAME || !PASSWORD || !PORT)
+      throw new AppError('Redis env variables connection is not provided')
 
     let redisOptions: Partial<RedisOptions> = {}
 
     if (IS_DEV_ENV) {
       redisOptions = {
         host: HOST,
-        username: USERNAME,
-        password: PASSWORD,
         port: Number(PORT),
-        tls: {},
       }
 
       try {
@@ -39,6 +37,8 @@ export class RedisCache implements ICache {
 
       return
     }
+
+    if (!URL) throw new AppError('Redis url connection is not provided')
 
     try {
       const client = (this.redis = new Redis(URL))
