@@ -4,7 +4,9 @@ import { IEnvConfig } from './interfaces/IEnvConfig'
 
 type NodeEnv = 'production' | 'development' | 'test'
 
-const isTestEnv = process.env.NODE_ENV == 'test'
+const isTestEnv = process.env.NODE_ENV === 'test'
+
+console.log({ isTestEnv })
 
 let _envConfig: IEnvConfig | null = null
 
