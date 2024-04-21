@@ -13,7 +13,7 @@ export default defineConfig({
   test: {
     clearMocks: true,
     globals: true,
-    setupFiles: ['dotenv/config']
+    setupFiles: ['dotenv/config'],
   },
   plugins: [tsconfigPaths()],
 })
