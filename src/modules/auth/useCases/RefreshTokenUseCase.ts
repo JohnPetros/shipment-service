@@ -5,11 +5,11 @@ import { errorConfig } from '@configs/errorConfig'
 import { cacheConfig } from '@configs/cacheConfig'
 
 export class RefreshTokenUseCase {
-  private shippmentProvider: IShipmentProvider
+  private shipmentProvider: IShipmentProvider
   private cache: ICache
 
-  constructor(shippmentProvider: IShipmentProvider, cache: ICache) {
-    this.shippmentProvider = shippmentProvider
+  constructor(shipmentProvider: IShipmentProvider, cache: ICache) {
+    this.shipmentProvider = shipmentProvider
     this.cache = cache
   }
 
@@ -18,21 +18,17 @@ export class RefreshTokenUseCase {
     if (!refreshToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
 
     try {
-      const jwt = await this.shippmentProvider.refreshToken(refreshToken)
+      const jwt = await this.shipmentProvider.refreshToken(refreshToken)
 
-      const [, , previousRoute] = await Promise.all([
+       await Promise.all([
         this.cache.set(cacheConfig.KEYS.ACCESS_TOKEN, jwt.accessToken),
         this.cache.set(cacheConfig.KEYS.REFRESH_TOKEN, jwt.refreshToken),
-        this.cache.get(cacheConfig.KEYS.PREVIOUS_ROUTE),
-        this.cache.delete(cacheConfig.KEYS.PREVIOUS_ROUTE),
       ])
 
-      if (!previousRoute) throw new AppError('Failed to get previous route', 500)
-
-      return previousRoute
+      return jwt
     } catch (error) {
       console.error(error)
-      this.shippmentProvider.handleApiError(error)
+      this.shipmentProvider.handleApiError(error)
       throw new AppError('Failed to refresh token', 500)
     }
   }

@@ -16,10 +16,8 @@ export class RefreshTokenController implements ICrontroller {
       new Cache(),
     )
 
-    const previousRoute = await refreshTokenUseCase.execute()
+    const jwt = await refreshTokenUseCase.execute()
 
-    console.log(previousRoute)
-
-    http.redirect(previousRoute)
+    http.send(200, jwt)
   }
 }

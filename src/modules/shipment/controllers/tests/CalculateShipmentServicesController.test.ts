@@ -1,12 +1,10 @@
 import request from 'supertest'
-import { afterAll, beforeAll, describe, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from 'app'
 import { productsMock } from '@entities/mocks/productsMock'
 
-require('dotenv').config()
-
-describe('Generate Token Use Case', () => {
+describe('Calculate Shipment Services Controller', () => {
   beforeAll(async () => {
     await app.waitServerAvailability()
   })
@@ -25,12 +23,19 @@ describe('Generate Token Use Case', () => {
   })
 
   it('should calculate shipment services', async () => {
-    await request(app.getServer())
+   const response = await request(app.getServer())
       .post('/shipment/calculate')
       .send({
-        zipcode: 'code',
+        zipcode: '12231440',
         products: productsMock,
       })
-      .expect(400)
+      .expect(200)
+
+      for (const shipmentService of response.body) {
+        expect(shipmentService).toHaveProperty("name")
+        expect(shipmentService).toHaveProperty("service")
+        expect(shipmentService).toHaveProperty("price")
+        expect(shipmentService).toHaveProperty("days")
+      }
   })
 })
