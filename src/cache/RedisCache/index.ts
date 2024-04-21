@@ -10,7 +10,7 @@ const USERNAME = process.env.VITE_REDIS_USERNAME
 const PASSWORD = process.env.VITE_REDIS_PASSWORD
 const HOST = process.env.VITE_REDIS_HOST
 const PORT = process.env.VITE_REDIS_PORT
-const URL = process.env.VITE_REDIS_URL
+const URL = process.env.REDIS_URL
 
 export class RedisCache implements ICache {
   private redis: Redis
@@ -40,7 +40,9 @@ export class RedisCache implements ICache {
       return
     }
 
-    if (!URL) throw new AppError('Redis url connection is not provided')
+    if (!URL) {
+      throw new AppError('Redis url connection is not provided')
+    }
 
     try {
       const client = (this.redis = new Redis(URL))
