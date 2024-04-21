@@ -1,10 +1,10 @@
-import { IEnvConfig } from './interfaces/IEnvConfig'
-import 'dotenv/config'
 import { ZodValidationProvider } from '@providers/ValidationProvider/ZodValidationProvider'
+import 'dotenv/config'
+import { IEnvConfig } from './interfaces/IEnvConfig'
 
 type NodeEnv = 'production' | 'development' | 'test'
 
-const isTestEnv = process.env.NODE_ENV
+const isTestEnv = process.env.NODE_ENV == 'test'
 
 let _envConfig: IEnvConfig | null = null
 
