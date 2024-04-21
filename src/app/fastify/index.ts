@@ -1,13 +1,13 @@
 import { Server } from 'node:http'
 
-import getFastifyInstance, { FastifyInstance } from 'fastify'
-import { FastifyRouter } from './FastifyRouter'
 import cookie from '@fastify/cookie'
+// import rateLimit from '@fastify/rate-limit'
+import getFastifyInstance, { FastifyInstance } from 'fastify'
 import cron from "node-cron"
-import rateLimit from '@fastify/rate-limit'
+import { FastifyRouter } from './FastifyRouter'
 
 import { envConfig } from '@configs/envConfig'
-import { rateLimitConfig } from '@configs/rateLimitConfig'
+// import { rateLimitConfig } from '@configs/rateLimitConfig'
 
 import { authRoutes } from '@routes/authRoutes'
 import { shipmentRoutes } from '@routes/shipmentRoutes'
@@ -17,10 +17,10 @@ import { SentryMonitor } from '@providers/MonitorProvider/SentryMonitor'
 import { AppError } from '@utils/AppError'
 import { Console } from '@utils/Console'
 
+import { RedisCache } from '@cache/RedisCache'
 import { IApp } from '../interfaces/IApp'
 import { IHttp } from '../interfaces/IHttp'
 import { FastifyHttp } from './FastifyHttp'
-import { RedisCache } from '@cache/RedisCache'
 
 export class FastifyApp implements IApp {
   private fastify: FastifyInstance
