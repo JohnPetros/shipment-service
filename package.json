@@ -1,5 +1,5 @@
 {
-  "name": "shipment-service",
+  "name": "shipping-service",
   "version": "1.0.0",
   "description": "Simple app to calculate shipment quote",
   "engines": {

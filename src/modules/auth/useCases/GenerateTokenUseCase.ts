@@ -4,11 +4,11 @@ import { AppError } from '../../../utils/AppError'
 import { cacheConfig } from '@configs/cacheConfig'
 
 export class GenerateTokenUseCase {
-  private shippmentProvider: IShipmentProvider
+  private shipmentProvider: IShipmentProvider
   private cache: ICache
 
-  constructor(shippmentProvider: IShipmentProvider, cache: ICache) {
-    this.shippmentProvider = shippmentProvider
+  constructor(shipmentProvider: IShipmentProvider, cache: ICache) {
+    this.shipmentProvider = shipmentProvider
     this.cache = cache
   }
 
@@ -16,7 +16,7 @@ export class GenerateTokenUseCase {
     if (!code) throw new AppError('Invalid code', 401)
 
     try {
-      const jwt = await this.shippmentProvider.getToken(code)
+      const jwt = await this.shipmentProvider.getToken(code)
 
       await Promise.all([
         this.cache.set(cacheConfig.KEYS.ACCESS_TOKEN, jwt.accessToken),

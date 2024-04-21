@@ -23,6 +23,7 @@ export class RedisCache implements ICache {
     if (IS_DEV_ENV) {
       redisOptions = {
         host: HOST,
+        password: 'sertton',
         port: Number(PORT),
       }
 

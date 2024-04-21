@@ -18,7 +18,6 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
   }
 
   setJwt(token: string) {
-    console.log({ token })
     this.axios.defaults.headers.common.Authorization = token
   }
 
