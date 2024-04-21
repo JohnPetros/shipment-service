@@ -9,7 +9,15 @@ export class InMemoryCache implements ICache {
     this.cache = []
   }
 
+  private hasKey(key: string) {
+    return this.cache.some((object) => key in object)
+  }
+
   async set(key: string, data: string): Promise<void> {
+    if (this.hasKey(key)) {
+      this.delete(key)
+    }
+
     this.cache.push({ [key]: data })
   }
 
@@ -26,7 +34,7 @@ export class InMemoryCache implements ICache {
   }
 
   async delete(key: string): Promise<void> {
-    this.cache.filter((record) => {
+    this.cache = this.cache.filter((record) => {
       return !(key in record)
     })
   }

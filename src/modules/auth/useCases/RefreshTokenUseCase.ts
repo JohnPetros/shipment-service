@@ -15,17 +15,15 @@ export class RefreshTokenUseCase {
 
   async execute() {
     const refreshToken = await this.cache.get(cacheConfig.KEYS.REFRESH_TOKEN)
-    if (!refreshToken) throw new AppError(errorConfig.AUTH.INVALID_TOKEN, 402)
+    if (!refreshToken) throw new AppError('Refresh token is not found', 402)
 
     try {
       const jwt = await this.shipmentProvider.refreshToken(refreshToken)
 
-       await Promise.all([
+      await Promise.all([
         this.cache.set(cacheConfig.KEYS.ACCESS_TOKEN, jwt.accessToken),
         this.cache.set(cacheConfig.KEYS.REFRESH_TOKEN, jwt.refreshToken),
       ])
-
-      return jwt
     } catch (error) {
       console.error(error)
       this.shipmentProvider.handleApiError(error)

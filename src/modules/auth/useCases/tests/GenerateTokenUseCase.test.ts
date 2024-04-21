@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
+import type { Jwt } from '@entities/Jwt'
+
 import { InMemoryShipmentProvider } from '@providers/ShipmentProvider/InMemoryShipmentProvider'
+
 import { InMemoryCache } from '@cache/InMemoryCache'
-import { Jwt } from '@entities/Jwt'
+
 import { cacheConfig } from '@configs/cacheConfig'
 
 import { GenerateTokenUseCase } from '../GenerateTokenUseCase'
@@ -14,7 +17,7 @@ describe('Generate Token Use Case', () => {
   it('Should throw an error if the code to generate the token is not provided', () => {
     const generateTokenUseCase = new GenerateTokenUseCase(shipmentProvider, cache)
 
-    expect(async () => await generateTokenUseCase.execute('')).rejects.toThrow(
+    expect(async () => await generateTokenUseCase.execute('ggg')).rejects.toThrow(
       'Invalid code'
     )
   })

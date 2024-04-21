@@ -11,16 +11,10 @@ export class CallbackController implements ICrontroller {
 
     const cache = new Cache()
     const axiosHttpClientProvider = new AxiosHttpClientProvider()
-    const shippmentProvider = new MelhorEnvioShipmentProvider(
-      axiosHttpClientProvider,
-    )
-    const generateTokenUseCase = new GenerateTokenUseCase(
-      shippmentProvider,
-      cache,
-    )
+    const shippmentProvider = new MelhorEnvioShipmentProvider(axiosHttpClientProvider)
+    const generateTokenUseCase = new GenerateTokenUseCase(shippmentProvider, cache)
 
-    const { accessToken, refreshToken } =
-      await generateTokenUseCase.execute(code)
+    const { accessToken, refreshToken } = await generateTokenUseCase.execute(code)
 
     http.send(200, { accessToken, refreshToken })
   }
