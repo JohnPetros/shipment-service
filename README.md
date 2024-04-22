@@ -142,7 +142,3 @@ This application is under MIT Licence. See [the licence file](https://github.com
 <p align="center">
   Made with 💜 by John Petros 👋🏻
 </p>
-
-
-## Thiago
-- 
