@@ -4,7 +4,7 @@ import { envConfig } from '@configs/envConfig'
 
 app.startServer()
 
-app.setCron('* * * * *', async () => {
+app.setCron('0 0 * * 0', async () => {
   fetch(`${envConfig.DOMAIN}/auth/refresh_token`, {
     method: 'POST',
   })
