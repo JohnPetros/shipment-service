@@ -12,8 +12,6 @@ import { envConfig } from '@configs/envConfig'
 import { authRoutes } from '@routes/authRoutes'
 import { shipmentRoutes } from '@routes/shipmentRoutes'
 
-import { SentryMonitor } from '@providers/MonitorProvider/SentryMonitor'
-
 import { AppError } from '@utils/AppError'
 import { Console } from '@utils/Console'
 
@@ -59,7 +57,6 @@ export class FastifyApp implements IApp {
     fastify.register(() => authRoutes(fastifyRouter))
     fastify.register(() => shipmentRoutes(fastifyRouter))
 
-    const sentryMonitor = new SentryMonitor()
     const console = new Console()
 
     fastify.setErrorHandler(async (error, _, reply) => {
@@ -67,10 +64,6 @@ export class FastifyApp implements IApp {
 
       if (error instanceof AppError) {
         reply.status(error.statusCode).send({ message: error.message })
-
-        if (error.statusCode === 500 || error.statusCode === 429) {
-          sentryMonitor.logError(error)
-        }
       }
 
       return reply.status(500).send({
