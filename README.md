@@ -37,8 +37,8 @@ This API Rest uses [Melhor Envio API](https://docs.melhorenvio.com.br/reference/
 
 - [x] This API should be authenticated by **Melhor Envio API** using [OAuth protocol](https://jwt.io/), where the former should behave client and resource server
 - [x] This API should request to **Melhor Envio** refresh the auth token every week on Sunday 00:00
-- [x] This API should validate the access token before sending to **Melhor Envio API**.
-- [x] This API should store both access token and refresh token in cache.
+- [x] This API should validate the access token before sending to **Melhor Envio API**
+- [x] This API should store both access token and refresh token in cache
 
 
 ### Shipping quote calculation
